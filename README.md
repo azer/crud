@@ -1,4 +1,4 @@
-## crud
+## CRUD
 
 A minimalistic database library for Go, with simple and familiar interface.
 
