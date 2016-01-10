@@ -11,6 +11,9 @@ A minimalistic database library for Go, with simple and familiar interface.
 * CRUD:
   * [Create](#create)
   * [Read](#read)
+    * [Reading a single row](#reading-a-single-row)
+    * [Reading multiple rows](#reading-multiple-rows)
+    * [Scanning to custom values](#scanning-to-custom-values)
   * [Update](#update)
   * [MustUpdate](#mustupdate)
   * [Delete](#delete)
@@ -83,6 +86,8 @@ err := DB.Create(user)
 ```
 
 ### Read
+
+You can read single/multiple rows, or custom values, with the `Read` method.
 
 ##### Reading a single row:
 
