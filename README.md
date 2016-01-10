@@ -16,6 +16,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
   * [MustUpdate](#mustupdate)
   * [Delete](#delete)
   * [MustDelete](#mustdelete)
+  * [Transactions](#transactions)
 * [Logs](#logs)
 * [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
@@ -168,6 +169,35 @@ err := DB.MustDelete(&User{
 })
 ```
 
+## Transactions
+
+Use `Begin` method of a `crud.DB` instance to create a new transaction. Each transaction will provide you following methods;
+
+* Commit
+* Rollback
+* Exec
+* Query
+* Create
+* Read
+* Update
+* MustUpdate
+* Delete
+* MustDelete
+
+```go
+tx, err := DB.Begin()
+
+err := tx.Create(&User{
+  Name: "yolo"
+})
+
+err := tx.Delete(&User{
+  Id: 123
+})
+
+err := tx.Commit()
+```
+
 ## Logs
 
 If you want to see crud's internal logs, specify `crud` in the `LOG` environment variable when you run your app. For example;
@@ -177,33 +207,6 @@ $ LOG=crud go run myapp.go
 ```
 
 [(More info about how crud's logging work)](http://github.com/azer/logger)
-
-## Transactions
-
-Transaction objects return crud methods in addition to `Commit` and `Rollback`. Here is the list;
-
-* Commit
-* Rollback
-* Create
-* Read
-* Update
-* MustUpdate
-* Delete
-* MustDelete
-
-```go
-trans, err := DB.Begin()
-
-err := trans.Create(&User{
-  Name: "yolo"
-})
-
-err := trans.Delete(&User{
-  Id: 123
-})
-
-err := trans.Commit()
-```
 
 ## Custom Queries
 
