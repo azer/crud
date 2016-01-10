@@ -1,6 +1,6 @@
 ## CRUD
 
-A minimalistic relational database library for Go, with simple and familiar interface.
+A minimalistic relational database library for Go, with simple and familiar interface. [Why?](#why-another-ormish-library-for-go)
 
 * [Install](#install)
 * [Initialize](#initialize)
@@ -18,7 +18,6 @@ A minimalistic relational database library for Go, with simple and familiar inte
   * [MustDelete](#mustdelete)
   * [Transactions](#transactions)
 * [Logs](#logs)
-* [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
 * [Running Tests](#running-tests)
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
