@@ -1,7 +1,6 @@
 package crud
 
 import (
-	"github.com/azer/snakecase"
 	"time"
 )
 
@@ -32,7 +31,7 @@ func NewRow(st interface{}) (*Row, error) {
 	}
 
 	return &Row{
-		SQLTableName: snakecase.SnakeCase(GetTableNameOf(st)),
+		SQLTableName: SQLTableNameOf(st),
 		Values:       values,
 	}, nil
 }

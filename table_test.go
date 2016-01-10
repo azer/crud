@@ -35,17 +35,79 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[3].SQL.Length, 255)
 }
 
-func TestCreate(t *testing.T) {
-	DB.CreateTable(UserProfile{})
-
-	azer := UserProfile{
-		Name:  "Azer",
-		Bio:   "I like photography",
-		Email: "azer@roadbeats.com",
-	}
-
-	err := DB.Create(azer)
+func TestColumnDict(t *testing.T) {
+	table, err := crud.NewTable(Foo{})
 	assert.Nil(t, err)
 
-	DB.DropTable(UserProfile{})
+	columnDict := table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	table, err = crud.NewTable(&Foo{})
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	/*var f *Foo
+	table, err = crud.NewTable(f)
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")*/
+}
+
+func TestColumnDictOfSlices(t *testing.T) {
+	table, err := crud.NewTable([]Foo{})
+	assert.Nil(t, err)
+
+	columnDict := table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	table, err = crud.NewTable(FooSlice{})
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	table, err = crud.NewTable(&FooSlice{})
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	table, err = crud.NewTable(FooPTRSlice{})
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
+
+	table, err = crud.NewTable(&FooPTRSlice{})
+	assert.Nil(t, err)
+
+	columnDict = table.SQLColumnDict()
+	assert.Equal(t, columnDict["id"], "Id")
+	assert.Equal(t, columnDict["api_key"], "APIKey")
+	assert.Equal(t, columnDict["yolo"], "YOLO")
+	assert.Equal(t, columnDict["beast"], "Beast")
 }

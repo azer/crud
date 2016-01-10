@@ -119,3 +119,24 @@ func InsertQuery(tableName string, columnNames []string) string {
 	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)",
 		tableName, strings.Join(columnNames, ","), questionMarks)
 }
+
+func SelectQuery(tableName string, columnNames []string) string {
+	columns := strings.Join(columnNames, ",")
+	if columns == "" {
+		columns = "*"
+	}
+
+	return fmt.Sprintf("SELECT %s FROM %s", columns, tableName)
+}
+
+func CompleteSelectQuery(tableName string, columnNames []string, original string) string {
+	if strings.HasPrefix(original, "SELECT ") {
+		return original
+	}
+
+	if len(original) > 0 {
+		original = " " + original
+	}
+
+	return fmt.Sprintf("%s%s", SelectQuery(tableName, columnNames), original)
+}

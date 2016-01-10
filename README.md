@@ -1,7 +1,6 @@
 ## crud
 
 A minimalistic database library for Go, with simple and familiar interface.
-It embeds [sqlx](https://github.com/jmoiron/sqlx).
 
 Manual:
 
@@ -26,29 +25,21 @@ Manual:
 $ go get github.com/azer/crud
 ```
 
-#### Initialize and Ping Database
+#### Initialize and Ping
 
-````go
+```go
 import (
   "github.com/azer/crud"
+  _ "github.com/go-sql-driver/mysql"
 )
 
-var DB crud.DB
+var DB *crud.DB
 
 func init () {
-  var err error
-  DB, err = crud.Open("mysql", os.Getenv("DATABASE_URL"))
-
-  if err != nil {
-    panic(err)
-  }
-
+  DB, err := crud.Connect("mysql", os.Getenv("DATABASE_URL"))
   err := DB.Ping()
-  if err != nil {
-    panic(err)
-  }
 }
-````
+```
 
 #### Define
 
@@ -62,16 +53,16 @@ type User struct {
 
 type Profile struct {
   Id int `sql:"auto-increment primary-key"`
-  Bio string
+  Bio string `sql:"text"`
 }
 ```
 
-#### Setup
+#### Create Tables
 
-`setup` makes sure the given structs have corresponding tables in the database.
+`CreateTables` takes list of structs and makes sure they exist in the database.
 
 ```go
-err := DB.Setup(User{}, Profile{})
+err := DB.CreateTables(User{}, Profile{})
 ```
 
 #### Create
@@ -86,8 +77,8 @@ err := DB.Create(user)
 **Reading a single row:**
 
 ```go
-var user *User
-err := DB.Read(user, "WHERE id = ?", 1)
+user := User{}
+err := DB.Read(user, "WHERE id = ?", 1) // You can type the full query if preferred.
 // => SELECT * FROM users WHERE id = 1
 
 fmt.Println(user.Name)
@@ -97,7 +88,7 @@ fmt.Println(user.Name)
 **Reading multiple rows:**
 
 ```go
-var users []*User
+users := []*User{}
 
 err := DB.Read(&users)
 // => SELECT * FROM users
@@ -106,15 +97,20 @@ fmt.Println(len(users))
 // => 10
 ```
 
-**Custom queries:**
+**Scanning to custom values:**
 
 ```go
-var names []string{}
+names := []string{}
 err := DB.Read(&names, "SELECT name FROM users")
 ```
 
+```
+name := ""
+err := DB.Read(&name, "SELECT name FROM users WHERE id=1")
+```
+
 ```go
-var totalUsers int
+totalUsers := 0
 err := DB.Read(&totalUsers, "SELECT COUNT(id) FROM users"
 ```
 

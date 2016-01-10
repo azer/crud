@@ -19,6 +19,7 @@ var TypeDict = map[string]string{
 	"int":       "int",
 	"string":    "varchar",
 	"time.Time": "timestamp",
+	"bool":      "tinyint",
 }
 
 func MatchType(typeName string) (string, error) {

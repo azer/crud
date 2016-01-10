@@ -1,19 +1,22 @@
 package crud
 
 import (
+	"github.com/azer/crud/reflect"
 	"github.com/azer/crud/sql"
 	"github.com/azer/snakecase"
-	"reflect"
-	"strings"
 )
 
-func NewTable(st interface{}) (*Table, error) {
-	fields, err := GetFieldsOf(st)
+func NewTable(any interface{}) (*Table, error) {
+	if reflect.IsSlice(any) {
+		any = reflect.CreateElement(any).Interface()
+	}
+
+	fields, err := GetFieldsOf(any)
 	if err != nil {
 		return nil, err
 	}
 
-	name := GetTableNameOf(st)
+	name := reflect.TypeNameOf(any)
 
 	return &Table{
 		Name:    name,
@@ -38,7 +41,12 @@ func (table *Table) SQLOptions() []*sql.Options {
 	return result
 }
 
-func GetTableNameOf(st interface{}) string {
-	parts := strings.Split(reflect.TypeOf(st).String(), ".")
-	return parts[len(parts)-1]
+func (table *Table) SQLColumnDict() map[string]string {
+	result := map[string]string{}
+
+	for _, field := range table.Fields {
+		result[field.SQL.Name] = field.Name
+	}
+
+	return result
 }

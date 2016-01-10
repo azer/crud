@@ -1,13 +1,14 @@
 package crud
 
 import (
+	"github.com/azer/crud/reflect"
 	"github.com/azer/crud/sql"
 	"github.com/azer/snakecase"
-	"reflect"
+	reflectlib "reflect"
 )
 
 func NewIteration(st interface{}) *Iteration {
-	rvalue, rtype := GetReflection(st)
+	rvalue, rtype := reflect.Get(st)
 	length := rvalue.NumField()
 
 	return &Iteration{
@@ -21,8 +22,8 @@ func NewIteration(st interface{}) *Iteration {
 type Iteration struct {
 	Index        int
 	Length       int
-	ReflectValue reflect.Value
-	ReflectType  reflect.Type
+	ReflectValue reflectlib.Value
+	ReflectType  reflectlib.Type
 }
 
 func (iteration *Iteration) Next() bool {
@@ -34,11 +35,11 @@ func (iteration *Iteration) Next() bool {
 	return true
 }
 
-func (iteration *Iteration) TypeField() reflect.StructField {
+func (iteration *Iteration) TypeField() reflectlib.StructField {
 	return iteration.ReflectType.Field(iteration.Index)
 }
 
-func (iteration *Iteration) ValueField() reflect.Value {
+func (iteration *Iteration) ValueField() reflectlib.Value {
 	return iteration.ReflectValue.Field(iteration.Index)
 }
 
@@ -71,17 +72,4 @@ func (iteration *Iteration) Value() interface{} {
 
 func (iteration *Iteration) Name() string {
 	return iteration.TypeField().Name
-}
-
-func GetReflection(st interface{}) (v reflect.Value, t reflect.Type) {
-	defer func() {
-		if r := recover(); r != nil {
-			v = reflect.ValueOf(st)
-			t = reflect.TypeOf(st)
-		}
-	}()
-
-	v = reflect.ValueOf(st).Elem()
-	t = v.Type()
-	return
 }

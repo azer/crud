@@ -25,9 +25,19 @@ type Post struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
+type Foo struct {
+	Id     int
+	APIKey string
+	YOLO   bool
+	Beast  string
+}
+
+type FooSlice []Foo
+type FooPTRSlice []*Foo
+
 func init() {
 	var err error
-	DB, err = crud.Connect(os.Getenv("DATABASE_DRIVER"), os.Getenv("DATABASE_URL"))
+	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		panic(err)
 	}
@@ -50,15 +60,15 @@ func TestExecuteSQL(t *testing.T) {
 	assert.Equal(t, a, int64(0))
 }
 
-func TestCreateTable(t *testing.T) {
-	err := DB.CreateTable(UserProfile{}, Post{})
+func TestCreateTables(t *testing.T) {
+	err := DB.CreateTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
 	assert.True(t, DB.CheckIfTableExists("user_profile"))
 	assert.True(t, DB.CheckIfTableExists("post"))
 }
 
-func TestDropTable(t *testing.T) {
-	err := DB.DropTable(UserProfile{}, Post{})
+func TestDropTables(t *testing.T) {
+	err := DB.DropTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
 	assert.False(t, DB.CheckIfTableExists("user_profile"))
 	assert.False(t, DB.CheckIfTableExists("post"))

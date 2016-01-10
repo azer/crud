@@ -79,3 +79,13 @@ func TestDropTableQuery(t *testing.T) {
 	assert.Equal(t, sql.DropTableQuery("yolo", false), "DROP TABLE yolo")
 	assert.Equal(t, sql.DropTableQuery("yolo", true), "DROP TABLE IF EXISTS yolo")
 }
+
+func TestSelectQuery(t *testing.T) {
+	assert.Equal(t, sql.SelectQuery("yolo", []string{"foo", "bar"}), "SELECT foo,bar FROM yolo")
+	assert.Equal(t, sql.SelectQuery("yolo", []string{}), "SELECT * FROM yolo")
+}
+
+func TestCompleteSelectQuery(t *testing.T) {
+	assert.Equal(t, sql.CompleteSelectQuery("yolo", []string{"foo", "bar"}, ""), "SELECT foo,bar FROM yolo")
+	assert.Equal(t, sql.CompleteSelectQuery("yolo", []string{}, "ORDER BY name"), "SELECT * FROM yolo ORDER BY name")
+}

@@ -1,13 +1,12 @@
 package crud
 
 import (
-	"fmt"
+	stdsql "database/sql"
 	"github.com/azer/crud/sql"
-	"github.com/jmoiron/sqlx"
 )
 
 func Connect(driver, url string) (*DB, error) {
-	client, err := sqlx.Connect(driver, url)
+	client, err := stdsql.Open(driver, url)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +19,7 @@ func Connect(driver, url string) (*DB, error) {
 }
 
 type DB struct {
-	Client *sqlx.DB
+	Client *stdsql.DB
 	Driver string
 	URL    string
 }
@@ -30,19 +29,31 @@ func (db *DB) Ping() error {
 }
 
 func (db *DB) ExecuteSQL(sql string, params ...interface{}) error {
-	fmt.Println("$", sql)
 	_, err := db.Client.Exec(sql, params...)
 	return err
 }
 
-func (db *DB) CreateTable(structs ...interface{}) error {
-	for _, st := range structs {
-		t, err := NewTable(st)
-		if err != nil {
-			return err
-		}
+func (db *DB) CreateTable(st interface{}, ifexists bool) error {
+	t, err := NewTable(st)
+	if err != nil {
+		return err
+	}
 
-		if err := db.ExecuteSQL(sql.NewTableQuery(t.SQLName, t.SQLOptions(), true)); err != nil {
+	return db.ExecuteSQL(sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists))
+}
+
+func (db *DB) DropTable(st interface{}, ifexists bool) error {
+	t, err := NewTable(st)
+	if err != nil {
+		return err
+	}
+
+	return db.ExecuteSQL(sql.DropTableQuery(t.SQLName, true))
+}
+
+func (db *DB) CreateTables(structs ...interface{}) error {
+	for _, st := range structs {
+		if err := db.CreateTable(st, true); err != nil {
 			return err
 		}
 	}
@@ -50,16 +61,23 @@ func (db *DB) CreateTable(structs ...interface{}) error {
 	return nil
 }
 
-func (db *DB) DropTable(structs ...interface{}) error {
+func (db *DB) DropTables(structs ...interface{}) error {
 	for _, st := range structs {
-		t, err := NewTable(st)
-		if err != nil {
+		if err := db.DropTable(st, true); err != nil {
 			return err
 		}
+	}
 
-		if err := db.ExecuteSQL(sql.DropTableQuery(t.SQLName, true)); err != nil {
-			return err
-		}
+	return nil
+}
+
+func (db *DB) ResetTables(structs ...interface{}) error {
+	if err := db.DropTables(structs...); err != nil {
+		return err
+	}
+
+	if err := db.CreateTables(structs...); err != nil {
+		return err
 	}
 
 	return nil
@@ -71,19 +89,10 @@ func (db *DB) CheckIfTableExists(name string) bool {
 	return err == nil && result == name
 }
 
-func (db *DB) Create(value interface{}) error {
-	row, err := NewRow(value)
-	if err != nil {
-		return err
+func (db *DB) CompleteSelectQuery(query string, scanner *Scan) string {
+	if scanner.Table == nil {
+		return query
 	}
 
-	columns := []string{}
-	values := []interface{}{}
-
-	for c, v := range row.SQLValues() {
-		columns = append(columns, c)
-		values = append(values, v)
-	}
-
-	return db.ExecuteSQL(sql.InsertQuery(row.SQLTableName, columns), values...)
+	return sql.CompleteSelectQuery(scanner.Table.SQLName, []string{}, query)
 }
