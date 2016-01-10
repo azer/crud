@@ -1,8 +1,6 @@
 ## CRUD
 
-A minimalistic database library for Go, with simple and familiar interface.
-
-## Manual
+A minimalistic relational database library for Go, with simple and familiar interface.
 
 * [Install](#install)
 * [Initialize](#initialize)
@@ -21,14 +19,15 @@ A minimalistic database library for Go, with simple and familiar interface.
 * [Logs](#logs)
 * [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
+* [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 
-### Install
+## Install
 
 ```bash
 $ go get github.com/azer/crud
 ```
 
-### Initialize
+## Initialize
 
 ```go
 import (
@@ -44,7 +43,7 @@ func init () {
 }
 ```
 
-### Define
+## Define
 
 ```go
 type User struct {
@@ -78,14 +77,14 @@ err := DB.CreateTables(User{}, Profile{})
 err := DB.DropTables(User{}, Profile{})
 ```
 
-### Create
+## Create
 
 ```go
 user := &User{1, "Foo", "Bar", 1}
 err := DB.Create(user)
 ```
 
-### Read
+## Read
 
 You can read single/multiple rows, or custom values, with the `Read` method.
 
@@ -129,7 +128,7 @@ totalUsers := 0
 err := DB.Read(&totalUsers, "SELECT COUNT(id) FROM users"
 ```
 
-### Update
+## Update
 
 ```go
 user := &User{}
@@ -139,7 +138,7 @@ user.Name = "Yolo"
 err := DB.Update(user)
 ```
 
-### MustUpdate
+## MustUpdate
 
 Same as [Update](#update), returns error when there is no matching row.
 
@@ -150,7 +149,7 @@ err := DB.MustUpdate(&User{
 })
 ```
 
-### Delete
+## Delete
 
 ```go
 err := DB.Delete(&User{
@@ -158,7 +157,7 @@ err := DB.Delete(&User{
 })
 ```
 
-### MustDelete
+## MustDelete
 
 Same as [Delete](#delete), returns error when there is no matching row.
 
@@ -168,7 +167,7 @@ err := DB.MustDelete(&User{
 })
 ```
 
-### Logs
+## Logs
 
 If you want to see crud's internal logs, specify `crud` in the `LOG` environment variable when you run your app. For example;
 
@@ -178,7 +177,7 @@ $ LOG=crud go run myapp.go
 
 [(More info about how crud's logging work)](http://github.com/azer/logger)
 
-### Transactions
+## Transactions
 
 Transaction objects return crud methods in addition to `Commit` and `Rollback`. Here is the list;
 
@@ -205,16 +204,17 @@ err := trans.Delete(&User{
 err := trans.Commit()
 ```
 
-### Custom Queries
+## Custom Queries
 
 ````go
 result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 ````
 
-### Why another ORMish library for Go?
+## Why another ORMish library for Go?
 
 * Simplicity, taking more advantage of `reflect` library to keep the API simple.
-* Building less things with more essential abstractions
+* Building less things with more complete abstractions
 * Handling errors in an idiomatic way
-* Test coverage
+* Good test coverage
 * Modular & reusable code
+* Making less unsafe assumptions. e.g: not mapping structs to SQL rows by column index.
