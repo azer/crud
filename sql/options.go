@@ -71,16 +71,17 @@ func NewOptions(input string) (*Options, error) {
 }
 
 type Options struct {
-	Name          string
-	Type          string
-	Length        int
-	DefaultValue  string
-	AutoIncrement int
-	IsPrimaryKey  bool
-	IsUnique      bool
-	IsUnsigned    bool
-	IsRequired    bool
-	Ignore        bool
+	Name               string
+	Type               string
+	Length             int
+	DefaultValue       string
+	AutoIncrement      int
+	IsAutoIncrementing bool
+	IsPrimaryKey       bool
+	IsUnique           bool
+	IsUnsigned         bool
+	IsRequired         bool
+	Ignore             bool
 }
 
 func (options *Options) ReadAttr(input string, names ...string) (string, bool) {
@@ -155,6 +156,8 @@ func (options *Options) ReadAutoIncrement(input string) bool {
 	if !ok {
 		return false
 	}
+
+	options.IsAutoIncrementing = true
 
 	if len(value) > 0 {
 		if val, err := strconv.Atoi(value); err == nil {

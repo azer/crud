@@ -50,3 +50,47 @@ func (table *Table) SQLColumnDict() map[string]string {
 
 	return result
 }
+
+func (table *Table) PrimaryKeyField() *Field {
+	for _, f := range table.Fields {
+		if f.SQL.IsPrimaryKey {
+			return f
+		}
+	}
+
+	return nil
+}
+
+func (table *Table) SQLUpdateColumnSet() []string {
+	columns := []string{}
+
+	for _, f := range table.Fields {
+		if f.SQL.Ignore || f.SQL.IsAutoIncrementing {
+			continue
+		}
+
+		columns = append(columns, f.SQL.Name)
+	}
+
+	return columns
+}
+
+func (table *Table) SQLUpdateValueSet() []interface{} {
+	values := []interface{}{}
+
+	for _, f := range table.Fields {
+		if f.SQL.Ignore || f.SQL.IsAutoIncrementing {
+			continue
+		}
+
+		values = append(values, f.Value)
+	}
+
+	pk := table.PrimaryKeyField()
+
+	if pk != nil {
+		values = append(values, pk.Value)
+	}
+
+	return values
+}

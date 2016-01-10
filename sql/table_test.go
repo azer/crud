@@ -89,3 +89,7 @@ func TestCompleteSelectQuery(t *testing.T) {
 	assert.Equal(t, sql.CompleteSelectQuery("yolo", []string{"foo", "bar"}, ""), "SELECT foo,bar FROM yolo")
 	assert.Equal(t, sql.CompleteSelectQuery("yolo", []string{}, "ORDER BY name"), "SELECT * FROM yolo ORDER BY name")
 }
+
+func TestUpdateQuery(t *testing.T) {
+	assert.Equal(t, sql.UpdateQuery("yolo", "id", []string{"name", "email", "age"}), "UPDATE yolo SET name=?, email=?, age=? WHERE id=?")
+}

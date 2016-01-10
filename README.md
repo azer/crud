@@ -117,7 +117,7 @@ err := DB.Read(&totalUsers, "SELECT COUNT(id) FROM users"
 #### Update
 
 ```go
-var user *User
+user := &User{}
 err := DB.Read(user, "WHERE id = ?", 1)
 
 user.Name = "Yolo"
