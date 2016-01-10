@@ -2,30 +2,30 @@
 
 A minimalistic database library for Go, with simple and familiar interface.
 
-Manual:
+## Manual
 
 * [Install](#install)
 * [Initialize](#initialize)
 * [Define](#define)
+  * [Create & Drop Tables](#create_drop_tables)
 * CRUD:
   * [Create](#create)
   * [Read](#read)
   * [Update](#update)
+  * [MustUpdate](#must_update)
   * [Delete](#delete)
-* [Tables](#tables)
+  * [MustDelete](#must_delete)
 * [Logs](#logs)
 * [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
 
-## Manual
-
-#### Install
+### Install
 
 ```bash
 $ go get github.com/azer/crud
 ```
 
-#### Initialize and Ping
+### Initialize
 
 ```go
 import (
@@ -41,7 +41,7 @@ func init () {
 }
 ```
 
-#### Define
+### Define
 
 ```go
 type User struct {
@@ -57,22 +57,24 @@ type Profile struct {
 }
 ```
 
-#### Create Tables
+#### Create & Drop Tables
 
 `CreateTables` takes list of structs and makes sure they exist in the database.
 
 ```go
 err := DB.CreateTables(User{}, Profile{})
+
+err := DB.DropTables(User{}, Profile{})
 ```
 
-#### Create
+### Create
 
 ```go
 user := &User{1, "Foo", "Bar", 1}
 err := DB.Create(user)
 ```
 
-#### Read
+### Read
 
 **Reading a single row:**
 
@@ -114,7 +116,7 @@ totalUsers := 0
 err := DB.Read(&totalUsers, "SELECT COUNT(id) FROM users"
 ```
 
-#### Update
+### Update
 
 ```go
 user := &User{}
@@ -124,54 +126,73 @@ user.Name = "Yolo"
 err := DB.Update(user)
 ```
 
-#### Delete
+### MustUpdate
 
-````go
-var user *User
-err := DB.Read(user, "WHERE id = ?", 1)
-
-user.Name = "Yolo"
-err := DB.Delete(user)
-````
-
-#### Tables
-
-To a create table:
+Same as [Update](#update), returns error when there is no matching row.
 
 ```go
-err := DB.CreateTable(User)
-// => CREATE TABLE IF NOT EXISTS users ...
+err := DB.MustUpdate(&User{
+  Id: 123,
+  Name: "Foo"
+})
 ```
 
-To drop a table:
+### Delete
 
 ```go
-err := DB.DropTable(User)
-// => DROP TABLE IF EXISTS users
+err := DB.Delete(&User{
+  Id: 1
+})
 ```
 
-#### Enabling Logs
+### MustDelete
 
-If you want to see `crud` logs, specify `crud` in the `LOG` environment variable when you run your app. For example;
+Same as [Delete](#delete), returns error when there is no matching row.
+
+err := DB.MustDelete(&User{
+  Id: 1
+})
+```
+
+### Logs
+
+If you want to see crud's internal logs, specify `crud` in the `LOG` environment variable when you run your app. For example;
 
 ```
 $ LOG=crud go run myapp.go
 ```
 
-#### Transactions
+[(More info about how crud's logging work)](http://github.com/azer/logger)
+
+### Transactions
+
+Transaction objects return crud methods in addition to `Commit` and `Rollback`. Here is the list;
+
+* Commit
+* Rollback
+* Create
+* Read
+* Update
+* MustUpdate
+* Delete
+* MustDelete
 
 ```go
 trans, err := DB.Begin()
 
-trans.Create()
-trans.Update()
-trans.Delete()
+err := trans.Create(&User{
+  Name: "yolo"
+})
+
+err := trans.Delete(&User{
+  Id: 123
+})
 
 err := trans.Commit()
 ```
 
-#### Custom Queries
+### Custom Queries
 
 ````go
-result, err := DB.Query("DROP DATABASE yolo")
+result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 ````

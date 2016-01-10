@@ -29,7 +29,7 @@ func (db *DB) ReadOne(scanTo interface{}, query string, params ...interface{}) e
 		return err
 	}
 
-	rows, err := db.Client.Query(db.CompleteSelectQuery(query, scanner), params...)
+	rows, err := db.Query(db.CompleteSelectQuery(query, scanner), params...)
 	if err != nil {
 		return err
 	}
@@ -49,7 +49,7 @@ func (db *DB) ReadAll(scanTo interface{}, query string, params ...interface{}) e
 		return err
 	}
 
-	rows, err := db.Client.Query(db.CompleteSelectQuery(query, scanner), params...)
+	rows, err := db.Query(db.CompleteSelectQuery(query, scanner), params...)
 	if err != nil {
 		return err
 	}

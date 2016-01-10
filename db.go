@@ -28,9 +28,12 @@ func (db *DB) Ping() error {
 	return db.Client.Ping()
 }
 
-func (db *DB) ExecuteSQL(sql string, params ...interface{}) error {
-	_, err := db.Client.Exec(sql, params...)
-	return err
+func (db *DB) Exec(sql string, params ...interface{}) (stdsql.Result, error) {
+	return db.Client.Exec(sql, params...)
+}
+
+func (db *DB) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
+	return db.Client.Query(sql, params...)
 }
 
 func (db *DB) CreateTable(st interface{}, ifexists bool) error {
@@ -39,7 +42,8 @@ func (db *DB) CreateTable(st interface{}, ifexists bool) error {
 		return err
 	}
 
-	return db.ExecuteSQL(sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists))
+	_, err = db.Exec(sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists))
+	return err
 }
 
 func (db *DB) DropTable(st interface{}, ifexists bool) error {
@@ -48,7 +52,8 @@ func (db *DB) DropTable(st interface{}, ifexists bool) error {
 		return err
 	}
 
-	return db.ExecuteSQL(sql.DropTableQuery(t.SQLName, true))
+	_, err = db.Exec(sql.DropTableQuery(t.SQLName, true))
+	return err
 }
 
 func (db *DB) CreateTables(structs ...interface{}) error {

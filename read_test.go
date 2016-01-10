@@ -58,6 +58,11 @@ func TestReadingMultipleRows(t *testing.T) {
 	assert.Equal(t, results[1].Name, "Azer")
 	assert.Equal(t, results[1].Bio, "Engineer")
 	assert.Equal(t, results[1].Email, "azer@roadbeats.com")
+
+	var notmatching []*UserProfile
+	err = DB.Read(&notmatching, "SELECT * FROM user_profile WHERE name='not matching'")
+	assert.Nil(t, err)
+	assert.Equal(t, len(notmatching), 0)
 }
 
 func TestReadingSingleRow(t *testing.T) {
@@ -78,6 +83,10 @@ func TestReadingSingleRow(t *testing.T) {
 	assert.Equal(t, azer.Name, "Azer")
 	assert.Equal(t, azer.Bio, "Engineer")
 	assert.Equal(t, azer.Email, "azer@roadbeats.com")
+
+	no := UserProfile{}
+	err = DB.Read(&no, "SELECT * FROM user_profile WHERE name = 'No'")
+	assert.NotNil(t, err)
 
 	DB.DropTables(UserProfile{})
 }

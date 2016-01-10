@@ -18,5 +18,6 @@ func (db *DB) Create(value interface{}) error {
 		values = append(values, v)
 	}
 
-	return db.ExecuteSQL(sql.InsertQuery(row.SQLTableName, columns), values...)
+	_, err = db.Exec(sql.InsertQuery(row.SQLTableName, columns), values...)
+	return err
 }

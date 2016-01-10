@@ -1,7 +1,6 @@
 package reflect
 
 import (
-	"fmt"
 	lib "reflect"
 	"strings"
 )
@@ -46,8 +45,6 @@ func HasPointers(any interface{}) bool {
 
 func CreateIfNil(any interface{}) interface{} {
 	val := DirectValueOf(any)
-
-	fmt.Println("?", val)
 
 	if !val.IsNil() {
 		return any

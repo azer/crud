@@ -5,51 +5,43 @@ import (
 	"testing"
 )
 
-func TestUpdate(t *testing.T) {
+func TestDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	nova := UserProfile{}
 	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = 'Nova'")
 	assert.Nil(t, err)
 
-	nova.Bio = "Y O L O"
-	assert.Nil(t, DB.Update(nova))
+	assert.Nil(t, DB.Delete(nova))
 
 	novac := UserProfile{}
 	err = DB.Read(&novac, "SELECT * FROM user_profile WHERE name = 'Nova'")
-	assert.Nil(t, err)
-	assert.Equal(t, novac.Bio, "Y O L O")
-	assert.Equal(t, novac.Email, nova.Email)
-	assert.Equal(t, novac.Id, nova.Id)
+	assert.NotNil(t, err)
 }
 
-func TestUpdateNotMatching(t *testing.T) {
-	assert.Nil(t, DB.Update(&UserProfile{
+func TestDeleteNotMatching(t *testing.T) {
+	assert.Nil(t, DB.Delete(&UserProfile{
 		Id:   123,
 		Name: "Yolo",
 	}))
 }
 
-func TestMustUpdate(t *testing.T) {
+func TestMustDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	nova := UserProfile{}
 	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = 'Nova'")
 	assert.Nil(t, err)
 
-	nova.Bio = "Hola"
-	assert.Nil(t, DB.MustUpdate(nova))
+	assert.Nil(t, DB.MustDelete(nova))
 
 	novac := UserProfile{}
 	err = DB.Read(&novac, "SELECT * FROM user_profile WHERE name = 'Nova'")
-	assert.Nil(t, err)
-	assert.Equal(t, novac.Bio, "Hola")
-	assert.Equal(t, novac.Email, nova.Email)
-	assert.Equal(t, novac.Id, nova.Id)
+	assert.NotNil(t, err)
 }
 
-func TestMustUpdateNotMatching(t *testing.T) {
-	assert.NotNil(t, DB.MustUpdate(&UserProfile{
+func TestMustDeleteNotMatching(t *testing.T) {
+	assert.NotNil(t, DB.MustDelete(&UserProfile{
 		Id:   123,
 		Name: "Yolo",
 	}))
