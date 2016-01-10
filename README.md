@@ -65,7 +65,7 @@ type Post {
 }
 ```
 
-#### Create & Drop Tables
+##### Create & Drop Tables
 
 `CreateTables` takes list of structs and makes sure they exist in the database.
 
@@ -84,7 +84,7 @@ err := DB.Create(user)
 
 ### Read
 
-**Reading a single row:**
+##### Reading a single row:
 
 ```go
 user := User{}
@@ -95,7 +95,7 @@ fmt.Println(user.Name)
 // => Foo
 ```
 
-**Reading multiple rows:**
+##### Reading multiple rows:
 
 ```go
 users := []*User{}
@@ -107,7 +107,7 @@ fmt.Println(len(users))
 // => 10
 ```
 
-**Scanning to custom values:**
+##### Scanning to custom values:
 
 ```go
 names := []string{}
@@ -207,8 +207,6 @@ result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 ````
 
 ### Why another ORMish library for Go?
-
-I use Gorm, Gorp, SQLx in different projects, and here are my reasons to make this alternative;
 
 * Simplicity, taking more advantage of `reflect` library to keep the API simple.
 * Building less things with more essential abstractions
