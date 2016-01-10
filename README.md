@@ -60,7 +60,7 @@ type Profile struct {
 }
 ```
 
-You don't need to specify SQL field names manually. CRUD will automatically do that for you. You can still choose custom names though;
+You don't need to specify SQL field names manually. CRUD will automatically convert column names like "FirstName" to "first_name" for you. You can still choose custom names though;
 
 ```go
 type Post {
