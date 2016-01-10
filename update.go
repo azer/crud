@@ -7,7 +7,7 @@ import (
 	"github.com/azer/crud/sql"
 )
 
-func Update(db *DB, record interface{}) (stdsql.Result, error) {
+func Update(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	table, err := NewTable(record)
 	if err != nil {
 		return nil, err
@@ -18,16 +18,11 @@ func Update(db *DB, record interface{}) (stdsql.Result, error) {
 		return nil, errors.New(fmt.Sprintf("Table '%s' (%s) doesn't have a primary-key field", table.Name, table.SQLName))
 	}
 
-	return db.Exec(sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet()), table.SQLUpdateValueSet()...)
+	return exec(sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet()), table.SQLUpdateValueSet()...)
 }
 
-func (db *DB) Update(record interface{}) error {
-	_, err := Update(db, record)
-	return err
-}
-
-func (db *DB) MustUpdate(record interface{}) error {
-	result, err := Update(db, record)
+func MustUpdate(exec ExecFn, record interface{}) error {
+	result, err := Update(exec, record)
 	if err != nil {
 		return err
 	}

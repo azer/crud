@@ -3,20 +3,13 @@ package crud
 import (
 	stdsql "database/sql"
 	"github.com/azer/crud/sql"
+	"github.com/azer/logger"
 )
 
-func Connect(driver, url string) (*DB, error) {
-	client, err := stdsql.Open(driver, url)
-	if err != nil {
-		return nil, err
-	}
+var log = logger.New("crud")
 
-	return &DB{
-		Client: client,
-		Driver: driver,
-		URL:    url,
-	}, nil
-}
+type ExecFn func(string, ...interface{}) (stdsql.Result, error)
+type QueryFn func(string, ...interface{}) (*stdsql.Rows, error)
 
 type DB struct {
 	Client *stdsql.DB
@@ -29,10 +22,12 @@ func (db *DB) Ping() error {
 }
 
 func (db *DB) Exec(sql string, params ...interface{}) (stdsql.Result, error) {
+	log.Info(sql)
 	return db.Client.Exec(sql, params...)
 }
 
 func (db *DB) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
+	log.Info(sql)
 	return db.Client.Query(sql, params...)
 }
 
@@ -94,10 +89,52 @@ func (db *DB) CheckIfTableExists(name string) bool {
 	return err == nil && result == name
 }
 
-func (db *DB) CompleteSelectQuery(query string, scanner *Scan) string {
-	if scanner.Table == nil {
-		return query
+func (db *DB) Create(record interface{}) error {
+	return Create(db.Exec, record)
+}
+
+func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
+	return Read(db.Query, scanTo, params)
+}
+
+func (db *DB) Update(record interface{}) error {
+	_, err := Update(db.Exec, record)
+	return err
+}
+
+func (db *DB) MustUpdate(record interface{}) error {
+	return MustUpdate(db.Exec, record)
+}
+
+func (db *DB) Delete(record interface{}) error {
+	_, err := Delete(db.Exec, record)
+	return err
+}
+
+func (db *DB) MustDelete(record interface{}) error {
+	return MustDelete(db.Exec, record)
+}
+
+func (db *DB) Begin() (*Tx, error) {
+	client, err := db.Client.Begin()
+	if err != nil {
+		return nil, err
 	}
 
-	return sql.CompleteSelectQuery(scanner.Table.SQLName, []string{}, query)
+	return &Tx{
+		Client: client,
+	}, nil
+}
+
+func Connect(driver, url string) (*DB, error) {
+	client, err := stdsql.Open(driver, url)
+	if err != nil {
+		return nil, err
+	}
+
+	return &DB{
+		Client: client,
+		Driver: driver,
+		URL:    url,
+	}, nil
 }

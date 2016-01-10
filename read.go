@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/azer/crud/reflect"
+	"github.com/azer/crud/sql"
 )
 
-func (db *DB) Read(scanTo interface{}, allparams ...interface{}) error {
-	query, params, err := ResolveReadParams(allparams)
+func Read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
+	sql, params, err := ResolveReadParams(allparams)
 	if err != nil {
 		return err
 	}
@@ -17,19 +18,19 @@ func (db *DB) Read(scanTo interface{}, allparams ...interface{}) error {
 	}
 
 	if reflect.IsSlice(scanTo) {
-		return db.ReadAll(scanTo, query, params...)
+		return ReadAll(query, scanTo, sql, params)
 	}
 
-	return db.ReadOne(scanTo, query, params...)
+	return ReadOne(query, scanTo, sql, params)
 }
 
-func (db *DB) ReadOne(scanTo interface{}, query string, params ...interface{}) error {
+func ReadOne(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
 	scanner, err := NewScan(scanTo)
 	if err != nil {
 		return err
 	}
 
-	rows, err := db.Query(db.CompleteSelectQuery(query, scanner), params...)
+	rows, err := query(CompleteSelectQuery(sql, scanner), params...)
 	if err != nil {
 		return err
 	}
@@ -43,13 +44,13 @@ func (db *DB) ReadOne(scanTo interface{}, query string, params ...interface{}) e
 	return rows.Err()
 }
 
-func (db *DB) ReadAll(scanTo interface{}, query string, params ...interface{}) error {
+func ReadAll(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
 	scanner, err := NewScan(scanTo)
 	if err != nil {
 		return err
 	}
 
-	rows, err := db.Query(db.CompleteSelectQuery(query, scanner), params...)
+	rows, err := query(CompleteSelectQuery(sql, scanner), params...)
 	if err != nil {
 		return err
 	}
@@ -82,4 +83,12 @@ func ResolveReadParams(params []interface{}) (string, []interface{}, error) {
 	}
 
 	return query, params[1:], nil
+}
+
+func CompleteSelectQuery(query string, scanner *Scan) string {
+	if scanner.Table == nil {
+		return query
+	}
+
+	return sql.CompleteSelectQuery(scanner.Table.SQLName, []string{}, query)
 }

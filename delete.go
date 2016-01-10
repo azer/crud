@@ -7,7 +7,7 @@ import (
 	"github.com/azer/crud/sql"
 )
 
-func Delete(db *DB, record interface{}) (stdsql.Result, error) {
+func Delete(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	table, err := NewTable(record)
 	if err != nil {
 		return nil, err
@@ -18,16 +18,11 @@ func Delete(db *DB, record interface{}) (stdsql.Result, error) {
 		return nil, errors.New(fmt.Sprintf("Table '%s' (%s) doesn't have a primary-key field", table.Name, table.SQLName))
 	}
 
-	return db.Exec(sql.DeleteQuery(table.SQLName, pk.SQL.Name), pk.Value)
+	return exec(sql.DeleteQuery(table.SQLName, pk.SQL.Name), pk.Value)
 }
 
-func (db *DB) Delete(record interface{}) error {
-	_, err := Delete(db, record)
-	return err
-}
-
-func (db *DB) MustDelete(record interface{}) error {
-	result, err := Delete(db, record)
+func MustDelete(exec ExecFn, record interface{}) error {
+	result, err := Delete(exec, record)
 	if err != nil {
 		return err
 	}

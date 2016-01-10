@@ -69,7 +69,7 @@ func TestReadingSingleRow(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	nova := UserProfile{}
-	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = 'Nova'")
+	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = ?", "Nova")
 	assert.Nil(t, err)
 	assert.Equal(t, nova.Id, 1)
 	assert.Equal(t, nova.Name, "Nova")
@@ -77,7 +77,7 @@ func TestReadingSingleRow(t *testing.T) {
 	assert.Equal(t, nova.Email, "nova@roadbeats.com")
 
 	var azer *UserProfile = &UserProfile{}
-	err = DB.Read(azer, "SELECT * FROM user_profile WHERE name = 'Azer'")
+	err = DB.Read(azer, "SELECT * FROM user_profile WHERE name = ?", "Azer")
 	assert.Nil(t, err)
 	assert.Equal(t, azer.Id, 2)
 	assert.Equal(t, azer.Name, "Azer")
@@ -85,7 +85,7 @@ func TestReadingSingleRow(t *testing.T) {
 	assert.Equal(t, azer.Email, "azer@roadbeats.com")
 
 	no := UserProfile{}
-	err = DB.Read(&no, "SELECT * FROM user_profile WHERE name = 'No'")
+	err = DB.Read(&no, "SELECT * FROM user_profile WHERE name = ?", "Not matching")
 	assert.NotNil(t, err)
 
 	DB.DropTables(UserProfile{})

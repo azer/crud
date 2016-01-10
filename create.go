@@ -4,8 +4,8 @@ import (
 	"github.com/azer/crud/sql"
 )
 
-func (db *DB) Create(value interface{}) error {
-	row, err := NewRow(value)
+func Create(exec ExecFn, record interface{}) error {
+	row, err := NewRow(record)
 	if err != nil {
 		return err
 	}
@@ -18,6 +18,6 @@ func (db *DB) Create(value interface{}) error {
 		values = append(values, v)
 	}
 
-	_, err = db.Exec(sql.InsertQuery(row.SQLTableName, columns), values...)
+	_, err = exec(sql.InsertQuery(row.SQLTableName, columns), values...)
 	return err
 }
