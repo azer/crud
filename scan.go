@@ -3,15 +3,15 @@ package crud
 import (
 	"database/sql"
 	"errors"
-	"github.com/azer/crud/reflect"
-	stdreflect "reflect"
+	"github.com/azer/crud/meta"
+	"reflect"
 )
 
 func NewScan(to interface{}) (*Scan, error) {
 	scan := &Scan{
 		To:         to,
-		ToPointers: reflect.HasPointers(to),
-		ToStructs:  reflect.HasAnyStruct(to),
+		ToPointers: meta.HasPointers(to),
+		ToStructs:  meta.HasAnyStruct(to),
 	}
 
 	if scan.ToStructs {
@@ -36,16 +36,16 @@ type Scan struct {
 }
 
 func (scan *Scan) All(rows *sql.Rows) error {
-	writeTo := reflect.Addressable(scan.To)
+	writeTo := meta.Addressable(scan.To)
 
 	for rows.Next() {
-		record := reflect.CreateElement(scan.To)
+		record := meta.CreateElement(scan.To)
 
 		if err := scan.Scan(rows, record); err != nil {
 			return err
 		}
 
-		reflect.Push(writeTo, record)
+		meta.Push(writeTo, record)
 	}
 
 	return nil
@@ -53,25 +53,25 @@ func (scan *Scan) All(rows *sql.Rows) error {
 
 func (scan *Scan) One(rows *sql.Rows) error {
 	for rows.Next() {
-		return scan.Scan(rows, reflect.DirectValueOf(scan.To))
+		return scan.Scan(rows, meta.DirectValueOf(scan.To))
 	}
 
 	return errors.New("No matching rows found.")
 }
 
-func (scan *Scan) Scan(rows *sql.Rows, record stdreflect.Value) error {
+func (scan *Scan) Scan(rows *sql.Rows, record reflect.Value) error {
 	if scan.ToStructs {
 		return scan.ScanToStruct(rows, record)
 	}
 
-	if record.Kind() != stdreflect.Ptr {
+	if record.Kind() != reflect.Ptr {
 		return rows.Scan(record.Addr().Interface())
 	} else {
 		return rows.Scan(record.Interface())
 	}
 }
 
-func (scan *Scan) ScanToStruct(rows *sql.Rows, record stdreflect.Value) error {
+func (scan *Scan) ScanToStruct(rows *sql.Rows, record reflect.Value) error {
 	columns, err := rows.Columns()
 	if err != nil {
 		return err
@@ -80,7 +80,7 @@ func (scan *Scan) ScanToStruct(rows *sql.Rows, record stdreflect.Value) error {
 	values := make([]interface{}, len(columns))
 
 	for i, column := range columns {
-		var field stdreflect.Value
+		var field reflect.Value
 
 		fieldName := scan.SQLColumnDict[column]
 

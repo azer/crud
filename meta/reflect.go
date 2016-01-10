@@ -1,4 +1,4 @@
-package reflect
+package meta
 
 import (
 	lib "reflect"

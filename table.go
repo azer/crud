@@ -1,14 +1,14 @@
 package crud
 
 import (
-	"github.com/azer/crud/reflect"
+	"github.com/azer/crud/meta"
 	"github.com/azer/crud/sql"
 	"github.com/azer/snakecase"
 )
 
 func NewTable(any interface{}) (*Table, error) {
-	if reflect.IsSlice(any) {
-		any = reflect.CreateElement(any).Interface()
+	if meta.IsSlice(any) {
+		any = meta.CreateElement(any).Interface()
 	}
 
 	fields, err := GetFieldsOf(any)
@@ -16,7 +16,7 @@ func NewTable(any interface{}) (*Table, error) {
 		return nil, err
 	}
 
-	name := reflect.TypeNameOf(any)
+	name := meta.TypeNameOf(any)
 
 	return &Table{
 		Name:    name,

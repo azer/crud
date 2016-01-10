@@ -1,0 +1,95 @@
+package meta_test
+
+import (
+	"fmt"
+	"github.com/azer/crud/meta"
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
+
+type Foo struct {
+	Id int
+}
+
+type FooSlice []Foo
+type FooPTRSlice []*Foo
+
+func TestGetTypeNameOf(t *testing.T) {
+	assert.Equal(t, meta.TypeNameOf(Foo{}), "Foo")
+	assert.Equal(t, meta.TypeNameOf(FooSlice{}), "FooSlice")
+	assert.Equal(t, meta.TypeNameOf(&FooPTRSlice{}), "FooPTRSlice")
+}
+
+func TestElementType(t *testing.T) {
+	assert.Equal(t, meta.ElementType([]Foo{}).String(), "meta_test.Foo")
+	assert.Equal(t, meta.ElementType([]*Foo{}).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.ElementType(&[]*Foo{}).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.ElementType(FooSlice{}).String(), "meta_test.Foo")
+	assert.Equal(t, meta.ElementType(&FooSlice{}).String(), "meta_test.Foo")
+	assert.Equal(t, meta.ElementType(FooPTRSlice{}).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.ElementType(&FooPTRSlice{}).String(), "*meta_test.Foo")
+}
+
+func TestCreateElement(t *testing.T) {
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement([]Foo{}).Interface()).String(), "meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement([]*Foo{}).Interface()).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement(&[]Foo{}).Interface()).String(), "meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement(&[]*Foo{}).Interface()).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement(FooPTRSlice{}).Interface()).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement(&FooPTRSlice{}).Interface()).String(), "*meta_test.Foo")
+	assert.Equal(t, meta.DirectTypeOf(meta.CreateElement([]string{}).Interface()).String(), "string")
+}
+
+func TestIsPointer(t *testing.T) {
+	assert.True(t, meta.IsPointer(&Foo{}))
+	assert.True(t, meta.IsPointer(&[]Foo{}))
+	assert.False(t, meta.IsPointer(Foo{}))
+	assert.False(t, meta.IsPointer(*&Foo{}))
+}
+
+func TestHasPointers(t *testing.T) {
+	assert.True(t, meta.HasPointers([]*Foo{}))
+	assert.True(t, meta.HasPointers(&[]*Foo{}))
+	assert.False(t, meta.HasPointers([]Foo{}))
+	assert.False(t, meta.HasPointers(&[]Foo{}))
+	assert.True(t, meta.HasPointers(&Foo{}))
+	assert.False(t, meta.HasPointers(Foo{}))
+}
+
+func TestHasAnyStruct(t *testing.T) {
+	var u Foo
+	//var up *Foo
+	var sup []*Foo
+
+	assert.True(t, meta.HasAnyStruct(Foo{}))
+	assert.True(t, meta.HasAnyStruct(&Foo{}))
+	assert.True(t, meta.HasAnyStruct([]Foo{}))
+	assert.True(t, meta.HasAnyStruct([]*Foo{}))
+	assert.True(t, meta.HasAnyStruct(&[]Foo{}))
+	assert.True(t, meta.HasAnyStruct(&[]*Foo{}))
+	assert.True(t, meta.HasAnyStruct(u))
+	//assert.True(t, meta.HasAnyStruct(up))
+	assert.True(t, meta.HasAnyStruct(sup))
+
+	var a string
+	var b int
+	var c bool
+
+	assert.False(t, meta.HasAnyStruct(123))
+	assert.False(t, meta.HasAnyStruct(true))
+	assert.False(t, meta.HasAnyStruct(""))
+	assert.False(t, meta.HasAnyStruct(a))
+	assert.False(t, meta.HasAnyStruct(b))
+	assert.False(t, meta.HasAnyStruct(c))
+}
+
+func TestCreateIfNil(t *testing.T) {
+	var f *Foo
+	var sf []*Foo
+
+	fmt.Println(f)
+	fmt.Println(sf)
+
+	fmt.Println("#", meta.CreateIfNil(f))
+	fmt.Println(meta.CreateIfNil(sf))
+}

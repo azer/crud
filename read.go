@@ -3,7 +3,7 @@ package crud
 import (
 	"errors"
 	"fmt"
-	"github.com/azer/crud/reflect"
+	"github.com/azer/crud/meta"
 	"github.com/azer/crud/sql"
 )
 
@@ -13,11 +13,11 @@ func Read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
 		return err
 	}
 
-	if !reflect.IsPointer(scanTo) {
+	if !meta.IsPointer(scanTo) {
 		return errors.New("A pointer has to be passed for scanning rows to.")
 	}
 
-	if reflect.IsSlice(scanTo) {
+	if meta.IsSlice(scanTo) {
 		return ReadAll(query, scanTo, sql, params)
 	}
 

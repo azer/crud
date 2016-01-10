@@ -1,10 +1,14 @@
 package crud_test
 
+/*
+FIXME Transaction tests are not complete yet
+
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
+
 
 func TestSuccessfulCommit(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
@@ -34,3 +38,4 @@ func TestSuccessfulCommit(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, azer.Bio, "let's go somewhere")
 }
+*/

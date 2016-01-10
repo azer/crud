@@ -1,14 +1,14 @@
 package crud
 
 import (
-	"github.com/azer/crud/reflect"
+	"github.com/azer/crud/meta"
 	"github.com/azer/crud/sql"
 	"github.com/azer/snakecase"
-	reflectlib "reflect"
+	"reflect"
 )
 
 func NewIteration(st interface{}) *Iteration {
-	rvalue, rtype := reflect.Get(st)
+	rvalue, rtype := meta.Get(st)
 	length := rvalue.NumField()
 
 	return &Iteration{
@@ -22,8 +22,8 @@ func NewIteration(st interface{}) *Iteration {
 type Iteration struct {
 	Index        int
 	Length       int
-	ReflectValue reflectlib.Value
-	ReflectType  reflectlib.Type
+	ReflectValue reflect.Value
+	ReflectType  reflect.Type
 }
 
 func (iteration *Iteration) Next() bool {
@@ -35,11 +35,11 @@ func (iteration *Iteration) Next() bool {
 	return true
 }
 
-func (iteration *Iteration) TypeField() reflectlib.StructField {
+func (iteration *Iteration) TypeField() reflect.StructField {
 	return iteration.ReflectType.Field(iteration.Index)
 }
 
-func (iteration *Iteration) ValueField() reflectlib.Value {
+func (iteration *Iteration) ValueField() reflect.Value {
 	return iteration.ReflectValue.Field(iteration.Index)
 }
 
