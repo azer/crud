@@ -19,6 +19,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Logs](#logs)
 * [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
+* [Running Tests](#running-tests)
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 
 ## Install
@@ -209,6 +210,12 @@ err := trans.Commit()
 ````go
 result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 ````
+
+## Running Tests
+
+```bash
+DATABASE_URL="?" go test ./...
+```
 
 ## Why another ORMish library for Go?
 
