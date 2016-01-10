@@ -7,14 +7,14 @@ A minimalistic database library for Go, with simple and familiar interface.
 * [Install](#install)
 * [Initialize](#initialize)
 * [Define](#define)
-  * [Create & Drop Tables](#create_drop_tables)
+  * [Create & Drop Tables](#create-drop--tables)
 * CRUD:
   * [Create](#create)
   * [Read](#read)
   * [Update](#update)
-  * [MustUpdate](#must_update)
+  * [MustUpdate](#mustupdate)
   * [Delete](#delete)
-  * [MustDelete](#must_delete)
+  * [MustDelete](#mustdelete)
 * [Logs](#logs)
 * [Transactions](#transactions)
 * [Custom Queries](#custom-queries)
@@ -54,6 +54,14 @@ type User struct {
 type Profile struct {
   Id int `sql:"auto-increment primary-key"`
   Bio string `sql:"text"`
+}
+```
+
+You don't need to specify SQL field names manually. CRUD will automatically do that for you. You can still choose custom names though;
+
+```go
+type Post {
+  Slug string `sql:"name=slug_id varchar(255) primary-key required"`
 }
 ```
 
@@ -149,6 +157,7 @@ err := DB.Delete(&User{
 
 Same as [Delete](#delete), returns error when there is no matching row.
 
+```
 err := DB.MustDelete(&User{
   Id: 1
 })
@@ -196,3 +205,13 @@ err := trans.Commit()
 ````go
 result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 ````
+
+### Why another ORMish library for Go?
+
+I use Gorm, Gorp, SQLx in different projects, and here are my reasons to make this alternative;
+
+* Simplicity, taking more advantage of `reflect` library to keep the API simple.
+* Building less things with more essential abstractions
+* Handling errors in an idiomatic way
+* Test coverage
+* Modular & reusable code
