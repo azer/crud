@@ -130,7 +130,7 @@ func SelectQuery(tableName string, columnNames []string) string {
 }
 
 func CompleteSelectQuery(tableName string, columnNames []string, original string) string {
-	if strings.HasPrefix(original, "SELECT ") {
+	if strings.HasPrefix(original, "SELECT ") || strings.HasPrefix(original, "select ") {
 		return original
 	}
 
