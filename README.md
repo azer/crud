@@ -60,13 +60,15 @@ type Profile struct {
 }
 ```
 
-You don't need to specify SQL field names manually. CRUD will automatically convert column names like "FirstName" to "first_name" for you. You can still choose custom names though;
+CRUD will automatically convert column names from "FirstName" (CamelCase) to "first_name" (snake_case) for you. You can still choose custom names though;
 
 ```go
 type Post {
   Slug string `sql:"name=slug_id varchar(255) primary-key required"`
 }
 ```
+
+If no primary key is specified, CRUD will look for a field named "Id" with int type, and set it as auto-incrementing primary-key field.
 
 ##### Create & Drop Tables
 
