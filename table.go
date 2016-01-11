@@ -16,6 +16,8 @@ func NewTable(any interface{}) (*Table, error) {
 		return nil, err
 	}
 
+	SetDefaultPK(fields)
+
 	name := meta.TypeNameOf(any)
 
 	return &Table{
