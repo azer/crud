@@ -21,6 +21,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Custom Queries](#custom-queries)
 * [Running Tests](#running-tests)
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
+* [Apps Using CRUD](#apps-using-crud)
 
 ## Install
 
@@ -229,3 +230,7 @@ DATABASE_URL="?" go test ./...
 * Good test coverage
 * Modular & reusable code
 * Making less unsafe assumptions. e.g: not mapping structs to SQL rows by column index.
+
+## Apps Using CRUD
+
+[Listen Paradise](http://listenparadise.org) is built with CRUD and [it's open source](http://github.com/azer/radio-paradise).
