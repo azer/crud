@@ -35,7 +35,7 @@ func NewRow(st interface{}) (*Row, error) {
 func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
 	values := []*RowValue{}
 
-	iter := NewIteration(st)
+	iter := NewFieldIteration(st)
 	for iter.Next() {
 		sqlOptions, err := iter.SQLOptions()
 

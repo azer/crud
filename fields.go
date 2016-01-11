@@ -13,7 +13,7 @@ type Field struct {
 func GetFieldsOf(st interface{}) ([]*Field, error) {
 	fields := []*Field{}
 
-	iter := NewIteration(st)
+	iter := NewFieldIteration(st)
 	for iter.Next() {
 		sqlOptions, err := iter.SQLOptions()
 

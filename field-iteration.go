@@ -7,11 +7,11 @@ import (
 	"reflect"
 )
 
-func NewIteration(st interface{}) *Iteration {
+func NewFieldIteration(st interface{}) *FieldIteration {
 	rvalue, rtype := meta.Get(st)
 	length := rvalue.NumField()
 
-	return &Iteration{
+	return &FieldIteration{
 		Index:        -1,
 		Length:       length,
 		ReflectType:  rtype,
@@ -19,14 +19,14 @@ func NewIteration(st interface{}) *Iteration {
 	}
 }
 
-type Iteration struct {
+type FieldIteration struct {
 	Index        int
 	Length       int
 	ReflectValue reflect.Value
 	ReflectType  reflect.Type
 }
 
-func (iteration *Iteration) Next() bool {
+func (iteration *FieldIteration) Next() bool {
 	if iteration.Index+1 >= iteration.Length {
 		return false
 	}
@@ -35,15 +35,15 @@ func (iteration *Iteration) Next() bool {
 	return true
 }
 
-func (iteration *Iteration) TypeField() reflect.StructField {
+func (iteration *FieldIteration) TypeField() reflect.StructField {
 	return iteration.ReflectType.Field(iteration.Index)
 }
 
-func (iteration *Iteration) ValueField() reflect.Value {
+func (iteration *FieldIteration) ValueField() reflect.Value {
 	return iteration.ReflectValue.Field(iteration.Index)
 }
 
-func (iteration *Iteration) SQLOptions() (*sql.Options, error) {
+func (iteration *FieldIteration) SQLOptions() (*sql.Options, error) {
 	result, err := sql.NewOptions(iteration.TypeField().Tag.Get("sql"))
 	if err != nil {
 		return nil, err
@@ -66,10 +66,10 @@ func (iteration *Iteration) SQLOptions() (*sql.Options, error) {
 	return result, nil
 }
 
-func (iteration *Iteration) Value() interface{} {
+func (iteration *FieldIteration) Value() interface{} {
 	return iteration.ReflectValue.Field(iteration.Index).Interface()
 }
 
-func (iteration *Iteration) Name() string {
+func (iteration *FieldIteration) Name() string {
 	return iteration.TypeField().Name
 }
