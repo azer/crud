@@ -1,9 +1,5 @@
 package crud
 
-import (
-	"time"
-)
-
 type RowValue struct {
 	SQLColumn string
 	Value     interface{}
@@ -53,19 +49,7 @@ func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
 
 		value := iter.Value()
 
-		if value == nil {
-			continue
-		}
-
 		if n, ok := value.(int); ok && sqlOptions.AutoIncrement > 0 && n == 0 {
-			continue
-		}
-
-		if str, ok := value.(string); ok && len(str) == 0 {
-			continue
-		}
-
-		if t, ok := value.(time.Time); ok && t == (time.Time{}) {
 			continue
 		}
 

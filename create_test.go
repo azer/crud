@@ -19,3 +19,16 @@ func TestCreate(t *testing.T) {
 
 	DB.DropTables(UserProfile{})
 }
+
+func TestCreateEmpty(t *testing.T) {
+	DB.ResetTables(UserProfile{})
+
+	azer := UserProfile{
+		Name: "Azer",
+	}
+
+	err := DB.Create(azer)
+	assert.Nil(t, err)
+
+	DB.DropTables(UserProfile{})
+}

@@ -29,7 +29,7 @@ func TestReadingMultipleRows(t *testing.T) {
 	result := []UserProfile{}
 	err := DB.Read(&result, "SELECT * FROM user_profile")
 	assert.Nil(t, err)
-	assert.Equal(t, len(result), 2)
+	assert.Equal(t, len(result), 3)
 	assert.Equal(t, result[0].Name, "Nova")
 	assert.Equal(t, result[0].Bio, "Photographer")
 	assert.Equal(t, result[0].Email, "nova@roadbeats.com")
@@ -40,7 +40,7 @@ func TestReadingMultipleRows(t *testing.T) {
 	resultptr := []*UserProfile{}
 	err = DB.Read(&resultptr, "SELECT * FROM user_profile")
 	assert.Nil(t, err)
-	assert.Equal(t, len(resultptr), 2)
+	assert.Equal(t, len(resultptr), 3)
 	assert.Equal(t, resultptr[0].Name, "Nova")
 	assert.Equal(t, resultptr[0].Bio, "Photographer")
 	assert.Equal(t, resultptr[0].Email, "nova@roadbeats.com")
@@ -51,7 +51,7 @@ func TestReadingMultipleRows(t *testing.T) {
 	var results []*UserProfile
 	err = DB.Read(&results, "SELECT * FROM user_profile")
 	assert.Nil(t, err)
-	assert.Equal(t, len(results), 2)
+	assert.Equal(t, len(results), 3)
 	assert.Equal(t, results[0].Name, "Nova")
 	assert.Equal(t, results[0].Bio, "Photographer")
 	assert.Equal(t, results[0].Email, "nova@roadbeats.com")
@@ -97,13 +97,16 @@ func TestGeneratingQueries(t *testing.T) {
 	result := []UserProfile{}
 	err := DB.Read(&result)
 	assert.Nil(t, err)
-	assert.Equal(t, len(result), 2)
+	assert.Equal(t, len(result), 3)
 	assert.Equal(t, result[0].Name, "Nova")
 	assert.Equal(t, result[0].Bio, "Photographer")
 	assert.Equal(t, result[0].Email, "nova@roadbeats.com")
 	assert.Equal(t, result[1].Name, "Azer")
 	assert.Equal(t, result[1].Bio, "Engineer")
 	assert.Equal(t, result[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, result[2].Name, "Hola")
+	assert.Equal(t, result[2].Bio, "")
+	assert.Equal(t, result[2].Email, "hola@roadbeats.com")
 
 	nova := UserProfile{}
 	err = DB.Read(&nova, "WHERE name=?", "Nova")
@@ -121,7 +124,7 @@ func TestScanningToCustomValues(t *testing.T) {
 	names := []string{}
 	err := DB.Read(&names, "SELECT name FROM user_profile ORDER BY id ASC")
 	assert.Nil(t, err)
-	assert.Equal(t, len(names), 2)
+	assert.Equal(t, len(names), 3)
 	assert.Equal(t, names[0], "Nova")
 	assert.Equal(t, names[1], "Azer")
 
@@ -133,7 +136,7 @@ func TestScanningToCustomValues(t *testing.T) {
 	count := 0
 	err = DB.Read(&count, "SELECT COUNT(id) FROM user_profile")
 	assert.Nil(t, err)
-	assert.Equal(t, count, 2)
+	assert.Equal(t, count, 3)
 
 	DB.DropTables(UserProfile{})
 }
@@ -155,6 +158,13 @@ func CreateUserProfiles() error {
 		Name:  "Azer",
 		Bio:   "Engineer",
 		Email: "azer@roadbeats.com",
+	}); err != nil {
+		return err
+	}
+
+	if err := DB.Create(UserProfile{
+		Name:  "Hola",
+		Email: "hola@roadbeats.com",
 	}); err != nil {
 		return err
 	}

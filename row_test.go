@@ -9,7 +9,7 @@ import (
 func TestGettingRowValues(t *testing.T) {
 	rows, err := crud.GetRowValuesOf(UserProfile{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 0)
+	assert.Equal(t, len(rows), 3)
 
 	rows, err = crud.GetRowValuesOf(UserProfile{
 		Name:  "Azer",
@@ -17,15 +17,17 @@ func TestGettingRowValues(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 2)
+	assert.Equal(t, len(rows), 3)
 	assert.Equal(t, rows[0].SQLColumn, "name")
 	assert.Equal(t, rows[0].Value.(string), "Azer")
-	assert.Equal(t, rows[1].SQLColumn, "email")
-	assert.Equal(t, rows[1].Value.(string), "azer@roadbeats.com")
+	assert.Equal(t, rows[1].SQLColumn, "bio")
+	assert.Equal(t, rows[1].Value.(string), "")
+	assert.Equal(t, rows[2].SQLColumn, "email")
+	assert.Equal(t, rows[2].Value.(string), "azer@roadbeats.com")
 
 	rows, err = crud.GetRowValuesOf(Post{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 0)
+	assert.Equal(t, len(rows), 3)
 
 	rows, err = crud.GetRowValuesOf(Post{
 		Title: "Hello World",
