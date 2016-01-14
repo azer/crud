@@ -13,9 +13,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
     * [Reading multiple rows](#reading-multiple-rows)
     * [Scanning to custom values](#scanning-to-custom-values)
   * [Update](#update)
-  * [MustUpdate](#mustupdate)
   * [Delete](#delete)
-  * [MustDelete](#mustdelete)
   * [Transactions](#transactions)
 * [Logs](#logs)
 * [Custom Queries](#custom-queries)
@@ -134,6 +132,8 @@ err := DB.Read(&totalUsers, "SELECT COUNT(id) FROM users"
 
 ## Update
 
+Updates matching row in database, returns `sql.ErrNoRows` nothing matched.
+
 ```go
 user := &User{}
 err := DB.Read(user, "WHERE id = ?", 1)
@@ -142,31 +142,12 @@ user.Name = "Yolo"
 err := DB.Update(user)
 ```
 
-## MustUpdate
-
-Same as [Update](#update), returns error when there is no matching row.
-
-```go
-err := DB.MustUpdate(&User{
-  Id: 123,
-  Name: "Foo"
-})
-```
-
 ## Delete
+
+Deletes matching row in database, returns `sql.ErrNoRows` nothing matched.
 
 ```go
 err := DB.Delete(&User{
-  Id: 1
-})
-```
-
-## MustDelete
-
-Same as [Delete](#delete), returns error when there is no matching row.
-
-```
-err := DB.MustDelete(&User{
   Id: 1
 })
 ```
@@ -182,9 +163,7 @@ Use `Begin` method of a `crud.DB` instance to create a new transaction. Each tra
 * Create
 * Read
 * Update
-* MustUpdate
 * Delete
-* MustDelete
 
 ```go
 tx, err := DB.Begin()
