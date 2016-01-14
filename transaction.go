@@ -2,7 +2,6 @@ package crud
 
 import (
 	stdsql "database/sql"
-	"fmt"
 )
 
 type Tx struct {
@@ -34,22 +33,9 @@ func (tx *Tx) Read(scanTo interface{}, params ...interface{}) error {
 }
 
 func (tx *Tx) Update(record interface{}) error {
-	r, err := Update(tx.Exec, record)
-	a, err := r.RowsAffected()
-	fmt.Println(a)
-	fmt.Println(err)
-	return err
-}
-
-func (tx *Tx) MustUpdate(record interface{}) error {
 	return MustUpdate(tx.Exec, record)
 }
 
 func (tx *Tx) Delete(record interface{}) error {
-	_, err := Delete(tx.Exec, record)
-	return err
-}
-
-func (tx *Tx) MustDelete(record interface{}) error {
 	return MustDelete(tx.Exec, record)
 }

@@ -98,20 +98,10 @@ func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
 }
 
 func (db *DB) Update(record interface{}) error {
-	_, err := Update(db.Exec, record)
-	return err
-}
-
-func (db *DB) MustUpdate(record interface{}) error {
 	return MustUpdate(db.Exec, record)
 }
 
 func (db *DB) Delete(record interface{}) error {
-	_, err := Delete(db.Exec, record)
-	return err
-}
-
-func (db *DB) MustDelete(record interface{}) error {
 	return MustDelete(db.Exec, record)
 }
 

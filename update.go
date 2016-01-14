@@ -33,7 +33,7 @@ func MustUpdate(exec ExecFn, record interface{}) error {
 	}
 
 	if count == 0 {
-		return errors.New("No rows matching")
+		return stdsql.ErrNoRows
 	}
 
 	return nil

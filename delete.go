@@ -33,7 +33,7 @@ func MustDelete(exec ExecFn, record interface{}) error {
 	}
 
 	if count == 0 {
-		return errors.New("No matching rows")
+		return stdsql.ErrNoRows
 	}
 
 	return nil

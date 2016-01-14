@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestUpdate(t *testing.T) {
+/*func TestUpdate(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	nova := UserProfile{}
@@ -28,7 +28,7 @@ func TestUpdateNotMatching(t *testing.T) {
 		Id:   123,
 		Name: "Yolo",
 	}))
-}
+}*/
 
 func TestMustUpdate(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
@@ -38,7 +38,7 @@ func TestMustUpdate(t *testing.T) {
 	assert.Nil(t, err)
 
 	nova.Bio = "Hola"
-	assert.Nil(t, DB.MustUpdate(nova))
+	assert.Nil(t, DB.Update(nova))
 
 	novac := UserProfile{}
 	err = DB.Read(&novac, "SELECT * FROM user_profile WHERE name = 'Nova'")
@@ -49,7 +49,7 @@ func TestMustUpdate(t *testing.T) {
 }
 
 func TestMustUpdateNotMatching(t *testing.T) {
-	assert.NotNil(t, DB.MustUpdate(&UserProfile{
+	assert.NotNil(t, DB.Update(&UserProfile{
 		Id:   123,
 		Name: "Yolo",
 	}))

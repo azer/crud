@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestDelete(t *testing.T) {
+/*func TestDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	nova := UserProfile{}
@@ -24,7 +24,7 @@ func TestDeleteNotMatching(t *testing.T) {
 		Id:   123,
 		Name: "Yolo",
 	}))
-}
+}*/
 
 func TestMustDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
@@ -33,7 +33,7 @@ func TestMustDelete(t *testing.T) {
 	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = 'Nova'")
 	assert.Nil(t, err)
 
-	assert.Nil(t, DB.MustDelete(nova))
+	assert.Nil(t, DB.Delete(nova))
 
 	novac := UserProfile{}
 	err = DB.Read(&novac, "SELECT * FROM user_profile WHERE name = 'Nova'")
@@ -41,7 +41,7 @@ func TestMustDelete(t *testing.T) {
 }
 
 func TestMustDeleteNotMatching(t *testing.T) {
-	assert.NotNil(t, DB.MustDelete(&UserProfile{
+	assert.NotNil(t, DB.Delete(&UserProfile{
 		Id:   123,
 		Name: "Yolo",
 	}))
