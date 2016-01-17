@@ -93,7 +93,7 @@ You can read single/multiple rows, or custom values, with the `Read` method.
 ##### Reading a single row:
 
 ```go
-user := User{}
+user := &User{}
 err := DB.Read(user, "WHERE id = ?", 1) // You can type the full query if preferred.
 // => SELECT * FROM users WHERE id = 1
 
