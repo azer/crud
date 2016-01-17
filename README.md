@@ -38,8 +38,9 @@ import (
 var DB *crud.DB
 
 func init () {
-  DB, err := crud.Connect("mysql", os.Getenv("DATABASE_URL"))
-  err := DB.Ping()
+  var err error
+  DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
+  err = DB.Ping()
 }
 ```
 
