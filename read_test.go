@@ -84,6 +84,14 @@ func TestReadingSingleRow(t *testing.T) {
 	assert.Equal(t, azer.Bio, "Engineer")
 	assert.Equal(t, azer.Email, "azer@roadbeats.com")
 
+	var az UserProfile
+	err = DB.Read(&az, "SELECT * FROM user_profile WHERE name = ?", "Azer")
+	assert.Nil(t, err)
+	assert.Equal(t, az.Id, 2)
+	assert.Equal(t, az.Name, "Azer")
+	assert.Equal(t, az.Bio, "Engineer")
+	assert.Equal(t, az.Email, "azer@roadbeats.com")
+
 	no := UserProfile{}
 	err = DB.Read(&no, "SELECT * FROM user_profile WHERE name = ?", "Not matching")
 	assert.NotNil(t, err)
