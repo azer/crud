@@ -1,12 +1,12 @@
 package meta
 
 import (
-	lib "reflect"
+	"reflect"
 	"strings"
 )
 
-func Get(any interface{}) (lib.Value, lib.Type) {
-	v := lib.Indirect(lib.ValueOf(any))
+func Get(any interface{}) (reflect.Value, reflect.Type) {
+	v := reflect.Indirect(reflect.ValueOf(any))
 	return v, v.Type()
 }
 
@@ -15,24 +15,24 @@ func TypeNameOf(any interface{}) string {
 	return parts[len(parts)-1]
 }
 
-func TypeOf(any interface{}) lib.Type {
+func TypeOf(any interface{}) reflect.Type {
 	return ValueOf(any).Type()
 }
 
-func ValueOf(any interface{}) lib.Value {
-	return lib.Indirect(lib.ValueOf(any))
+func ValueOf(any interface{}) reflect.Value {
+	return reflect.Indirect(reflect.ValueOf(any))
 }
 
-func DirectTypeOf(any interface{}) lib.Type {
-	return lib.TypeOf(any)
+func DirectTypeOf(any interface{}) reflect.Type {
+	return reflect.TypeOf(any)
 }
 
-func DirectValueOf(any interface{}) lib.Value {
-	return lib.ValueOf(any)
+func DirectValueOf(any interface{}) reflect.Value {
+	return reflect.ValueOf(any)
 }
 
 func IsPointer(any interface{}) bool {
-	return DirectValueOf(any).Kind() == lib.Ptr
+	return DirectValueOf(any).Kind() == reflect.Ptr
 }
 
 func HasPointers(any interface{}) bool {
@@ -40,7 +40,29 @@ func HasPointers(any interface{}) bool {
 		return IsPointer(any)
 	}
 
-	return ElementType(any).Kind() == lib.Ptr
+	return ElementType(any).Kind() == reflect.Ptr
+}
+
+func IsEmpty(any interface{}) bool {
+	v := ValueOf(any)
+
+	// I copy pasted this following switch-case code from encoding/json package
+	switch v.Kind() {
+	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
+		return v.Len() == 0
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+
+	return false
 }
 
 func CreateIfNil(any interface{}) interface{} {
@@ -54,7 +76,7 @@ func CreateIfNil(any interface{}) interface{} {
 }
 
 func HasAnyStruct(any interface{}) bool {
-	var t lib.Type
+	var t reflect.Type
 
 	if IsSlice(any) {
 		t = ElementType(any)
@@ -62,9 +84,9 @@ func HasAnyStruct(any interface{}) bool {
 		t = TypeOf(any)
 	}
 
-	if t.Kind() == lib.Ptr {
+	if t.Kind() == reflect.Ptr {
 		t = t.Elem()
 	}
 
-	return t.Kind() == lib.Struct
+	return t.Kind() == reflect.Struct
 }

@@ -58,7 +58,7 @@ func TestHasPointers(t *testing.T) {
 
 func TestHasAnyStruct(t *testing.T) {
 	var u Foo
-	//var up *Foo
+	var up Foo
 	var sup []*Foo
 
 	assert.True(t, meta.HasAnyStruct(Foo{}))
@@ -68,7 +68,7 @@ func TestHasAnyStruct(t *testing.T) {
 	assert.True(t, meta.HasAnyStruct(&[]Foo{}))
 	assert.True(t, meta.HasAnyStruct(&[]*Foo{}))
 	assert.True(t, meta.HasAnyStruct(u))
-	//assert.True(t, meta.HasAnyStruct(up))
+	assert.True(t, meta.HasAnyStruct(&up))
 	assert.True(t, meta.HasAnyStruct(sup))
 
 	var a string
@@ -82,6 +82,22 @@ func TestHasAnyStruct(t *testing.T) {
 	assert.False(t, meta.HasAnyStruct(b))
 	assert.False(t, meta.HasAnyStruct(c))
 }
+
+/*func TestIsEmpty(t *testing.T) {
+	var f Foo
+	var fptr *Foo
+	var sup []*Foo
+	var s string
+	var ls []string
+	var n int
+
+	assert.True(t, meta.IsEmpty(f))
+	assert.True(t, meta.IsEmpty(fptr))
+	assert.True(t, meta.IsEmpty(sup))
+	assert.True(t, meta.IsEmpty(s))
+	assert.True(t, meta.IsEmpty(ls))
+	assert.True(t, meta.IsEmpty(n))
+}*/
 
 func TestCreateIfNil(t *testing.T) {
 	var f *Foo
