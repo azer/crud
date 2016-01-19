@@ -220,4 +220,4 @@ DATABASE_URL="?" go test ./...
 
 * **Explicit Read Methods:** We can have explicit alternatives of `Read` method for people who prefers.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
-* **Comments:** I like self-documenting code and nice README's rather than commenting code. Pull requests are welcome.
+* **Comments:** I like self-documenting code and nice README's rather than commenting code, so rarely comment my code.
