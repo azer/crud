@@ -20,7 +20,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Running Tests](#running-tests)
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 * [Apps Using CRUD](#apps-using-crud)
-* [What's Missing?][#what-s-missing]
+* [What's Missing?](#what-s-missing)
 
 ## Install
 
