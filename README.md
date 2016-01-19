@@ -20,6 +20,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Running Tests](#running-tests)
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 * [Apps Using CRUD](#apps-using-crud)
+* [What's Missing?][#what-s-missing]
 
 ## Install
 
@@ -214,3 +215,9 @@ DATABASE_URL="?" go test ./...
 ## Apps Using CRUD
 
 [Listen Paradise](http://listenparadise.org) is built with CRUD and [it's open source](http://github.com/azer/radio-paradise).
+
+## What's Missing?
+
+* **Explicit Read Methods:** We can have explicit alternatives of `Read` method for people who prefers.
+* **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
+* **Comments:** I like self-documenting code and nice README's rather than commenting code. Pull requests are welcome.
