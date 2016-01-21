@@ -5,7 +5,8 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Install](#install)
 * [Initialize](#initialize)
 * [Define](#define)
-  * [Create & Drop Tables](#create-drop--tables)
+  * [Create & Drop Tables](#create--drop--tables)
+  * [Reset Tables](#reset-tables)
 * CRUD:
   * [Create](#create)
   * [Read](#read)
@@ -79,6 +80,14 @@ If no primary key is specified, CRUD will look for a field named "Id" with int t
 err := DB.CreateTables(User{}, Profile{})
 
 err := DB.DropTables(User{}, Profile{})
+```
+
+##### Reset Tables
+
+Shortcut for dropping and creating tables.
+
+```go
+err := DB.ResetTables(User{}, Profile{})
 ```
 
 ## Create
@@ -218,6 +227,7 @@ DATABASE_URL="?" go test ./...
 
 ## What's Missing?
 
+* **Migration:** We need a sophisticated solution for adding / removing columns when user changes the structs.
 * **Explicit Read Methods:** We can have explicit alternatives of `Read` method for people who prefers.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
 * **Comments:** I like self-documenting code and nice README's rather than commenting code, so rarely comment my code.
