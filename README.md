@@ -5,7 +5,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Install](#install)
 * [Initialize](#initialize)
 * [Define](#define)
-  * [Create & Drop Tables](#create--drop--tables)
+  * [Create & Drop Tables](#create--drop-tables)
   * [Reset Tables](#reset-tables)
 * CRUD:
   * [Create](#create)
