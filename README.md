@@ -105,7 +105,7 @@ Above example sets the type of the `Text` column as `varchar(140)`, makes it req
 
 Here is the list of the options that you can pass;
 
-* *Types:* `int`, `bigint`, `varchar`, `text`, `date`, `time`, `timestamp`
+* Types: `int`, `bigint`, `varchar`, `text`, `date`, `time`, `timestamp`
 * `auto-increment` / `autoincrement` / `auto_increment`
 * `primary-key` / `primarykey` / `primary_key`
 * `required`
