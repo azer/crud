@@ -7,6 +7,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Define](#define)
   * [Create & Drop Tables](#create--drop-tables)
   * [Reset Tables](#reset-tables)
+  * [SQL Options](#sql-options)
 * CRUD:
   * [Create](#create)
   * [Read](#read)
@@ -65,7 +66,7 @@ type Profile struct {
 CRUD will automatically convert column names from "FirstName" (CamelCase) to "first_name" (snake_case) for you. You can still choose custom names though;
 
 ```go
-type Post {
+type Post struct {
   Slug string `sql:"name=slug_id varchar(255) primary-key required"`
 }
 ```
@@ -88,6 +89,35 @@ Shortcut for dropping and creating tables.
 
 ```go
 err := DB.ResetTables(User{}, Profile{})
+```
+
+##### SQL Options
+
+CRUD tries to be smart about figuring out the best SQL options for your structs, and lets you choose manually, too. For example;
+
+```go
+type Tweet struct {
+ Text string `sql:"varchar(140) required name=tweet"`
+}
+```
+
+Above example sets the type of the `Text` column as `varchar(140)`, makes it required (`NOT NULL`) and changes the column name as `tweet`. 
+
+Here is the list of the options that you can pass;
+
+* *Types:* `int`, `bigint`, `varchar`, `text`, `date`, `time`, `timestamp`
+* `auto-increment` / `autoincrement` / `auto_increment`
+* `primary-key` / `primarykey` / `primary_key`
+* `required`
+* `default='?'`
+* `name=?`
+
+If you'd like a struct field to be ignored by CRUD, choose `-` as options:
+
+```go
+type Foo struct {
+ IgnoreMe string `sql:"-"`
+}
 ```
 
 ## Create
