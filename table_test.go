@@ -11,7 +11,7 @@ func TestNewTable(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "UserProfile")
 	assert.Equal(t, table.SQLName, "user_profile")
-	assert.Equal(t, len(table.Fields), 4)
+	assert.Equal(t, len(table.Fields), 5)
 	assert.Equal(t, table.Fields[0].Name, "Id")
 	assert.Equal(t, table.Fields[0].SQL.Name, "id")
 	assert.Equal(t, table.Fields[0].SQL.Type, "int")
@@ -33,6 +33,10 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[3].SQL.Name, "email")
 	assert.Equal(t, table.Fields[3].SQL.Type, "varchar")
 	assert.Equal(t, table.Fields[3].SQL.Length, 255)
+	assert.Equal(t, table.Fields[4].Name, "Modified")
+	assert.Equal(t, table.Fields[4].SQL.Name, "modified")
+	assert.Equal(t, table.Fields[4].SQL.Type, "bigint")
+	assert.Equal(t, table.Fields[4].SQL.Length, 20)
 }
 
 func TestColumnDict(t *testing.T) {

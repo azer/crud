@@ -12,10 +12,11 @@ import (
 var DB *crud.DB
 
 type UserProfile struct {
-	Id    int    `json:"id" sql:"auto-increment primary-key required"`
-	Name  string `json:"name" sql:"unique required"`
-	Bio   string `json:"bio" sql:"type=text"`
-	Email string `json:"e-mail" sql:"name=email"`
+	Id       int    `json:"id" sql:"auto-increment primary-key required"`
+	Name     string `json:"name" sql:"unique required"`
+	Bio      string `json:"bio" sql:"type=text"`
+	Email    string `json:"e-mail" sql:"name=email"`
+	Modified int64  `json:"modified" sql:"name=modified"`
 }
 
 type Post struct {
