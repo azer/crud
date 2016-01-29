@@ -17,6 +17,7 @@ var Types = map[string]int{
 
 var TypeDict = map[string]string{
 	"int":       "int",
+	"int64":     "bigint",
 	"string":    "varchar",
 	"time.Time": "timestamp",
 	"bool":      "tinyint",

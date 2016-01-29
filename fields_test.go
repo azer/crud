@@ -9,7 +9,7 @@ import (
 func TestFields(t *testing.T) {
 	fields, err := crud.GetFieldsOf(UserProfile{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(fields), 4)
+	assert.Equal(t, len(fields), 5)
 	assert.Equal(t, fields[0].Name, "Id")
 	assert.Equal(t, fields[0].SQL.Name, "id")
 	assert.Equal(t, fields[0].SQL.Type, "int")
@@ -25,6 +25,9 @@ func TestFields(t *testing.T) {
 	assert.Equal(t, fields[3].Name, "Email")
 	assert.Equal(t, fields[3].SQL.Name, "email")
 	assert.Equal(t, fields[3].SQL.Type, "varchar")
+	assert.Equal(t, fields[4].Name, "Modified")
+	assert.Equal(t, fields[4].SQL.Name, "modified")
+	assert.Equal(t, fields[4].SQL.Type, "bigint")
 }
 
 func TestHasPK(t *testing.T) {
