@@ -23,6 +23,7 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 * [Apps Using CRUD](#apps-using-crud)
 * [What's Missing?](#whats-missing)
+* License: [WTFPL](http://www.wtfpl.net/)
 
 ## Install
 
