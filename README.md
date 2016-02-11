@@ -23,7 +23,6 @@ A minimalistic relational database library for Go, with simple and familiar inte
 * [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
 * [Apps Using CRUD](#apps-using-crud)
 * [What's Missing?](#whats-missing)
-* License: [WTFPL](http://www.wtfpl.net/)
 
 ## Install
 
@@ -263,3 +262,7 @@ DATABASE_URL="?" go test ./...
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
 * **Comments:** I like self-documenting code and nice README's rather than commenting code, so rarely comment my code.
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
+
+## LICENSE
+
+[WTFPL](http://www.wtfpl.net/)
