@@ -149,6 +149,19 @@ func TestScanningToCustomValues(t *testing.T) {
 	DB.DropTables(UserProfile{})
 }
 
+func TestUnexistingFields(t *testing.T) {
+	assert.Nil(t, CreateUserProfiles())
+
+	nova := UserProfile{}
+	err := DB.Read(&nova, "SELECT u.*, COUNT(u.id) as ucount FROM user_profile u WHERE name=?", "Nova")
+	assert.Nil(t, err)
+	assert.Equal(t, nova.Name, "Nova")
+	assert.Equal(t, nova.Bio, "Photographer")
+	assert.Equal(t, nova.Email, "nova@roadbeats.com")
+
+	DB.DropTables(UserProfile{})
+}
+
 func CreateUserProfiles() error {
 	if err := DB.ResetTables(UserProfile{}); err != nil {
 		return err
