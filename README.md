@@ -259,6 +259,7 @@ DATABASE_URL="?" go test ./...
 
 * **Migration:** We need a sophisticated solution for adding / removing columns when user changes the structs.
 * **Explicit Read Methods:** We can have explicit alternatives of `Read` method for people who prefers.
+* **Relationships:** This was intentionally avoided. Can be considered if there is a clean way to implement it.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
 * **Custom Table Names:** It needs to let people use custom table names.
 * **Comments:** I rarely comment my code.
