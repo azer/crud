@@ -93,6 +93,14 @@ func (db *DB) Create(record interface{}) error {
 	return Create(db.Exec, record)
 }
 
+func (db *DB) CreateAndGetResult(record interface{}) (stdsql.Result, error) {
+	return CreateAndGetResult(db.Exec, record)
+}
+
+func (db *DB) CreateAndRead(record interface{}) error {
+	return CreateAndRead(db.Exec, db.Query, record)
+}
+
 func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
 	return Read(db.Query, scanTo, params)
 }
