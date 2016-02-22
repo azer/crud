@@ -117,7 +117,7 @@ func InsertQuery(tableName string, columnNames []string) string {
 	}
 
 	return fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)",
-		tableName, strings.Join(columnNames, ","), questionMarks)
+		tableName, strings.Join(quoteColumnNames(columnNames), ","), questionMarks)
 }
 
 func SelectQuery(tableName string, columnNames []string) string {
@@ -142,9 +142,19 @@ func CompleteSelectQuery(tableName string, columnNames []string, original string
 }
 
 func UpdateQuery(tableName, index string, columnNames []string) string {
-	return fmt.Sprintf("UPDATE %s SET %s=? WHERE %s=?", tableName, strings.Join(columnNames, "=?, "), index)
+	return fmt.Sprintf("UPDATE %s SET %s=? WHERE %s=?", tableName, strings.Join(quoteColumnNames(columnNames), "=?, "), index)
 }
 
 func DeleteQuery(tableName, index string) string {
 	return fmt.Sprintf("DELETE FROM %s WHERE %s=?", tableName, index)
+}
+
+func quoteColumnNames(columns []string) []string {
+	quoted := []string{}
+
+	for _, c := range columns {
+		quoted = append(quoted, fmt.Sprintf("`%s`", c))
+	}
+
+	return quoted
 }

@@ -92,8 +92,12 @@ func TestCompleteSelectQuery(t *testing.T) {
 	assert.Equal(t, sql.CompleteSelectQuery("yolo", []string{}, "select yo from yolo order by name"), "select yo from yolo order by name")
 }
 
+func TestInsertQuery(t *testing.T) {
+	assert.Equal(t, sql.InsertQuery("yolo", []string{"name", "email", "age"}), "INSERT INTO yolo (`name`,`email`,`age`) VALUES (?,?,?)")
+}
+
 func TestUpdateQuery(t *testing.T) {
-	assert.Equal(t, sql.UpdateQuery("yolo", "id", []string{"name", "email", "age"}), "UPDATE yolo SET name=?, email=?, age=? WHERE id=?")
+	assert.Equal(t, sql.UpdateQuery("yolo", "id", []string{"name", "email", "age"}), "UPDATE yolo SET `name`=?, `email`=?, `age`=? WHERE id=?")
 }
 
 func TestDeleteQuery(t *testing.T) {
