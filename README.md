@@ -287,6 +287,7 @@ DATABASE_URL="?" go test ./...
 * **Custom Table Names:** It needs to let people use custom table names.
 * **Comments:** I rarely comment my code.
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
+* **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
 
 ## LICENSE
 
