@@ -272,6 +272,7 @@ DATABASE_URL="?" go test ./...
 * Good test coverage
 * Modular & reusable code
 * Making less unsafe assumptions. e.g: not mapping structs to SQL rows by column index.
+* Complete & tested [SQL Options](#sql-options)
 
 ## Apps Using CRUD
 
