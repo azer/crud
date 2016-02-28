@@ -2,7 +2,6 @@ package crud
 
 import (
 	"database/sql"
-	"errors"
 	"github.com/azer/crud/meta"
 	"reflect"
 )
@@ -56,7 +55,7 @@ func (scan *Scan) One(rows *sql.Rows) error {
 		return scan.Scan(rows, meta.DirectValueOf(scan.To))
 	}
 
-	return errors.New("No matching rows found.")
+	return sql.ErrNoRows
 }
 
 func (scan *Scan) Scan(rows *sql.Rows, record reflect.Value) error {
