@@ -288,6 +288,7 @@ DATABASE_URL="?" go test ./...
 * **Comments:** I rarely comment my code.
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
+* **Query Builder:** Building SQL queries programmatically is useful.
 
 ## LICENSE
 
