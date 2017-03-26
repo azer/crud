@@ -16,11 +16,16 @@ var Types = map[string]int{
 }
 
 var TypeDict = map[string]string{
-	"int":       "int",
-	"int64":     "bigint",
-	"string":    "varchar",
-	"time.Time": "timestamp",
-	"bool":      "tinyint",
+	"float64":         "float",
+	"int":             "int",
+	"int64":           "bigint",
+	"string":          "varchar",
+	"time.Time":       "timestamp",
+	"bool":            "tinyint",
+	"sql.NullFloat64": "float",
+	"sql.NullInt64":   "bigint",
+	"sql.NullString":  "varchar",
+	"sql.NullBool":    "tinyint",
 }
 
 func MatchType(typeName string) (string, error) {
