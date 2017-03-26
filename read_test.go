@@ -149,6 +149,21 @@ func TestScanningToCustomValues(t *testing.T) {
 	DB.DropTables(UserProfile{})
 }
 
+func TestScanningToNullTypes(t *testing.T) {
+	assert.Nil(t, CreateUserProfiles())
+
+	nova := UserProfileNull{}
+	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = ?", "Nova")
+	assert.Nil(t, err)
+
+	assert.Equal(t, nova.Id.Int64, int64(1))
+	assert.Equal(t, nova.Name.String, "Nova")
+	assert.Equal(t, nova.Bio.String, "Photographer")
+	assert.Equal(t, nova.Email.String, "nova@roadbeats.com")
+
+	DB.DropTables(UserProfile{})
+}
+
 func TestUnexistingFields(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
