@@ -6,7 +6,8 @@ import (
 )
 
 func TestCreate(t *testing.T) {
-	DB.ResetTables(UserProfile{})
+	err := DB.ResetTables(UserProfile{})
+	assert.Nil(t, err)
 
 	azer := UserProfile{
 		Name:  "Azer",
@@ -14,7 +15,7 @@ func TestCreate(t *testing.T) {
 		Email: "azer@roadbeats.com",
 	}
 
-	err := DB.Create(azer)
+	err = DB.Create(azer)
 	assert.Nil(t, err)
 
 	DB.DropTables(UserProfile{})

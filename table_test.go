@@ -23,7 +23,7 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[1].SQL.Name, "name")
 	assert.Equal(t, table.Fields[1].SQL.Type, "varchar")
 	assert.Equal(t, table.Fields[1].SQL.Length, 255)
-	assert.Equal(t, table.Fields[1].SQL.IsUnique, true)
+	assert.Equal(t, table.Fields[1].SQL.IsUnique, false)
 	assert.Equal(t, table.Fields[1].SQL.IsRequired, true)
 	assert.Equal(t, table.Fields[2].Name, "Bio")
 	assert.Equal(t, table.Fields[2].SQL.Name, "bio")
