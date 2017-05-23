@@ -276,7 +276,9 @@ DATABASE_URL="?" go test ./...
 
 ## Apps Using CRUD
 
-[Listen Paradise](http://listenparadise.org) is built with CRUD and [it's open source](http://github.com/azer/radio-paradise).
+* [Kozmos](http://getkozmos.com)
+* [MultiplayerChess.com](http://multiplayerchess.com)
+* [Listen Paradise](http://github.com/azer/radio-paradise).
 
 ## What's Missing?
 
