@@ -283,7 +283,6 @@ DATABASE_URL="?" go test ./...
 ## What's Missing?
 
 * **Migration:** We need a sophisticated solution for adding / removing columns when user changes the structs.
-* **Explicit Read Methods:** We can have explicit alternatives of `Read` method for people who prefers.
 * **Relationships:** This was intentionally avoided. Can be considered if there is a clean way to implement it.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
 * **Custom Table Names:** It needs to let people use custom table names.
@@ -291,6 +290,7 @@ DATABASE_URL="?" go test ./...
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
 * **Query Builder:** Building SQL queries programmatically is useful.
+* **Make UTF-8 Default:** Looks like the default charset is not UTF8. 
 
 ## LICENSE
 
