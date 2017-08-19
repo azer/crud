@@ -49,6 +49,10 @@ func (iteration *FieldIteration) SQLOptions() (*sql.Options, error) {
 		return nil, err
 	}
 
+	if result.Ignore {
+		return result, nil
+	}
+
 	if len(result.Name) == 0 {
 		result.Name = snakecase.SnakeCase(iteration.Name())
 	}
