@@ -1,7 +1,13 @@
 ## CRUD
 
-A minimalistic relational database library for Go, with simple and familiar interface. [Why?](#why-another-ormish-library-for-go)
+A minimalistic relational database library for Go.
 
+Features:
+* Simple and familiar interface.
+* Well tested, being used in production for past 2 years.
+* Internal logging with timers, can be configured for streaming slow queries into Slack.
+
+Manual:
 * [Install](#install)
 * [Initialize](#initialize)
 * [Define](#define)
@@ -157,7 +163,7 @@ Pass your struct's pointer, and a query;
 
 ```go
 user := &User{}
-err := DB.Read(user, "WHERE id = ?", 1) // You can type the full query if preferred.
+err := DB.Read(user, "SELECT * FROM users WHERE id = ?", 1)
 // => SELECT * FROM users WHERE id = 1
 
 fmt.Println(user.Name)
@@ -199,7 +205,7 @@ Updates matching row in database, returns `sql.ErrNoRows` nothing matched.
 
 ```go
 user := &User{}
-err := DB.Read(user, "WHERE id = ?", 1)
+err := DB.Read(user, "SELECT * FROM users WHERE id = ?", 1)
 
 user.Name = "Yolo"
 err := DB.Update(user)
