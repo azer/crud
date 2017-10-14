@@ -22,13 +22,17 @@ func (db *DB) Ping() error {
 }
 
 func (db *DB) Exec(sql string, params ...interface{}) (stdsql.Result, error) {
-	log.Info(sql)
-	return db.Client.Exec(sql, params...)
+	timer := log.Timer()
+	result, error := db.Client.Exec(sql, params...)
+	timer.End("SQL Query Executed: %s", sql)
+	return result, error
 }
 
 func (db *DB) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
-	log.Info(sql)
-	return db.Client.Query(sql, params...)
+	timer := log.Timer()
+	result, error := db.Client.Query(sql, params...)
+	timer.End("SQL Query Executed: %s", sql)
+	return result, error
 }
 
 func (db *DB) CreateTable(st interface{}, ifexists bool) error {
