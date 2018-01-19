@@ -35,6 +35,10 @@ func IsPointer(any interface{}) bool {
 	return DirectValueOf(any).Kind() == reflect.Ptr
 }
 
+func IsStruct(any interface{}) bool {
+	return DirectValueOf(any).Kind() == reflect.Struct
+}
+
 func HasPointers(any interface{}) bool {
 	if !IsSlice(any) {
 		return IsPointer(any)

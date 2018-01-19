@@ -42,6 +42,12 @@ type Foo struct {
 	Beast  string
 }
 
+type EmbeddedFoo struct {
+	Foo
+	Span int
+	Eggs string
+}
+
 type FooSlice []Foo
 type FooPTRSlice []*Foo
 

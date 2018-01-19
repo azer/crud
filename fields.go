@@ -11,10 +11,26 @@ type Field struct {
 }
 
 func GetFieldsOf(st interface{}) ([]*Field, error) {
-	fields := []*Field{}
+	fields, err := CollectFields(st, []*Field{})
+	if err != nil {
+		return nil, err
+	}
 
+	return fields, nil
+}
+
+func CollectFields(st interface{}, fields []*Field) ([]*Field, error) {
 	iter := NewFieldIteration(st)
 	for iter.Next() {
+		if iter.IsEmbeddedStruct() {
+			if _fields, err := CollectFields(iter.ValueField().Interface(), fields); err != nil {
+				return nil, err
+			} else {
+				fields = _fields
+			}
+			continue
+		}
+
 		sqlOptions, err := iter.SQLOptions()
 
 		if err != nil {

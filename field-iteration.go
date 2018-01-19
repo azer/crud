@@ -77,3 +77,11 @@ func (iteration *FieldIteration) Value() interface{} {
 func (iteration *FieldIteration) Name() string {
 	return iteration.TypeField().Name
 }
+
+func (iteration *FieldIteration) IsEmbeddedStruct() bool {
+	if _, ok := sql.TypeDict[iteration.TypeField().Type.String()]; ok {
+		return false
+	}
+
+	return iteration.ReflectValue.Field(iteration.Index).Kind() == reflect.Struct
+}

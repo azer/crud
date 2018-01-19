@@ -11,6 +11,12 @@ type Foo struct {
 	Id int
 }
 
+type EmbeddedFoo struct {
+	Foo
+	Span bool
+	Eggs int
+}
+
 type FooSlice []Foo
 type FooPTRSlice []*Foo
 
@@ -45,6 +51,15 @@ func TestIsPointer(t *testing.T) {
 	assert.True(t, meta.IsPointer(&[]Foo{}))
 	assert.False(t, meta.IsPointer(Foo{}))
 	assert.False(t, meta.IsPointer(*&Foo{}))
+}
+
+func TestIsStruct(t *testing.T) {
+	ef := EmbeddedFoo{}
+
+	assert.True(t, meta.IsStruct(ef))
+	assert.True(t, meta.IsStruct(ef.Foo))
+	assert.False(t, meta.IsStruct(ef.Span))
+	assert.False(t, meta.IsStruct(ef.Eggs))
 }
 
 func TestHasPointers(t *testing.T) {

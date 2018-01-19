@@ -50,3 +50,24 @@ func TestCreateEmpty(t *testing.T) {
 
 	DB.DropTables(UserProfile{})
 }
+
+/*func TestEmbedding(t *testing.T) {
+	DB.ResetTables(EmbeddedFoo{})
+
+	foo := EmbeddedFoo{
+		Foo{
+			APIKey: "hi",
+			YOLO:   true,
+			Beast:  "span eggs",
+		},
+	}
+
+	assert.Equal(t, foo.Id, 0)
+	err := DB.CreateAndRead(&foo)
+	assert.Nil(t, err)
+	assert.Equal(t, foo.Id, 1)
+	assert.Equal(t, foo.APIKey, "hi")
+	assert.Equal(t, foo.Beast, "span eggs")
+
+	DB.DropTables(EmbeddedFoo{})
+}*/
