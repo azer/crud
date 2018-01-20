@@ -33,10 +33,26 @@ func NewRow(st interface{}) (*Row, error) {
 }
 
 func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
-	values := []*RowValue{}
+	fields, err := CollectRows(st, []*RowValue{})
+	if err != nil {
+		return nil, err
+	}
 
+	return fields, nil
+}
+
+func CollectRows(st interface{}, rows []*RowValue) ([]*RowValue, error) {
 	iter := NewFieldIteration(st)
 	for iter.Next() {
+		if iter.IsEmbeddedStruct() {
+			if _rows, err := CollectRows(iter.ValueField().Interface(), rows); err != nil {
+				return nil, err
+			} else {
+				rows = _rows
+			}
+			continue
+		}
+
 		sqlOptions, err := iter.SQLOptions()
 
 		if err != nil {
@@ -53,11 +69,11 @@ func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
 			continue
 		}
 
-		values = append(values, &RowValue{
+		rows = append(rows, &RowValue{
 			SQLColumn: sqlOptions.Name,
 			Value:     value,
 		})
 	}
 
-	return values, nil
+	return rows, nil
 }
