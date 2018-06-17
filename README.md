@@ -118,6 +118,7 @@ Here is the list of the options that you can pass;
 * `required`
 * `default='?'`
 * `name=?`
+* `table-name=?`
 
 If you'd like a struct field to be ignored by CRUD, choose `-` as options:
 
@@ -291,7 +292,6 @@ DATABASE_URL="?" go test ./...
 * **Migration:** We need a sophisticated solution for adding / removing columns when user changes the structs.
 * **Relationships:** This was intentionally avoided. Can be considered if there is a clean way to implement it.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
-* **Custom Table Names:** It needs to let people use custom table names.
 * **Comments:** I rarely comment my code.
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
