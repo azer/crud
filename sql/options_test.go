@@ -7,7 +7,7 @@ import (
 )
 
 func TestAllOptions(t *testing.T) {
-	o, err := sql.NewOptions("varchar(255) auto-increment=25 primary-key required default='yolo' name=id")
+	o, err := sql.NewOptions("varchar(255) auto-increment=25 primary-key required default='yolo' name=id table-name='hello-kitty'")
 	assert.Nil(t, err)
 	assert.Equal(t, o.Name, "id")
 	assert.Equal(t, o.Type, "varchar")
@@ -17,6 +17,7 @@ func TestAllOptions(t *testing.T) {
 	assert.Equal(t, o.IsPrimaryKey, true)
 	assert.Equal(t, o.IsRequired, true)
 	assert.Equal(t, o.DefaultValue, "'yolo'")
+	assert.Equal(t, o.TableName, "'hello-kitty'")
 }
 
 func TestIgnoring(t *testing.T) {

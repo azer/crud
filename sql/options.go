@@ -36,6 +36,10 @@ func NewOptions(input string) (*Options, error) {
 			continue
 		}
 
+		if options.ReadTableName(part) {
+			continue
+		}
+
 		if options.ReadDefaultValue(part) {
 			continue
 		}
@@ -82,6 +86,7 @@ type Options struct {
 	IsUnsigned         bool
 	IsRequired         bool
 	Ignore             bool
+	TableName          string
 }
 
 func (options *Options) ReadAttr(input string, names ...string) (string, bool) {
@@ -148,6 +153,16 @@ func (options *Options) ReadName(input string) bool {
 	}
 
 	options.Name = value
+	return true
+}
+
+func (options *Options) ReadTableName(input string) bool {
+	value, ok := options.ReadAttr(input, "table-name")
+	if !ok {
+		return false
+	}
+
+	options.TableName = value
 	return true
 }
 

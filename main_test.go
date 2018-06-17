@@ -29,7 +29,7 @@ type UserProfileNull struct {
 }
 
 type Post struct {
-	Id        int       `json:"id" sql:"auto-increment primary-key required"`
+	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed-post"`
 	Title     string    `json:"title"`
 	Text      string    `json:"text"`
 	CreatedAt time.Time `json:"created_at"`
@@ -80,7 +80,7 @@ func TestCreateTables(t *testing.T) {
 	err := DB.CreateTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
 	assert.True(t, DB.CheckIfTableExists("user_profile"))
-	assert.True(t, DB.CheckIfTableExists("post"))
+	assert.True(t, DB.CheckIfTableExists("renamed-post"))
 }
 
 func TestDropTables(t *testing.T) {

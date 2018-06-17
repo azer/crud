@@ -11,6 +11,10 @@ func NewTableQuery(name string, fields []*Options, ifNotExists bool) string {
 		ifNotExistsExt = " IF NOT EXISTS"
 	}
 
+	if customTableName, ok := LookupCustomTableName(fields); ok {
+		name = customTableName
+	}
+
 	return fmt.Sprintf("CREATE TABLE%s `%s` (\n%s%s\n)%s;",
 		ifNotExistsExt, name, NewFieldQueries(fields), NewPrimaryKeyQuery(fields), NewTableConfigQuery(fields))
 }
@@ -147,6 +151,16 @@ func UpdateQuery(tableName, index string, columnNames []string) string {
 
 func DeleteQuery(tableName, index string) string {
 	return fmt.Sprintf("DELETE FROM %s WHERE %s=?", tableName, index)
+}
+
+func LookupCustomTableName(fields []*Options) (string, bool) {
+	for _, f := range fields {
+		if len(f.TableName) > 0 {
+			return f.TableName, true
+		}
+	}
+
+	return "", false
 }
 
 func quoteColumnNames(columns []string) []string {
