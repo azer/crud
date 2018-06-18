@@ -26,8 +26,14 @@ func NewRow(st interface{}) (*Row, error) {
 		return nil, err
 	}
 
+	tableName := SQLTableNameOf(st)
+
+	if customTableName, ok := LookupCustomTableName(st); ok {
+		tableName = customTableName
+	}
+
 	return &Row{
-		SQLTableName: SQLTableNameOf(st),
+		SQLTableName: tableName,
 		Values:       values,
 	}, nil
 }

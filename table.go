@@ -20,6 +20,10 @@ func NewTable(any interface{}) (*Table, error) {
 
 	name := meta.TypeNameOf(any)
 
+	if customTableName, ok := LookupCustomTableName(any); ok {
+		name = customTableName
+	}
+
 	return &Table{
 		Name:    name,
 		SQLName: snakecase.SnakeCase(name),
@@ -95,4 +99,19 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 	}
 
 	return values
+}
+
+func LookupCustomTableName(any interface{}) (string, bool) {
+	fields, err := GetFieldsOf(any)
+	if err != nil {
+		return "", false
+	}
+
+	for _, f := range fields {
+		if len(f.SQL.TableName) > 0 {
+			return f.SQL.TableName, true
+		}
+	}
+
+	return "", false
 }

@@ -73,3 +73,19 @@ func TestEmbedding(t *testing.T) {
 
 	DB.DropTables(EmbeddedFoo{})
 }
+
+func TestCreatingRenamedTableRow(t *testing.T) {
+	DB.ResetTables(Post{})
+
+	p := Post{
+		Title: "Foo",
+		Text:  "bar",
+	}
+
+	assert.Equal(t, p.Id, 0)
+	err := DB.CreateAndRead(&p)
+	assert.Nil(t, err)
+	assert.Equal(t, p.Id, 1)
+
+	DB.DropTables(Post{})
+}

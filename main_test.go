@@ -29,7 +29,7 @@ type UserProfileNull struct {
 }
 
 type Post struct {
-	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed-post"`
+	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_post"`
 	Title     string    `json:"title"`
 	Text      string    `json:"text"`
 	CreatedAt time.Time `json:"created_at"`
