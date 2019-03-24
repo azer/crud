@@ -80,7 +80,7 @@ func TestCreateTables(t *testing.T) {
 	err := DB.CreateTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
 	assert.True(t, DB.CheckIfTableExists("user_profile"))
-	assert.True(t, DB.CheckIfTableExists("renamed-post"))
+	assert.True(t, DB.CheckIfTableExists("renamed_post"))
 }
 
 func TestDropTables(t *testing.T) {

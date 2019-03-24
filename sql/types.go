@@ -16,6 +16,7 @@ var Types = map[string]int{
 }
 
 var TypeDict = map[string]string{
+	"float32":         "float",
 	"float64":         "float",
 	"int":             "int",
 	"uint":            "int",
@@ -24,6 +25,7 @@ var TypeDict = map[string]string{
 	"string":          "varchar",
 	"time.Time":       "timestamp",
 	"bool":            "tinyint",
+	"sql.NullFloat32": "float",
 	"sql.NullFloat64": "float",
 	"sql.NullInt64":   "bigint",
 	"sql.NullString":  "varchar",
@@ -35,5 +37,5 @@ func MatchType(typeName string) (string, error) {
 		return result, nil
 	}
 
-	return "", errors.New(fmt.Sprintf("Unknown type '%s'", typeName))
+	return "", errors.New(fmt.Sprintf("[crud] Can't match Go type '%s' with any SQL type.", typeName))
 }

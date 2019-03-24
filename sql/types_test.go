@@ -19,6 +19,14 @@ func TestMatchType(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, m, "timestamp")
 
+	m, err = sql.MatchType("float32")
+	assert.Nil(t, err)
+	assert.Equal(t, m, "float")
+
+	m, err = sql.MatchType("sql.NullFloat32")
+	assert.Nil(t, err)
+	assert.Equal(t, m, "float")
+
 	m, err = sql.MatchType("float64")
 	assert.Nil(t, err)
 	assert.Equal(t, m, "float")
