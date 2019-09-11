@@ -4,7 +4,7 @@ A minimalistic relational database library for Go.
 
 Features:
 * Simple and familiar interface.
-* Well tested, being used [in production for past 2 years](#apps-using-crud).
+* Well tested, being used [in production since 2015](#apps-using-crud).
 * Internal logging with timers, [can be configured for streaming slow queries into Slack](https://kodfabrik.com/journal/monitoring-slow-sql-queries-via-slack/#crud).
 
 Manual:
