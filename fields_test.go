@@ -26,7 +26,7 @@ func TestFields(t *testing.T) {
 	assert.Equal(t, fields[3].SQL.Name, "email")
 	assert.Equal(t, fields[3].SQL.Type, "varchar")
 	assert.Equal(t, fields[4].Name, "Modified")
-	assert.Equal(t, fields[4].SQL.Name, "modified")
+	assert.Equal(t, fields[4].SQL.Name, "modified_col")
 	assert.Equal(t, fields[4].SQL.Type, "bigint")
 }
 

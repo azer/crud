@@ -17,7 +17,7 @@ type UserProfile struct {
 	Name     string `json:"name" sql:"required"`
 	Bio      string `json:"bio" sql:"type=text"`
 	Email    string `json:"e-mail" sql:"name=email"`
-	Modified int64  `json:"modified" sql:"name=modified"`
+	Modified int64  `json:"modified" sql:"name=modified_col"`
 }
 
 type UserProfileNull struct {
@@ -50,6 +50,10 @@ type EmbeddedFoo struct {
 
 type FooSlice []Foo
 type FooPTRSlice []*Foo
+
+type CustomTableName struct {
+	Foo int `sql:"table-name=yolo"`
+}
 
 func init() {
 	var err error

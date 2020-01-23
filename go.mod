@@ -9,3 +9,5 @@ require (
 	github.com/stretchr/testify v1.2.2
 	google.golang.org/appengine v1.1.0 // indirect
 )
+
+go 1.13

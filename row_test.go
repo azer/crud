@@ -12,8 +12,8 @@ func TestGettingRowValues(t *testing.T) {
 	assert.Equal(t, len(rows), 4)
 
 	rows, err = crud.GetRowValuesOf(UserProfile{
-		Name:  "Azer",
-		Email: "azer@roadbeats.com",
+		Name:     "Azer",
+		Email:    "azer@roadbeats.com",
 		Modified: 9223372036854775807,
 	})
 
@@ -25,7 +25,7 @@ func TestGettingRowValues(t *testing.T) {
 	assert.Equal(t, rows[1].Value.(string), "")
 	assert.Equal(t, rows[2].SQLColumn, "email")
 	assert.Equal(t, rows[2].Value.(string), "azer@roadbeats.com")
-	assert.Equal(t, rows[3].SQLColumn, "modified")
+	assert.Equal(t, rows[3].SQLColumn, "modified_col")
 	assert.Equal(t, rows[3].Value.(int64), int64(9223372036854775807))
 
 	rows, err = crud.GetRowValuesOf(Post{})

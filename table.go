@@ -18,15 +18,11 @@ func NewTable(any interface{}) (*Table, error) {
 
 	SetDefaultPK(fields)
 
-	name := meta.TypeNameOf(any)
-
-	if customTableName, ok := LookupCustomTableName(any); ok {
-		name = customTableName
-	}
+	name, sqlName := ReadTableName(any)
 
 	return &Table{
 		Name:    name,
-		SQLName: snakecase.SnakeCase(name),
+		SQLName: sqlName,
 		Fields:  fields,
 	}, nil
 }
@@ -99,6 +95,33 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 	}
 
 	return values
+}
+
+// Return struct name and SQL table name
+func ReadTableName(any interface{}) (string, string) {
+	name := meta.TypeNameOf(any)
+	sqlName := snakecase.SnakeCase(name)
+
+	if customTableName, ok := LookupCustomTableName(any); ok {
+		sqlName = customTableName
+	}
+
+	return name, sqlName
+}
+
+func ReadTableColumns(any interface{}) ([]string, error) {
+	fields, err := GetFieldsOf(any)
+	if err != nil {
+		return nil, err
+	}
+
+	columns := []string{}
+
+	for _, col := range fields {
+		columns = append(columns, col.SQL.Name)
+	}
+
+	return columns, nil
 }
 
 func LookupCustomTableName(any interface{}) (string, bool) {

@@ -1,6 +1,7 @@
 package crud_test
 
 import (
+	"fmt"
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -34,7 +35,7 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[3].SQL.Type, "varchar")
 	assert.Equal(t, table.Fields[3].SQL.Length, 255)
 	assert.Equal(t, table.Fields[4].Name, "Modified")
-	assert.Equal(t, table.Fields[4].SQL.Name, "modified")
+	assert.Equal(t, table.Fields[4].SQL.Name, "modified_col")
 	assert.Equal(t, table.Fields[4].SQL.Type, "bigint")
 	assert.Equal(t, table.Fields[4].SQL.Length, 20)
 }
@@ -114,4 +115,22 @@ func TestColumnDictOfSlices(t *testing.T) {
 	assert.Equal(t, columnDict["api_key"], "APIKey")
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
+}
+
+func TestReadingCustomTableName(t *testing.T) {
+	table, err := crud.NewTable(CustomTableName{})
+	assert.Nil(t, err)
+	assert.Equal(t, table.Name, "CustomTableName")
+	assert.Equal(t, table.SQLName, "yolo")
+}
+
+func TestReadingTableColumns(t *testing.T) {
+	columns, err := crud.ReadTableColumns(UserProfile{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "modified_col")
 }
