@@ -1,18 +1,15 @@
 package crud
 
 import (
-	"fmt"
+	"reflect"
+
 	"github.com/azer/crud/meta"
 	"github.com/azer/crud/sql"
 	"github.com/azer/snakecase"
-	"reflect"
 )
 
 func NewFieldIteration(st interface{}) *FieldIteration {
 	rvalue, rtype := meta.Get(st)
-
-	fmt.Println(st)
-	fmt.Println(rvalue, rtype)
 
 	length := rvalue.NumField()
 
