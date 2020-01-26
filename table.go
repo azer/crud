@@ -110,6 +110,10 @@ func ReadTableName(any interface{}) (string, string) {
 }
 
 func ReadTableColumns(any interface{}) ([]string, error) {
+	if meta.IsSlice(any) {
+		any = meta.CreateElement(any).Interface()
+	}
+
 	fields, err := GetFieldsOf(any)
 	if err != nil {
 		return nil, err

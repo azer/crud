@@ -1,7 +1,6 @@
 package crud_test
 
 import (
-	"fmt"
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -126,6 +125,37 @@ func TestReadingCustomTableName(t *testing.T) {
 
 func TestReadingTableColumns(t *testing.T) {
 	columns, err := crud.ReadTableColumns(UserProfile{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "modified_col")
+}
+
+func TestReadingTableColumnsFromPointer(t *testing.T) {
+	columns, err := crud.ReadTableColumns(&UserProfile{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "modified_col")
+}
+
+func TestReadingCustomTableNameFromList(t *testing.T) {
+	table, err := crud.NewTable([]*CustomTableName{})
+	assert.Nil(t, err)
+	assert.Equal(t, table.Name, "CustomTableName")
+	assert.Equal(t, table.SQLName, "yolo")
+}
+
+func TestReadingTableColumnsFromList(t *testing.T) {
+	list := []*UserProfile{}
+
+	columns, err := crud.ReadTableColumns(&list)
 
 	assert.Nil(t, err)
 	assert.Equal(t, columns[0], "id")
