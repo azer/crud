@@ -186,3 +186,10 @@ func TestReadingTableColumnsFromList(t *testing.T) {
 	assert.Equal(t, columns[3], "email")
 	assert.Equal(t, columns[4], "modified_col")
 }
+
+func TestMixed(t *testing.T) {
+	table, err := crud.NewTable(Mixed{})
+	assert.Nil(t, err)
+	assert.Equal(t, table.Name, "Mixed")
+	assert.Equal(t, table.SQLName, "__mixed__")
+}

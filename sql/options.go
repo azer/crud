@@ -9,8 +9,9 @@ import (
 
 func NewOptions(input string) (*Options, error) {
 	options := &Options{}
+	input = strings.TrimSpace(input)
 
-	if strings.TrimSpace(input) == "" {
+	if input == "" {
 		return options, nil
 	}
 

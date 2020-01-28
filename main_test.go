@@ -28,6 +28,14 @@ type UserProfileNull struct {
 	Modified sql.NullInt64  `json:"modified" sql:"name=modified"`
 }
 
+type Mixed struct {
+	Id        int    `json:"-" sql:"  primary-key auto-increment unsigned name=id table-name=__mixed__ "`
+	UserId    int    `json:"-" valid:"User.Id~Specified user was not found" sql:" name=user_id"`
+	Secret    string `json:"-" valid:"required" sql:" name=secret"`
+	CreatedAt int64  `json:"-" sql:"default=0 name=created_at"`
+	UpdatedAt int64  `json:"-" sql:"default=0 name=updated_at"`
+}
+
 type Post struct {
 	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_post"`
 	Title     string    `json:"title"`
