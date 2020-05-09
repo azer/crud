@@ -9,28 +9,33 @@ Features:
 * Internal logging with timers, [can be configured for streaming slow queries into Slack](https://kodfabrik.com/journal/monitoring-slow-sql-queries-via-slack/#crud).
 
 Manual:
-* [Install](#install)
-* [Initialize](#initialize)
-* [Define](#define)
-  * [Create & Drop Tables](#create--drop-tables)
-  * [Reset Tables](#reset-tables)
-  * [SQL Options](#sql-options)
-* CRUD:
-  * [Create](#create)
-  * [CreateAndRead](#createandread)
-  * [Read](#read)
-    * [Reading a single row](#reading-a-single-row)
-    * [Reading multiple rows](#reading-multiple-rows)
-    * [Scanning to custom values](#scanning-to-custom-values)
-  * [Update](#update)
-  * [Delete](#delete)
-  * [Transactions](#transactions)
-* [Logs](#logs)
-* [Custom Queries](#custom-queries)
-* [Running Tests](#running-tests)
-* [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
-* [Apps Using CRUD](#apps-using-crud)
-* [What's Missing?](#whats-missing)
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [-](#-)
+- [Install](#install)
+- [Initialize](#initialize)
+- [Define](#define)
+    - [-](#--1)
+    - [Reset Tables](#reset-tables)
+    - [SQL Options](#sql-options)
+    - [Create](#create)
+    - [CreateAndRead](#createandread)
+    - [Read](#read)
+        - [-](#--2)
+        - [Reading multiple rows:](#reading-multiple-rows)
+        - [Scanning to custom values:](#scanning-to-custom-values)
+    - [Update](#update)
+    - [Delete](#delete)
+    - [Transactions](#transactions)
+    - [Logs](#logs)
+    - [Custom Queries](#custom-queries)
+    - [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
+    - [Apps Using CRUD](#apps-using-crud)
+    - [What's Missing?](#whats-missing)
+    - [LICENSE](#license)
+
+<!-- markdown-toc end -->
 
 ## Install
 
@@ -297,7 +302,7 @@ DATABASE_URL="?" go test ./...
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
 * **Query Builder:** Building SQL queries programmatically is useful.
-* **Make UTF-8 Default:** Looks like the default charset is not UTF8. 
+* **Make UTF-8 Default:** Looks like the default charset is not UTF8.
 
 ## LICENSE
 
