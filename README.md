@@ -12,17 +12,14 @@ Manual:
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [-](#-)
 - [Install](#install)
 - [Initialize](#initialize)
 - [Define](#define)
-    - [-](#--1)
     - [Reset Tables](#reset-tables)
     - [SQL Options](#sql-options)
     - [Create](#create)
     - [CreateAndRead](#createandread)
     - [Read](#read)
-        - [-](#--2)
         - [Reading multiple rows:](#reading-multiple-rows)
         - [Scanning to custom values:](#scanning-to-custom-values)
     - [Update](#update)
