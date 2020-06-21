@@ -26,5 +26,5 @@ jobs:
           mysql password: "123456"
       - name: Test
         env:
-          DATABASE_URL: "user:123456@0.0.0.0:3306/crud?charset=utf8&parseTime=True&loc=Local"
+          DATABASE_URL: "user:123456@localhost:3306/crud?charset=utf8&parseTime=True&loc=Local"
         run: go test ./...
