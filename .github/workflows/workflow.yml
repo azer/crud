@@ -13,7 +13,13 @@ jobs:
 
     steps:
       - name: Start Mysql
-        run: sudo service mysql start
+        run: sudo service mysql stop
+      - uses: getong/mariadb-action@v1.1
+        with:
+          mysql database: 'crud'
+          mysql root password: 'password'
+          mysql user: 'user' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: 'password'
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
