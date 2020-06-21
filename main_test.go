@@ -8,6 +8,7 @@ import (
 	"os"
 	"testing"
 	"time"
+	"fmt"
 )
 
 var DB *crud.DB
@@ -64,6 +65,8 @@ type CustomTableName struct {
 }
 
 func init() {
+	fmt.Println("db:", os.Getenv("DATABASE_URL"))
+	
 	var err error
 	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
 	if err != nil {
