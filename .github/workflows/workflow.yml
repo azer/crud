@@ -8,22 +8,12 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    
-    services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3306
-        env:
-         MYSQL_USER: user
-         MYSQL_PASSWORD: password
-         MYSQL_DATABASE: crud
-         MYSQL_ROOT_PASSWORD: password
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
+      - name: Start Mysql
+        run: sudo service mysql start
       - uses: actions/checkout@v1
         with:
           fetch-depth: 1
