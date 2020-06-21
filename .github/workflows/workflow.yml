@@ -1,5 +1,12 @@
 name: CI
-on: pull_request
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  - pull_request:
+  - push:
+      branches:
+        - master
+
 jobs:
   test:
     runs-on: ubuntu-latest
