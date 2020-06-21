@@ -8,8 +8,21 @@ on:
       - master
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+    
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+         MYSQL_USER: user
+         MYSQL_PASSWORD: password
+         MYSQL_DATABASE: test
+         MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
     steps:
       - uses: actions/checkout@v1
         with:
@@ -17,13 +30,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-            go-version: '^1.13.1'
-      - name: Setup MySQL
-        uses: haltuf/mysql-action@v1.1
-        with:
-          mysql database: "crud"
-          mysql user: "user"
-          mysql password: "123456"
+          go-version: '^1.13.1'
       - name: Test
         env:
           DATABASE_URL: "user:123456@localhost:3306/crud?charset=utf8&parseTime=True&loc=Local"
