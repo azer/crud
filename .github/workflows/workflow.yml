@@ -1,0 +1,23 @@
+name: CI
+on: pull_request
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: Setup Go
+        uses: actions/setup-go@v2
+          with:
+            go-version: '^1.13.1'
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: "crud"
+          mysql user: "user"
+          mysql password: "123456"
+      - name: Test
+        env:
+          DATABASE_URL: "user:123456@/crud?charset=utf8&parseTime=True&loc=Local"
+        run: go test ./...
