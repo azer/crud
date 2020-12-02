@@ -142,7 +142,11 @@ func CompleteSelectQuery(tableName string, columnNames []string, original string
 }
 
 func UpdateQuery(tableName, index string, columnNames []string) string {
-	return fmt.Sprintf("UPDATE %s SET %s=? WHERE %s=?", tableName, strings.Join(quoteColumnNames(columnNames), "=?, "), index)
+	return fmt.Sprintf("%s WHERE %s=?", UpdateAllQuery(tableName, columnNames), index)
+}
+
+func UpdateAllQuery(tableName string, columnNames []string) string {
+	return fmt.Sprintf("UPDATE %s SET %s=?", tableName, strings.Join(quoteColumnNames(columnNames), "=?, "))
 }
 
 func DeleteQuery(tableName, index string) string {
