@@ -1,9 +1,10 @@
 package crud_test
 
 import (
+	"testing"
+
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestNewTable(t *testing.T) {
@@ -11,7 +12,7 @@ func TestNewTable(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "UserProfile")
 	assert.Equal(t, table.SQLName, "user_profile")
-	assert.Equal(t, len(table.Fields), 5)
+	assert.Equal(t, len(table.Fields), 6)
 	assert.Equal(t, table.Fields[0].Name, "Id")
 	assert.Equal(t, table.Fields[0].SQL.Name, "id")
 	assert.Equal(t, table.Fields[0].SQL.Type, "int")
@@ -33,10 +34,12 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[3].SQL.Name, "email")
 	assert.Equal(t, table.Fields[3].SQL.Type, "varchar")
 	assert.Equal(t, table.Fields[3].SQL.Length, 255)
-	assert.Equal(t, table.Fields[4].Name, "Modified")
-	assert.Equal(t, table.Fields[4].SQL.Name, "modified_col")
-	assert.Equal(t, table.Fields[4].SQL.Type, "bigint")
-	assert.Equal(t, table.Fields[4].SQL.Length, 20)
+	assert.Equal(t, table.Fields[4].SQL.Name, "attachment")
+	assert.Equal(t, table.Fields[4].SQL.Type, "blob")
+	assert.Equal(t, table.Fields[5].Name, "Modified")
+	assert.Equal(t, table.Fields[5].SQL.Name, "modified_col")
+	assert.Equal(t, table.Fields[5].SQL.Type, "bigint")
+	assert.Equal(t, table.Fields[5].SQL.Length, 20)
 }
 
 func TestColumnDict(t *testing.T) {
@@ -160,7 +163,8 @@ func TestReadingTableColumns(t *testing.T) {
 	assert.Equal(t, columns[1], "name")
 	assert.Equal(t, columns[2], "bio")
 	assert.Equal(t, columns[3], "email")
-	assert.Equal(t, columns[4], "modified_col")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
 }
 
 func TestReadingTableColumnsFromPointer(t *testing.T) {
@@ -171,7 +175,8 @@ func TestReadingTableColumnsFromPointer(t *testing.T) {
 	assert.Equal(t, columns[1], "name")
 	assert.Equal(t, columns[2], "bio")
 	assert.Equal(t, columns[3], "email")
-	assert.Equal(t, columns[4], "modified_col")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
 }
 
 func TestReadingTableColumnsFromList(t *testing.T) {
@@ -184,7 +189,8 @@ func TestReadingTableColumnsFromList(t *testing.T) {
 	assert.Equal(t, columns[1], "name")
 	assert.Equal(t, columns[2], "bio")
 	assert.Equal(t, columns[3], "email")
-	assert.Equal(t, columns[4], "modified_col")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
 }
 
 func TestMixed(t *testing.T) {

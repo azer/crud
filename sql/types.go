@@ -25,6 +25,8 @@ var TypeDict = map[string]string{
 	"string":          "varchar",
 	"time.Time":       "timestamp",
 	"bool":            "tinyint",
+	"[]byte":          "blob",
+	"[]uint8":         "blob",
 	"sql.NullFloat32": "float",
 	"sql.NullFloat64": "float",
 	"sql.NullInt64":   "bigint",

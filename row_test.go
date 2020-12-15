@@ -1,32 +1,36 @@
 package crud_test
 
 import (
+	"testing"
+
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestGettingRowValues(t *testing.T) {
 	rows, err := crud.GetRowValuesOf(UserProfile{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 4)
+	assert.Equal(t, len(rows), 5)
 
 	rows, err = crud.GetRowValuesOf(UserProfile{
-		Name:     "Azer",
-		Email:    "azer@roadbeats.com",
-		Modified: 9223372036854775807,
+		Name:       "Azer",
+		Email:      "azer@roadbeats.com",
+		Modified:   9223372036854775807,
+		Attachment: []byte("{ \"test\": true }"),
 	})
 
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 4)
+	assert.Equal(t, len(rows), 5)
 	assert.Equal(t, rows[0].SQLColumn, "name")
 	assert.Equal(t, rows[0].Value.(string), "Azer")
 	assert.Equal(t, rows[1].SQLColumn, "bio")
 	assert.Equal(t, rows[1].Value.(string), "")
 	assert.Equal(t, rows[2].SQLColumn, "email")
 	assert.Equal(t, rows[2].Value.(string), "azer@roadbeats.com")
-	assert.Equal(t, rows[3].SQLColumn, "modified_col")
-	assert.Equal(t, rows[3].Value.(int64), int64(9223372036854775807))
+	assert.Equal(t, rows[3].SQLColumn, "attachment")
+	assert.Equal(t, string(rows[3].Value.([]byte)), "{ \"test\": true }")
+	assert.Equal(t, rows[4].SQLColumn, "modified_col")
+	assert.Equal(t, rows[4].Value.(int64), int64(9223372036854775807))
 
 	rows, err = crud.GetRowValuesOf(Post{})
 	assert.Nil(t, err)

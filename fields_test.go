@@ -1,15 +1,16 @@
 package crud_test
 
 import (
+	"testing"
+
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestFields(t *testing.T) {
 	fields, err := crud.GetFieldsOf(UserProfile{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(fields), 5)
+	assert.Equal(t, len(fields), 6)
 	assert.Equal(t, fields[0].Name, "Id")
 	assert.Equal(t, fields[0].SQL.Name, "id")
 	assert.Equal(t, fields[0].SQL.Type, "int")
@@ -25,9 +26,13 @@ func TestFields(t *testing.T) {
 	assert.Equal(t, fields[3].Name, "Email")
 	assert.Equal(t, fields[3].SQL.Name, "email")
 	assert.Equal(t, fields[3].SQL.Type, "varchar")
-	assert.Equal(t, fields[4].Name, "Modified")
-	assert.Equal(t, fields[4].SQL.Name, "modified_col")
-	assert.Equal(t, fields[4].SQL.Type, "bigint")
+	assert.Equal(t, fields[4].Name, "Attachment")
+	assert.Equal(t, fields[4].SQL.Name, "attachment")
+	assert.Equal(t, fields[4].SQL.Type, "blob")
+	assert.Equal(t, fields[5].Name, "Modified")
+	assert.Equal(t, fields[5].SQL.Name, "modified_col")
+	assert.Equal(t, fields[5].SQL.Type, "bigint")
+
 }
 
 func TestHasPK(t *testing.T) {

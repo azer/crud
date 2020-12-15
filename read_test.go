@@ -1,9 +1,10 @@
 package crud_test
 
 import (
+	"testing"
+
 	"github.com/azer/crud"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestResolveReadParams(t *testing.T) {
@@ -36,6 +37,7 @@ func TestReadingMultipleRows(t *testing.T) {
 	assert.Equal(t, result[1].Name, "Azer")
 	assert.Equal(t, result[1].Bio, "Engineer")
 	assert.Equal(t, result[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, string(result[1].Attachment), "{ \"azer\": \"bar\" }")
 
 	resultptr := []*UserProfile{}
 	err = DB.Read(&resultptr, "SELECT * FROM user_profile")
@@ -183,24 +185,27 @@ func CreateUserProfiles() error {
 	}
 
 	if err := DB.Create(UserProfile{
-		Name:  "Nova",
-		Bio:   "Photographer",
-		Email: "nova@roadbeats.com",
+		Name:       "Nova",
+		Bio:        "Photographer",
+		Email:      "nova@roadbeats.com",
+		Attachment: []byte("{ \"nova\": \"bar\" }"),
 	}); err != nil {
 		return err
 	}
 
 	if err := DB.Create(UserProfile{
-		Name:  "Azer",
-		Bio:   "Engineer",
-		Email: "azer@roadbeats.com",
+		Name:       "Azer",
+		Bio:        "Engineer",
+		Email:      "azer@roadbeats.com",
+		Attachment: []byte("{ \"azer\": \"bar\" }"),
 	}); err != nil {
 		return err
 	}
 
 	if err := DB.Create(UserProfile{
-		Name:  "Hola",
-		Email: "hola@roadbeats.com",
+		Name:       "Hola",
+		Email:      "hola@roadbeats.com",
+		Attachment: []byte("{ \"hola\": \"bar\" }"),
 	}); err != nil {
 		return err
 	}

@@ -2,23 +2,25 @@ package crud_test
 
 import (
 	"database/sql"
-	"github.com/azer/crud"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/stretchr/testify/assert"
+	"fmt"
 	"os"
 	"testing"
 	"time"
-	"fmt"
+
+	"github.com/azer/crud"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/stretchr/testify/assert"
 )
 
 var DB *crud.DB
 
 type UserProfile struct {
-	Id       int    `json:"id" sql:"auto-increment primary-key required"`
-	Name     string `json:"name" sql:"required"`
-	Bio      string `json:"bio" sql:"type=text"`
-	Email    string `json:"e-mail" sql:"name=email"`
-	Modified int64  `json:"modified" sql:"name=modified_col"`
+	Id         int    `json:"id" sql:"auto-increment primary-key required"`
+	Name       string `json:"name" sql:"required"`
+	Bio        string `json:"bio" sql:"type=text"`
+	Email      string `json:"e-mail" sql:"name=email"`
+	Attachment []byte `json:"attachment"`
+	Modified   int64  `json:"modified" sql:"name=modified_col"`
 }
 
 type UserProfileNull struct {
@@ -66,7 +68,7 @@ type CustomTableName struct {
 
 func init() {
 	fmt.Println("db:", os.Getenv("DATABASE_URL"))
-	
+
 	var err error
 	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
 	if err != nil {

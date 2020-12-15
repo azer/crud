@@ -1,9 +1,10 @@
 package sql_test
 
 import (
+	"testing"
+
 	"github.com/azer/crud/sql"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestMatchType(t *testing.T) {
@@ -22,6 +23,10 @@ func TestMatchType(t *testing.T) {
 	m, err = sql.MatchType("float32")
 	assert.Nil(t, err)
 	assert.Equal(t, m, "float")
+
+	m, err = sql.MatchType("[]byte")
+	assert.Nil(t, err)
+	assert.Equal(t, m, "blob")
 
 	m, err = sql.MatchType("sql.NullFloat32")
 	assert.Nil(t, err)
