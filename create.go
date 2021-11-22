@@ -3,11 +3,12 @@ package crud
 import (
 	stdsql "database/sql"
 	"fmt"
+
 	"github.com/azer/crud/sql"
 )
 
-func CreateAndGetResult(exec ExecFn, record interface{}) (stdsql.Result, error) {
-	row, err := NewRow(record)
+func createAndGetResult(exec ExecFn, record interface{}) (stdsql.Result, error) {
+	row, err := newRow(record)
 	if err != nil {
 		return nil, err
 	}
@@ -23,13 +24,13 @@ func CreateAndGetResult(exec ExecFn, record interface{}) (stdsql.Result, error) 
 	return exec(sql.InsertQuery(row.SQLTableName, columns), values...)
 }
 
-func Create(exec ExecFn, record interface{}) error {
-	_, err := CreateAndGetResult(exec, record)
+func create(exec ExecFn, record interface{}) error {
+	_, err := createAndGetResult(exec, record)
 	return err
 }
 
-func CreateAndRead(exec ExecFn, query QueryFn, record interface{}) error {
-	result, err := CreateAndGetResult(exec, record)
+func createAndRead(exec ExecFn, query QueryFn, record interface{}) error {
+	result, err := createAndGetResult(exec, record)
 	if err != nil {
 		return err
 	}
@@ -51,5 +52,5 @@ func CreateAndRead(exec ExecFn, query QueryFn, record interface{}) error {
 		id,
 	}
 
-	return Read(query, record, params)
+	return read(query, record, params)
 }

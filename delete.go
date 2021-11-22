@@ -4,11 +4,13 @@ import (
 	stdsql "database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/azer/crud/sql"
 )
 
-func Delete(exec ExecFn, record interface{}) (stdsql.Result, error) {
+func deleteRow(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	table, err := NewTable(record)
+
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +23,8 @@ func Delete(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	return exec(sql.DeleteQuery(table.SQLName, pk.SQL.Name), pk.Value)
 }
 
-func MustDelete(exec ExecFn, record interface{}) error {
-	result, err := Delete(exec, record)
+func mustDelete(exec ExecFn, record interface{}) error {
+	result, err := deleteRow(exec, record)
 	if err != nil {
 		return err
 	}

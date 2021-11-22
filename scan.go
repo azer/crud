@@ -2,10 +2,13 @@ package crud
 
 import (
 	"database/sql"
-	"github.com/azer/crud/meta"
 	"reflect"
+
+	"github.com/azer/crud/meta"
 )
 
+// Create a scanner for any given interface. This function will be called for
+// every target interface passed to DB methods that scans results.
 func NewScan(to interface{}) (*Scan, error) {
 	scan := &Scan{
 		To:         to,

@@ -4,10 +4,11 @@ import (
 	stdsql "database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/azer/crud/sql"
 )
 
-func Update(exec ExecFn, record interface{}) (stdsql.Result, error) {
+func update(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	table, err := NewTable(record)
 	if err != nil {
 		return nil, err
@@ -21,8 +22,8 @@ func Update(exec ExecFn, record interface{}) (stdsql.Result, error) {
 	return exec(sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet()), table.SQLUpdateValueSet()...)
 }
 
-func MustUpdate(exec ExecFn, record interface{}) error {
-	result, err := Update(exec, record)
+func mustUpdate(exec ExecFn, record interface{}) error {
+	result, err := update(exec, record)
 	if err != nil {
 		return err
 	}

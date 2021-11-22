@@ -96,6 +96,7 @@ func (db *DB) ResetTables(structs ...interface{}) error {
 	return nil
 }
 
+// Runs a query to check if the given table exists and returns bool
 func (db *DB) CheckIfTableExists(name string) bool {
 	var result string
 	err := db.Client.QueryRow(sql.ShowTablesLikeQuery(name)).Scan(&result)
@@ -104,16 +105,16 @@ func (db *DB) CheckIfTableExists(name string) bool {
 
 // Inserts given record into the database, generating an insert query for it.
 func (db *DB) Create(record interface{}) error {
-	return Create(db.Exec, record)
+	return create(db.Exec, record)
 }
 
 func (db *DB) CreateAndGetResult(record interface{}) (stdsql.Result, error) {
-	return CreateAndGetResult(db.Exec, record)
+	return createAndGetResult(db.Exec, record)
 }
 
 // Inserts given record and scans the inserted row back to the given row.
 func (db *DB) CreateAndRead(record interface{}) error {
-	return CreateAndRead(db.Exec, db.Query, record)
+	return createAndRead(db.Exec, db.Query, record)
 }
 
 // Runs given SQL query and scans the result rows into the given target interface. The target
@@ -128,19 +129,19 @@ func (db *DB) CreateAndRead(record interface{}) error {
 // err := tx.Read(users, "SELECT * FROM users", 1)
 //
 func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
-	return Read(db.Query, scanTo, params)
+	return read(db.Query, scanTo, params)
 }
 
 // Finding out the primary-key field of the given row, updates the corresponding record on the table
 // with the values in the given record.
 func (db *DB) Update(record interface{}) error {
-	return MustUpdate(db.Exec, record)
+	return mustUpdate(db.Exec, record)
 }
 
 // Generates and executes a DELETE query for given struct record. It matches the database row by finding
 // out the primary key field defined in the table schema.
 func (db *DB) Delete(record interface{}) error {
-	return MustDelete(db.Exec, record)
+	return mustDelete(db.Exec, record)
 }
 
 // Start a DB transaction. It returns an interface w/ most of the methods DB provides.

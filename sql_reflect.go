@@ -6,15 +6,18 @@ import (
 	"github.com/jinzhu/inflection"
 )
 
+// Find out what given interface should be called in the database. It first looks up
+// if a table name was explicitly specified (see "table-name" option), or automatically
+// generates a plural name from the name of the struct type.
 func SQLTableNameOf(any interface{}) string {
-	if customTableName, ok := LookupCustomTableName(any); ok {
+	if customTableName, ok := lookupCustomTableName(any); ok {
 		return customTableName
 	}
 
 	return snakecase.SnakeCase(inflection.Plural(meta.TypeNameOf(any)))
 }
 
-func LookupCustomTableName(any interface{}) (string, bool) {
+func lookupCustomTableName(any interface{}) (string, bool) {
 	if meta.IsSlice(any) {
 		any = meta.CreateElement(any).Interface()
 	}

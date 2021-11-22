@@ -5,6 +5,8 @@ import (
 	"github.com/azer/crud/sql"
 )
 
+// Create an internal representation of a database table, including its fields from given
+// struct record
 func NewTable(any interface{}) (*Table, error) {
 	if meta.IsSlice(any) {
 		any = meta.CreateElement(any).Interface()
@@ -99,23 +101,4 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 // Return struct name and SQL table name
 func ReadTableName(any interface{}) (string, string) {
 	return meta.TypeNameOf(any), SQLTableNameOf(any)
-}
-
-func ReadTableColumns(any interface{}) ([]string, error) {
-	if meta.IsSlice(any) {
-		any = meta.CreateElement(any).Interface()
-	}
-
-	fields, err := GetFieldsOf(any)
-	if err != nil {
-		return nil, err
-	}
-
-	columns := []string{}
-
-	for _, col := range fields {
-		columns = append(columns, col.SQL.Name)
-	}
-
-	return columns, nil
 }

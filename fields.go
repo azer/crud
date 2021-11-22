@@ -10,8 +10,9 @@ type Field struct {
 	SQL   *sql.Options
 }
 
+// Get DB fields of any valid struct given
 func GetFieldsOf(st interface{}) ([]*Field, error) {
-	fields, err := CollectFields(st, []*Field{})
+	fields, err := collectFields(st, []*Field{})
 	if err != nil {
 		return nil, err
 	}
@@ -19,11 +20,11 @@ func GetFieldsOf(st interface{}) ([]*Field, error) {
 	return fields, nil
 }
 
-func CollectFields(st interface{}, fields []*Field) ([]*Field, error) {
+func collectFields(st interface{}, fields []*Field) ([]*Field, error) {
 	iter := NewFieldIteration(st)
 	for iter.Next() {
 		if iter.IsEmbeddedStruct() {
-			if _fields, err := CollectFields(iter.ValueField().Interface(), fields); err != nil {
+			if _fields, err := collectFields(iter.ValueField().Interface(), fields); err != nil {
 				return nil, err
 			} else {
 				fields = _fields

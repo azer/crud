@@ -8,6 +8,9 @@ import (
 	"github.com/azer/snakecase"
 )
 
+// Take any kind of struct and return a FieldIteration instance
+// which helps walking the fields of the given struct one by one
+// reading its name, value and SQL options
 func NewFieldIteration(st interface{}) *FieldIteration {
 	rvalue, rtype := meta.Get(st)
 

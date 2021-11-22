@@ -20,7 +20,8 @@ func (row *Row) SQLValues() map[string]interface{} {
 	return result
 }
 
-func NewRow(st interface{}) (*Row, error) {
+// Takes a valid struct record and returns a crud.Row instance.
+func newRow(st interface{}) (*Row, error) {
 	values, err := GetRowValuesOf(st)
 	if err != nil {
 		return nil, err
@@ -28,7 +29,7 @@ func NewRow(st interface{}) (*Row, error) {
 
 	tableName := SQLTableNameOf(st)
 
-	if customTableName, ok := LookupCustomTableName(st); ok {
+	if customTableName, ok := lookupCustomTableName(st); ok {
 		tableName = customTableName
 	}
 
@@ -38,8 +39,11 @@ func NewRow(st interface{}) (*Row, error) {
 	}, nil
 }
 
+// Scans given struct record and returns a list of crud.Row instances for each
+// struct field. It's useful for extracting values and corresponding SQL meta information
+// from structs representing database tables.
 func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
-	fields, err := CollectRows(st, []*RowValue{})
+	fields, err := collectRows(st, []*RowValue{})
 	if err != nil {
 		return nil, err
 	}
@@ -47,11 +51,11 @@ func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
 	return fields, nil
 }
 
-func CollectRows(st interface{}, rows []*RowValue) ([]*RowValue, error) {
+func collectRows(st interface{}, rows []*RowValue) ([]*RowValue, error) {
 	iter := NewFieldIteration(st)
 	for iter.Next() {
 		if iter.IsEmbeddedStruct() {
-			if _rows, err := CollectRows(iter.ValueField().Interface(), rows); err != nil {
+			if _rows, err := collectRows(iter.ValueField().Interface(), rows); err != nil {
 				return nil, err
 			} else {
 				rows = _rows
