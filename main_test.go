@@ -18,7 +18,7 @@ type UserProfile struct {
 	Id         int    `json:"id" sql:"auto-increment primary-key required"`
 	Name       string `json:"name" sql:"required"`
 	Bio        string `json:"bio" sql:"type=text"`
-	Email      string `json:"e-mail" sql:"name=email"`
+	Email      string `json:"e-mail" sql:"name=email unique"`
 	Attachment []byte `json:"attachment"`
 	Modified   int64  `json:"modified" sql:"name=modified_col"`
 }
