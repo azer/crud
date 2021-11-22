@@ -40,7 +40,7 @@ type Mixed struct {
 }
 
 type Post struct {
-	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_post"`
+	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_posts"`
 	Title     string    `json:"title"`
 	Text      string    `json:"text"`
 	CreatedAt time.Time `json:"created_at"`
@@ -96,13 +96,13 @@ func TestExecuteSQL(t *testing.T) {
 func TestCreateTables(t *testing.T) {
 	err := DB.CreateTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
-	assert.True(t, DB.CheckIfTableExists("user_profile"))
-	assert.True(t, DB.CheckIfTableExists("renamed_post"))
+	assert.True(t, DB.CheckIfTableExists("user_profiles"))
+	assert.True(t, DB.CheckIfTableExists("renamed_posts"))
 }
 
 func TestDropTables(t *testing.T) {
 	err := DB.DropTables(UserProfile{}, Post{})
 	assert.Nil(t, err)
-	assert.False(t, DB.CheckIfTableExists("user_profile"))
-	assert.False(t, DB.CheckIfTableExists("post"))
+	assert.False(t, DB.CheckIfTableExists("user_profiles"))
+	assert.False(t, DB.CheckIfTableExists("posts"))
 }

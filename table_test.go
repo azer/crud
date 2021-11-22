@@ -11,7 +11,7 @@ func TestNewTable(t *testing.T) {
 	table, err := crud.NewTable(UserProfile{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "UserProfile")
-	assert.Equal(t, table.SQLName, "user_profile")
+	assert.Equal(t, table.SQLName, "user_profiles")
 	assert.Equal(t, len(table.Fields), 6)
 	assert.Equal(t, table.Fields[0].Name, "Id")
 	assert.Equal(t, table.Fields[0].SQL.Name, "id")

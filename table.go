@@ -3,7 +3,6 @@ package crud
 import (
 	"github.com/azer/crud/meta"
 	"github.com/azer/crud/sql"
-	"github.com/azer/snakecase"
 )
 
 func NewTable(any interface{}) (*Table, error) {
@@ -99,22 +98,7 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 
 // Return struct name and SQL table name
 func ReadTableName(any interface{}) (string, string) {
-	if meta.IsSlice(any) {
-		any = meta.CreateElement(any).Interface()
-	}
-
-	return readTableName(any)
-}
-
-func readTableName(any interface{}) (string, string) {
-	name := meta.TypeNameOf(any)
-	sqlName := snakecase.SnakeCase(name)
-
-	if customTableName, ok := lookupCustomTableName(any); ok {
-		sqlName = customTableName
-	}
-
-	return name, sqlName
+	return meta.TypeNameOf(any), SQLTableNameOf(any)
 }
 
 func ReadTableColumns(any interface{}) ([]string, error) {
@@ -134,27 +118,4 @@ func ReadTableColumns(any interface{}) ([]string, error) {
 	}
 
 	return columns, nil
-}
-
-func LookupCustomTableName(any interface{}) (string, bool) {
-	if meta.IsSlice(any) {
-		any = meta.CreateElement(any).Interface()
-	}
-
-	return lookupCustomTableName(any)
-}
-
-func lookupCustomTableName(any interface{}) (string, bool) {
-	fields, err := GetFieldsOf(any)
-	if err != nil {
-		return "", false
-	}
-
-	for _, f := range fields {
-		if len(f.SQL.TableName) > 0 {
-			return f.SQL.TableName, true
-		}
-	}
-
-	return "", false
 }
