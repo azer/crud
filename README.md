@@ -2,12 +2,6 @@
 
 A minimalistic relational database library for Go.
 
-Features:
-* Fast.
-* Well tested.
-* Being used [in production since 2015](#apps-using-crud).
-* Internal logging with timers, [can be configured for streaming slow queries into Slack](https://kodfabrik.com/journal/monitoring-slow-sql-queries-via-slack/#crud).
-
 Manual:
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
@@ -274,28 +268,11 @@ result, err := DB.Query("DROP DATABASE yolo") // or .Exec
 DATABASE_URL="?" go test ./...
 ```
 
-## Why another ORMish library for Go?
-
-* Simplicity, taking more advantage of `reflect` library to keep the API simple.
-* Building less things with more complete abstractions
-* Handling errors in an idiomatic way
-* Good test coverage
-* Modular & reusable code
-* Making less unsafe assumptions. e.g: not mapping structs to SQL rows by column index.
-* Complete & tested [SQL Options](#sql-options)
-
-## Apps Using CRUD
-
-* [Kozmos](http://getkozmos.com)
-* [MultiplayerChess.com](http://multiplayerchess.com)
-* [Listen Paradise](http://github.com/azer/radio-paradise).
-
 ## What's Missing?
 
-* **Migration:** We need a sophisticated solution for adding / removing columns when user changes the structs.
 * **Relationships:** This was intentionally avoided. Can be considered if there is a clean way to implement it.
 * **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
-* **Comments:** I rarely comment my code.
+* **Comments:**
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
 * **Query Builder:** Building SQL queries programmatically is useful.
