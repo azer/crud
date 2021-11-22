@@ -62,7 +62,7 @@ func TestReadingMultipleRows(t *testing.T) {
 	assert.Equal(t, results[1].Email, "azer@roadbeats.com")
 
 	var notmatching []*UserProfile
-	err = DB.Read(&notmatching, "SELECT * FROM user_profile WHERE name='not matching'")
+	err = DB.Read(&notmatching, "SELECT * FROM user_profiles WHERE name='not matching'")
 	assert.Nil(t, err)
 	assert.Equal(t, len(notmatching), 0)
 }
