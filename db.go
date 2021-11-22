@@ -123,6 +123,10 @@ func (db *DB) CreateAndRead(record interface{}) error {
 //
 // user := &User{}
 // err := tx.Read(user, "SELECT * FROM users WHERE id = ?", 1)
+//
+// users := &[]*User{}
+// err := tx.Read(users, "SELECT * FROM users", 1)
+//
 func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
 	return Read(db.Query, scanTo, params)
 }

@@ -41,6 +41,9 @@ func (tx *Tx) Create(record interface{}) error {
 // user := &User{}
 // err := tx.Read(user, "SELECT * FROM users WHERE id = ?", 1)
 //
+// users := &[]*User{}
+// err := tx.Read(users, "SELECT * FROM users", 1)
+//
 func (tx *Tx) Read(scanTo interface{}, params ...interface{}) error {
 	return Read(tx.Query, scanTo, params)
 }
