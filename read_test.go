@@ -105,7 +105,7 @@ func TestGeneratingQueries(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
 	result := []UserProfile{}
-	err := DB.Read(&result)
+	err := DB.Read(&result, "SELECT * FROM user_profiles")
 	assert.Nil(t, err)
 	assert.Equal(t, len(result), 3)
 	assert.Equal(t, result[0].Name, "Nova")
@@ -119,7 +119,7 @@ func TestGeneratingQueries(t *testing.T) {
 	assert.Equal(t, result[2].Email, "hola@roadbeats.com")
 
 	nova := UserProfile{}
-	err = DB.Read(&nova, "WHERE name=?", "Nova")
+	err = DB.Read(&nova, "SELECT * FROM user_profiles WHERE name=?", "Nova")
 	assert.Nil(t, err)
 	assert.Equal(t, nova.Name, "Nova")
 	assert.Equal(t, nova.Bio, "Photographer")

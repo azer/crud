@@ -129,18 +129,6 @@ func SelectQuery(tableName string, columnNames []string) string {
 	return fmt.Sprintf("SELECT %s FROM %s", columns, tableName)
 }
 
-func CompleteSelectQuery(tableName string, columnNames []string, original string) string {
-	if strings.HasPrefix(original, "SELECT ") || strings.HasPrefix(original, "select ") {
-		return original
-	}
-
-	if len(original) > 0 {
-		original = " " + original
-	}
-
-	return fmt.Sprintf("%s%s", SelectQuery(tableName, columnNames), original)
-}
-
 func UpdateQuery(tableName, index string, columnNames []string) string {
 	return fmt.Sprintf("%s WHERE %s=?", UpdateAllQuery(tableName, columnNames), index)
 }

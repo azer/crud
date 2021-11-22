@@ -41,14 +41,13 @@ func createAndRead(exec ExecFn, query QueryFn, record interface{}) error {
 	}
 
 	table, err := NewTable(record)
-
 	if err != nil {
 		// this is a bad design choice made assuming that it'll never happen.
 		return err
 	}
 
 	params := []interface{}{
-		fmt.Sprintf("WHERE %s = ?", table.PrimaryKeyField().SQL.Name),
+		fmt.Sprintf("SELECT * FROM %s WHERE %s = ?", table.SQLName, table.PrimaryKeyField().SQL.Name),
 		id,
 	}
 

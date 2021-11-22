@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/azer/crud/meta"
-	"github.com/azer/crud/sql"
 )
 
 func read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
@@ -31,7 +30,7 @@ func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}
 		return err
 	}
 
-	rows, err := query(completeSelectQuery(sql, scanner), params...)
+	rows, err := query(sql, params...)
 	if err != nil {
 		return err
 	}
@@ -51,7 +50,7 @@ func readAll(query QueryFn, scanTo interface{}, sql string, params []interface{}
 		return err
 	}
 
-	rows, err := query(completeSelectQuery(sql, scanner), params...)
+	rows, err := query(sql, params...)
 	if err != nil {
 		return err
 	}
@@ -88,12 +87,4 @@ func ResolveReadParams(params []interface{}) (string, []interface{}, error) {
 	}
 
 	return query, params[1:], nil
-}
-
-func completeSelectQuery(query string, scanner *Scan) string {
-	if scanner.Table == nil {
-		return query
-	}
-
-	return sql.CompleteSelectQuery(scanner.Table.SQLName, []string{}, query)
 }
