@@ -21,8 +21,6 @@ Manual:
     - [Transactions](#transactions)
     - [Logs](#logs)
     - [Custom Queries](#custom-queries)
-    - [Why another ORMish library for Go?](#why-another-ormish-library-for-go)
-    - [Apps Using CRUD](#apps-using-crud)
     - [What's Missing?](#whats-missing)
     - [LICENSE](#license)
 
