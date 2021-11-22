@@ -171,7 +171,7 @@ fmt.Println(user.Name)
 ```go
 users := []*User{}
 
-err := DB.Read(&users)
+err := DB.Read(&users, "SELECT * FROM users")
 // => SELECT * FROM users
 
 fmt.Println(len(users))
