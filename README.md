@@ -29,14 +29,14 @@ Manual:
 ## Install
 
 ```bash
-$ go get github.com/azer/crud
+$ go get github.com/azer/crud/v2
 ```
 
 ## Initialize
 
 ```go
 import (
-  "github.com/azer/crud"
+  "github.com/azer/crud/v2"
   _ "github.com/go-sql-driver/mysql"
 )
 
