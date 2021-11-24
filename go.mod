@@ -1,4 +1,4 @@
-module github.com/azer/crud
+module github.com/azer/crud/v2
 
 require (
 	github.com/azer/logger v1.0.0
@@ -8,7 +8,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.2.2
-	google.golang.org/appengine v1.1.0 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
 )
 
 go 1.13

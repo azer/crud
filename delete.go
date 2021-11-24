@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/azer/crud/sql"
+	"github.com/azer/crud/v2/sql"
 )
 
 func deleteRow(exec ExecFn, record interface{}) (stdsql.Result, error) {

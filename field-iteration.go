@@ -3,8 +3,8 @@ package crud
 import (
 	"reflect"
 
-	"github.com/azer/crud/meta"
-	"github.com/azer/crud/sql"
+	"github.com/azer/crud/v2/meta"
+	"github.com/azer/crud/v2/sql"
 	"github.com/azer/snakecase"
 )
 

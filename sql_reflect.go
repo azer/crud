@@ -1,7 +1,7 @@
 package crud
 
 import (
-	"github.com/azer/crud/meta"
+	"github.com/azer/crud/v2/meta"
 	"github.com/azer/snakecase"
 	"github.com/jinzhu/inflection"
 )

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/azer/crud"
+	"github.com/azer/crud/v2"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
 )

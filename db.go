@@ -3,7 +3,7 @@ package crud
 import (
 	stdsql "database/sql"
 
-	"github.com/azer/crud/sql"
+	"github.com/azer/crud/v2/sql"
 	"github.com/azer/logger"
 )
 

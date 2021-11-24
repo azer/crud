@@ -1,9 +1,10 @@
 package sql_test
 
 import (
-	"github.com/azer/crud/sql"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/azer/crud/v2/sql"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAllOptions(t *testing.T) {

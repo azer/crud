@@ -1,9 +1,10 @@
 package meta_test
 
 import (
-	"github.com/azer/crud/meta"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/azer/crud/v2/meta"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestIsSlice(t *testing.T) {
