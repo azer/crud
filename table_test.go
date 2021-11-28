@@ -155,35 +155,47 @@ func TestReadTableName(t *testing.T) {
 	assert.Equal(t, sqlName, "yolo")
 }
 
-func TestReadingTableColumnsFromPointer(t *testing.T) {
-	table, err := crud.NewTable(&UserProfile{})
-
-	assert.Nil(t, err)
-	assert.Equal(t, table.Fields[0].SQL.Name, "id")
-	assert.Equal(t, table.Fields[1].SQL.Name, "name")
-	assert.Equal(t, table.Fields[2].SQL.Name, "bio")
-	assert.Equal(t, table.Fields[3].SQL.Name, "email")
-	assert.Equal(t, table.Fields[4].SQL.Name, "attachment")
-	assert.Equal(t, table.Fields[5].SQL.Name, "modified_col")
-}
-
-func TestReadingTableColumnsFromList(t *testing.T) {
-	list := []*UserProfile{}
-
-	table, err := crud.NewTable(&list)
-
-	assert.Nil(t, err)
-	assert.Equal(t, table.Fields[0].SQL.Name, "id")
-	assert.Equal(t, table.Fields[1].SQL.Name, "name")
-	assert.Equal(t, table.Fields[2].SQL.Name, "bio")
-	assert.Equal(t, table.Fields[3].SQL.Name, "email")
-	assert.Equal(t, table.Fields[4].SQL.Name, "attachment")
-	assert.Equal(t, table.Fields[5].SQL.Name, "modified_col")
-}
-
 func TestMixed(t *testing.T) {
 	table, err := crud.NewTable(Mixed{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "Mixed")
 	assert.Equal(t, table.SQLName, "__mixed__")
+}
+
+func TestReadingTableColumns(t *testing.T) {
+	columns, err := crud.ReadTableColumns(UserProfile{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
+}
+
+func TestReadingTableColumnsFromPointer(t *testing.T) {
+	columns, err := crud.ReadTableColumns(&UserProfile{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
+}
+
+func TestReadingTableColumnsFromList(t *testing.T) {
+	list := []*UserProfile{}
+
+	columns, err := crud.ReadTableColumns(&list)
+
+	assert.Nil(t, err)
+	assert.Equal(t, columns[0], "id")
+	assert.Equal(t, columns[1], "name")
+	assert.Equal(t, columns[2], "bio")
+	assert.Equal(t, columns[3], "email")
+	assert.Equal(t, columns[4], "attachment")
+	assert.Equal(t, columns[5], "modified_col")
 }

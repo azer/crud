@@ -102,3 +102,23 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 func ReadTableName(any interface{}) (string, string) {
 	return meta.TypeNameOf(any), SQLTableNameOf(any)
 }
+
+// Return table columns for given struct, pointer to struct or slice of structs.
+func ReadTableColumns(any interface{}) ([]string, error) {
+	if meta.IsSlice(any) {
+		any = meta.CreateElement(any).Interface()
+	}
+
+	fields, err := GetFieldsOf(any)
+	if err != nil {
+		return nil, err
+	}
+
+	columns := []string{}
+
+	for _, col := range fields {
+		columns = append(columns, col.SQL.Name)
+	}
+
+	return columns, nil
+}
