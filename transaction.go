@@ -28,8 +28,8 @@ func (tx *Tx) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
 	timer := log.Timer()
 	result, err := tx.Client.Query(sql, params...)
 	timer.End("Run SQL query.", logger.Attrs{
-		"tx":  tx.Id,
-		"sql": sql,
+		tx.IdKey: tx.Id,
+		"sql":    sql,
 	})
 	return result, err
 }
