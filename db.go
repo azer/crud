@@ -5,6 +5,7 @@ import (
 
 	"github.com/azer/crud/v2/sql"
 	"github.com/azer/logger"
+	"github.com/labstack/gommon/random"
 )
 
 var log = logger.New("crud")
@@ -152,6 +153,8 @@ func (db *DB) Begin() (*Tx, error) {
 	}
 
 	return &Tx{
+		Id:     random.String(32),
+		IdKey:  "Id",
 		Client: client,
 	}, nil
 }
