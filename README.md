@@ -277,4 +277,4 @@ DATABASE_URL="?" go test ./...
 
 ## LICENSE
 
-[WTFPL](http://www.wtfpl.net/)
+[MIT License](https://github.com/azer/crud/blob/master/COPYING)
