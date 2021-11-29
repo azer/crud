@@ -267,12 +267,8 @@ DATABASE_URL="?" go test ./...
 
 ## What's Missing?
 
-* **Relationships:** This was intentionally avoided. Can be considered if there is a clean way to implement it.
-* **Testing Transactions:** Transactions work as expected but there is a sync bug in the test causing failure. It needs to be fixed.
-* **Comments:**
 * **Hooks:** I'm not sure if this is needed, but worths to consider.
 * **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
-* **Query Builder:** Building SQL queries programmatically is useful.
 * **Make UTF-8 Default:** Looks like the default charset is not UTF8.
 
 ## LICENSE
