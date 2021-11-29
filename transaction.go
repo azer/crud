@@ -1,22 +1,24 @@
 package crud
 
 import (
+	"context"
 	stdsql "database/sql"
 
 	"github.com/azer/logger"
 )
 
 type Tx struct {
-	Client *stdsql.Tx
-	Id     string
-	IdKey  string
+	Context context.Context
+	Client  *stdsql.Tx
+	Id      string
+	IdKey   string
 }
 
 // Execute any SQL query on the transaction client. Returns sql.Result.
 func (tx *Tx) Exec(sql string, params ...interface{}) (stdsql.Result, error) {
 	timer := log.Timer()
-	result, err := tx.Client.Exec(sql, params...)
-	timer.End("Run SQL query.", logger.Attrs{
+	result, err := tx.Client.ExecContext(tx.Context, sql, params...)
+	timer.End("Executed SQL query.", logger.Attrs{
 		tx.IdKey: tx.Id,
 		"sql":    sql,
 	})
@@ -26,7 +28,7 @@ func (tx *Tx) Exec(sql string, params ...interface{}) (stdsql.Result, error) {
 // Execute any SQL query on the transaction client. Returns sql.Rows.
 func (tx *Tx) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
 	timer := log.Timer()
-	result, err := tx.Client.Query(sql, params...)
+	result, err := tx.Client.QueryContext(tx.Context, sql, params...)
 	timer.End("Run SQL query.", logger.Attrs{
 		tx.IdKey: tx.Id,
 		"sql":    sql,

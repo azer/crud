@@ -1,6 +1,7 @@
 package crud_test
 
 import (
+	"context"
 	"database/sql"
 	"testing"
 	"time"
@@ -11,7 +12,7 @@ import (
 func TestSuccessfulCommit(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	tx, err := DB.Begin()
+	tx, err := DB.Begin(context.Background())
 	assert.Nil(t, err)
 
 	n := UserProfile{}
@@ -42,7 +43,7 @@ func TestSuccessfulCommit(t *testing.T) {
 func TestRollback(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	tx, err := DB.Begin()
+	tx, err := DB.Begin(context.Background())
 	assert.Nil(t, err)
 
 	err = tx.Create(&UserProfile{
@@ -74,4 +75,6 @@ func TestRollback(t *testing.T) {
 	err = DB.Read(&shouldNotExist, "SELECT * from user_profiles WHERE email = ?", "row1@rows.com")
 	assert.Error(t, err)
 	assert.True(t, err == sql.ErrNoRows)
+
+	DB.DropTables(UserProfile{})
 }
