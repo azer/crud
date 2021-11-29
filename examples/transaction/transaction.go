@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -24,7 +25,7 @@ func main() {
 		panic(err)
 	}
 
-	tx, err := DB.Begin()
+	tx, err := DB.Begin(context.Background())
 
 	if err != nil {
 		panic(err)
