@@ -1,6 +1,7 @@
 package crud
 
 import (
+	"context"
 	stdsql "database/sql"
 
 	"github.com/azer/crud/v2/sql"
@@ -146,17 +147,28 @@ func (db *DB) Delete(record interface{}) error {
 }
 
 // Start a DB transaction. It returns an interface w/ most of the methods DB provides.
-func (db *DB) Begin() (*Tx, error) {
+func (db *DB) Begin(ctx context.Context) (*Tx, error) {
 	client, err := db.Client.Begin()
 	if err != nil {
 		return nil, err
 	}
 
 	return &Tx{
-		Id:     random.String(32),
-		IdKey:  "Id",
-		Client: client,
+		Id:      random.String(32),
+		IdKey:   "Id",
+		Client:  client,
+		Context: ctx,
 	}, nil
+}
+
+// Return a database client that wraps underlying SQL execution methods with the context specified
+func (db *DB) WithContext(ctx context.Context) *WithContext {
+	return &WithContext{
+		Context: ctx,
+		DB:      db.Client,
+		Id:      random.String(32),
+		IdKey:   "Id",
+	}
 }
 
 // Establish DB connection and return a crud.DB instance w/ methods needed for accessing / writing the database.
