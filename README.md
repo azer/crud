@@ -225,6 +225,7 @@ Use `Begin` method of a `crud.DB` instance to create a new transaction. Each tra
 * Exec
 * Query
 * Create
+* CreateAndRead
 * Read
 * Update
 * Delete
@@ -243,6 +244,13 @@ err := tx.Delete(&User{
 err := tx.Commit()
 ```
 
+CRUD generates an ID for each transaction, and uses that for logging queries and the state of the transactions. You can override transaction IDs in some use cases such as having same IDs and ID field keys with your Rest framework generating request IDs;
+
+```go
+tx.Id = requestId
+tx.IdKey = "requestId"
+```
+
 ## Logs
 
 If you want to see crud's internal logs, specify `crud` in the `LOG` environment variable when you run your app. For example;
@@ -250,8 +258,6 @@ If you want to see crud's internal logs, specify `crud` in the `LOG` environment
 ```
 $ LOG=crud go run myapp.go
 ```
-
-[(More info about how crud's logging work)](http://github.com/azer/logger)
 
 ## Custom Queries
 
