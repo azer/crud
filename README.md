@@ -8,8 +8,6 @@ A minimalistic relational database library for Go.
 - [Install](#install)
 - [Initialize](#initialize)
 - [Define](#define)
-- [Reset Tables](#reset-tables)
-- [SQL Options](#sql-options)
 - [Create](#create)
 - [CreateAndRead](#createandread)
 - [Read](#read)
@@ -17,6 +15,7 @@ A minimalistic relational database library for Go.
     - [Scanning to custom values:](#scanning-to-custom-values)
 - [Update](#update)
 - [Delete](#delete)
+- [Contexts](#contexts)
 - [Transactions](#transactions)
 - [Logs](#logs)
 - [Custom Queries](#custom-queries)
@@ -216,6 +215,14 @@ err := DB.Delete(&User{
 })
 ```
 
+## Contexts
+
+Use `WithContext` method to get a DB client with context. Here is an example;
+
+```go
+db := DB.WithContext(context.Background())
+```
+
 ## Transactions
 
 Use `Begin` method of a `crud.DB` instance to create a new transaction. Each transaction will provide you following methods;
@@ -231,7 +238,7 @@ Use `Begin` method of a `crud.DB` instance to create a new transaction. Each tra
 * Delete
 
 ```go
-tx, err := DB.Begin()
+tx, err := DB.Begin(context.Background())
 
 err := tx.Create(&User{
   Name: "yolo"
