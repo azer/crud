@@ -3,11 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/azer/crud/v2"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+var DB *crud.DB
 
 type User struct {
 	Id        int `sql:"auto-increment primary-key"`
@@ -16,7 +20,8 @@ type User struct {
 }
 
 func main() {
-	DB, err := crud.Connect("mysql", os.Getenv("DATABASE_URL"))
+	var err error
+	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		panic(err)
 	}
@@ -25,27 +30,35 @@ func main() {
 		panic(err)
 	}
 
-	tx, err := DB.Begin(context.Background())
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":8000", nil)
+}
 
+func handler(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
+	defer cancel()
+
+	tx, err := DB.Begin(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	azer := User{
-		FirstName: "Azer",
-		LastName:  "Koculu",
+	row := User{
+		FirstName: "Foo",
+		LastName:  "Bar",
 	}
 
-	if err := tx.Create(&azer); err != nil {
+	if err := tx.CreateAndRead(&row); err != nil {
 		panic(err)
 	}
 
-	tx.Commit()
-
-	copy := User{}
-	if err := DB.Read(&copy, "SELECT * FROM users WHERE first_name='Azer'"); err != nil {
+	if _, err := tx.Query("SELECT sleep(15)"); err != nil {
 		panic(err)
 	}
 
-	fmt.Println(copy.Id)
+	if err := tx.Commit(); err != nil {
+		panic(err)
+	}
+
+	w.Write([]byte(fmt.Sprintf("%d / %s / %s", row.Id, row.FirstName, row.LastName)))
 }

@@ -38,27 +38,20 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
 	defer cancel()
 
-	tx, err := DB.Begin(ctx)
-	if err != nil {
-		panic(err)
-	}
+	db := DB.WithContext(ctx)
 
 	row := User{
 		FirstName: "Foo",
 		LastName:  "Bar",
 	}
 
-	if err := tx.CreateAndRead(&row); err != nil {
+	if err := db.CreateAndRead(&row); err != nil {
 		panic(err)
 	}
 
-	if _, err := tx.Query("SELECT sleep(15)"); err != nil {
+	/*if _, err := db.Query("SELECT sleep(15)"); err != nil {
 		panic(err)
-	}
-
-	if err := tx.Commit(); err != nil {
-		panic(err)
-	}
+	}*/
 
 	w.Write([]byte(fmt.Sprintf("%d / %s / %s", row.Id, row.FirstName, row.LastName)))
 }
