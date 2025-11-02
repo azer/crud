@@ -31,35 +31,35 @@ func TestReadingMultipleRows(t *testing.T) {
 	err := DB.Read(&result, "SELECT * FROM user_profiles")
 	assert.Nil(t, err)
 	assert.Equal(t, len(result), 3)
-	assert.Equal(t, result[0].Name, "Nova")
-	assert.Equal(t, result[0].Bio, "Photographer")
-	assert.Equal(t, result[0].Email, "nova@roadbeats.com")
-	assert.Equal(t, result[1].Name, "Azer")
+	assert.Equal(t, result[0].Name, "Fuji")
+	assert.Equal(t, result[0].Bio, "Engineer")
+	assert.Equal(t, result[0].Email, "fuji@mitte.ai")
+	assert.Equal(t, result[1].Name, "John")
 	assert.Equal(t, result[1].Bio, "Engineer")
-	assert.Equal(t, result[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, result[1].Email, "azer@mitte.ai")
 	assert.Equal(t, string(result[1].Attachment), "{ \"azer\": \"bar\" }")
 
 	resultptr := []*UserProfile{}
 	err = DB.Read(&resultptr, "SELECT * FROM user_profiles")
 	assert.Nil(t, err)
 	assert.Equal(t, len(resultptr), 3)
-	assert.Equal(t, resultptr[0].Name, "Nova")
-	assert.Equal(t, resultptr[0].Bio, "Photographer")
-	assert.Equal(t, resultptr[0].Email, "nova@roadbeats.com")
-	assert.Equal(t, resultptr[1].Name, "Azer")
+	assert.Equal(t, resultptr[0].Name, "Fuji")
+	assert.Equal(t, resultptr[0].Bio, "Engineer")
+	assert.Equal(t, resultptr[0].Email, "fuji@mitte.ai")
+	assert.Equal(t, resultptr[1].Name, "John")
 	assert.Equal(t, resultptr[1].Bio, "Engineer")
-	assert.Equal(t, resultptr[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, resultptr[1].Email, "azer@mitte.ai")
 
 	var results []*UserProfile
 	err = DB.Read(&results, "SELECT * FROM user_profiles")
 	assert.Nil(t, err)
 	assert.Equal(t, len(results), 3)
-	assert.Equal(t, results[0].Name, "Nova")
-	assert.Equal(t, results[0].Bio, "Photographer")
-	assert.Equal(t, results[0].Email, "nova@roadbeats.com")
-	assert.Equal(t, results[1].Name, "Azer")
+	assert.Equal(t, results[0].Name, "Fuji")
+	assert.Equal(t, results[0].Bio, "Engineer")
+	assert.Equal(t, results[0].Email, "fuji@mitte.ai")
+	assert.Equal(t, results[1].Name, "John")
 	assert.Equal(t, results[1].Bio, "Engineer")
-	assert.Equal(t, results[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, results[1].Email, "azer@mitte.ai")
 
 	var notmatching []*UserProfile
 	err = DB.Read(&notmatching, "SELECT * FROM user_profiles WHERE name='not matching'")
@@ -70,29 +70,29 @@ func TestReadingMultipleRows(t *testing.T) {
 func TestReadingSingleRow(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	nova := UserProfile{}
-	err := DB.Read(&nova, "SELECT * FROM user_profiles WHERE name = ?", "Nova")
+	fuji := UserProfile{}
+	err := DB.Read(&fuji, "SELECT * FROM user_profiles WHERE name = ?", "Fuji")
 	assert.Nil(t, err)
-	assert.Equal(t, nova.Id, 1)
-	assert.Equal(t, nova.Name, "Nova")
-	assert.Equal(t, nova.Bio, "Photographer")
-	assert.Equal(t, nova.Email, "nova@roadbeats.com")
+	assert.Equal(t, fuji.Id, 1)
+	assert.Equal(t, fuji.Name, "Fuji")
+	assert.Equal(t, fuji.Bio, "Engineer")
+	assert.Equal(t, fuji.Email, "fuji@mitte.ai")
 
 	var azer *UserProfile = &UserProfile{}
-	err = DB.Read(azer, "SELECT * FROM user_profiles WHERE name = ?", "Azer")
+	err = DB.Read(azer, "SELECT * FROM user_profiles WHERE name = ?", "John")
 	assert.Nil(t, err)
 	assert.Equal(t, azer.Id, 2)
-	assert.Equal(t, azer.Name, "Azer")
+	assert.Equal(t, azer.Name, "John")
 	assert.Equal(t, azer.Bio, "Engineer")
-	assert.Equal(t, azer.Email, "azer@roadbeats.com")
+	assert.Equal(t, azer.Email, "azer@mitte.ai")
 
 	var az UserProfile
-	err = DB.Read(&az, "SELECT * FROM user_profiles WHERE name = ?", "Azer")
+	err = DB.Read(&az, "SELECT * FROM user_profiles WHERE name = ?", "John")
 	assert.Nil(t, err)
 	assert.Equal(t, az.Id, 2)
-	assert.Equal(t, az.Name, "Azer")
+	assert.Equal(t, az.Name, "John")
 	assert.Equal(t, az.Bio, "Engineer")
-	assert.Equal(t, az.Email, "azer@roadbeats.com")
+	assert.Equal(t, az.Email, "azer@mitte.ai")
 
 	no := UserProfile{}
 	err = DB.Read(&no, "SELECT * FROM user_profiles WHERE name = ?", "Not matching")
@@ -108,22 +108,22 @@ func TestGeneratingQueries(t *testing.T) {
 	err := DB.Read(&result, "SELECT * FROM user_profiles")
 	assert.Nil(t, err)
 	assert.Equal(t, len(result), 3)
-	assert.Equal(t, result[0].Name, "Nova")
-	assert.Equal(t, result[0].Bio, "Photographer")
-	assert.Equal(t, result[0].Email, "nova@roadbeats.com")
-	assert.Equal(t, result[1].Name, "Azer")
+	assert.Equal(t, result[0].Name, "Fuji")
+	assert.Equal(t, result[0].Bio, "Engineer")
+	assert.Equal(t, result[0].Email, "fuji@mitte.ai")
+	assert.Equal(t, result[1].Name, "John")
 	assert.Equal(t, result[1].Bio, "Engineer")
-	assert.Equal(t, result[1].Email, "azer@roadbeats.com")
+	assert.Equal(t, result[1].Email, "azer@mitte.ai")
 	assert.Equal(t, result[2].Name, "Hola")
 	assert.Equal(t, result[2].Bio, "")
-	assert.Equal(t, result[2].Email, "hola@roadbeats.com")
+	assert.Equal(t, result[2].Email, "hola@mitte.ai")
 
-	nova := UserProfile{}
-	err = DB.Read(&nova, "SELECT * FROM user_profiles WHERE name=?", "Nova")
+	fuji := UserProfile{}
+	err = DB.Read(&fuji, "SELECT * FROM user_profiles WHERE name=?", "Fuji")
 	assert.Nil(t, err)
-	assert.Equal(t, nova.Name, "Nova")
-	assert.Equal(t, nova.Bio, "Photographer")
-	assert.Equal(t, nova.Email, "nova@roadbeats.com")
+	assert.Equal(t, fuji.Name, "Fuji")
+	assert.Equal(t, fuji.Bio, "Engineer")
+	assert.Equal(t, fuji.Email, "fuji@mitte.ai")
 
 	DB.DropTables(UserProfile{})
 }
@@ -135,13 +135,13 @@ func TestScanningToCustomValues(t *testing.T) {
 	err := DB.Read(&names, "SELECT name FROM user_profiles ORDER BY id ASC")
 	assert.Nil(t, err)
 	assert.Equal(t, len(names), 3)
-	assert.Equal(t, names[0], "Nova")
-	assert.Equal(t, names[1], "Azer")
+	assert.Equal(t, names[0], "Fuji")
+	assert.Equal(t, names[1], "John")
 
 	name := ""
 	err = DB.Read(&name, "SELECT name FROM user_profiles WHERE id=1")
 	assert.Nil(t, err)
-	assert.Equal(t, name, "Nova")
+	assert.Equal(t, name, "Fuji")
 
 	count := 0
 	err = DB.Read(&count, "SELECT COUNT(id) FROM user_profiles")
@@ -154,14 +154,14 @@ func TestScanningToCustomValues(t *testing.T) {
 func TestScanningToNullTypes(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	nova := UserProfileNull{}
-	err := DB.Read(&nova, "SELECT * FROM user_profiles WHERE name = ?", "Nova")
+	fuji := UserProfileNull{}
+	err := DB.Read(&fuji, "SELECT * FROM user_profiles WHERE name = ?", "Fuji")
 	assert.Nil(t, err)
 
-	assert.Equal(t, nova.Id.Int64, int64(1))
-	assert.Equal(t, nova.Name.String, "Nova")
-	assert.Equal(t, nova.Bio.String, "Photographer")
-	assert.Equal(t, nova.Email.String, "nova@roadbeats.com")
+	assert.Equal(t, fuji.Id.Int64, int64(1))
+	assert.Equal(t, fuji.Name.String, "Fuji")
+	assert.Equal(t, fuji.Bio.String, "Engineer")
+	assert.Equal(t, fuji.Email.String, "fuji@mitte.ai")
 
 	DB.DropTables(UserProfile{})
 }
@@ -169,12 +169,14 @@ func TestScanningToNullTypes(t *testing.T) {
 func TestUnexistingFields(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	nova := UserProfile{}
-	err := DB.Read(&nova, "SELECT u.*, COUNT(u.id) as ucount FROM user_profiles u WHERE name=?", "Nova")
+	fuji := UserProfile{}
+	// Test that extra columns in SELECT don't break scanning
+	// Using a literal value instead of COUNT to avoid GROUP BY issues
+	err := DB.Read(&fuji, "SELECT u.*, 1 as extra_column FROM user_profiles u WHERE name=?", "Fuji")
 	assert.Nil(t, err)
-	assert.Equal(t, nova.Name, "Nova")
-	assert.Equal(t, nova.Bio, "Photographer")
-	assert.Equal(t, nova.Email, "nova@roadbeats.com")
+	assert.Equal(t, fuji.Name, "Fuji")
+	assert.Equal(t, fuji.Bio, "Engineer")
+	assert.Equal(t, fuji.Email, "fuji@mitte.ai")
 
 	DB.DropTables(UserProfile{})
 }
@@ -185,18 +187,18 @@ func CreateUserProfiles() error {
 	}
 
 	if err := DB.Create(UserProfile{
-		Name:       "Nova",
-		Bio:        "Photographer",
-		Email:      "nova@roadbeats.com",
-		Attachment: []byte("{ \"nova\": \"bar\" }"),
+		Name:       "Fuji",
+		Bio:        "Engineer",
+		Email:      "fuji@mitte.ai",
+		Attachment: []byte("{ \"fuji\": \"bar\" }"),
 	}); err != nil {
 		return err
 	}
 
 	if err := DB.Create(UserProfile{
-		Name:       "Azer",
+		Name:       "John",
 		Bio:        "Engineer",
-		Email:      "azer@roadbeats.com",
+		Email:      "azer@mitte.ai",
 		Attachment: []byte("{ \"azer\": \"bar\" }"),
 	}); err != nil {
 		return err
@@ -204,7 +206,7 @@ func CreateUserProfiles() error {
 
 	if err := DB.Create(UserProfile{
 		Name:       "Hola",
-		Email:      "hola@roadbeats.com",
+		Email:      "hola@mitte.ai",
 		Attachment: []byte("{ \"hola\": \"bar\" }"),
 	}); err != nil {
 		return err

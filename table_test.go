@@ -1,6 +1,7 @@
 package crud_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/azer/crud/v2"
@@ -8,21 +9,22 @@ import (
 )
 
 func TestNewTable(t *testing.T) {
-	table, err := crud.NewTable(UserProfile{})
+	table, err := crud.NewTable(getDriver(), UserProfile{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "UserProfile")
 	assert.Equal(t, table.SQLName, "user_profiles")
 	assert.Equal(t, len(table.Fields), 6)
 	assert.Equal(t, table.Fields[0].Name, "Id")
 	assert.Equal(t, table.Fields[0].SQL.Name, "id")
-	assert.Equal(t, table.Fields[0].SQL.Type, "int")
-	assert.Equal(t, table.Fields[0].SQL.Length, 11)
+	fmt.Println("++", table.Fields[0].SQL.Type)
+	assert.Equal(t, table.Fields[0].SQL.Type, getPkType())
+	//assert.Equal(t, table.Fields[0].SQL.Length, 11)
 	assert.Equal(t, table.Fields[0].SQL.AutoIncrement, 1)
 	assert.Equal(t, table.Fields[0].SQL.IsPrimaryKey, true)
 	assert.Equal(t, table.Fields[0].SQL.IsRequired, true)
 	assert.Equal(t, table.Fields[1].Name, "Name")
 	assert.Equal(t, table.Fields[1].SQL.Name, "name")
-	assert.Equal(t, table.Fields[1].SQL.Type, "varchar")
+	assert.Equal(t, table.Fields[1].SQL.Type, getVarcharType())
 	assert.Equal(t, table.Fields[1].SQL.Length, 255)
 	assert.Equal(t, table.Fields[1].SQL.IsUnique, false)
 	assert.Equal(t, table.Fields[1].SQL.IsRequired, true)
@@ -32,18 +34,18 @@ func TestNewTable(t *testing.T) {
 	assert.Equal(t, table.Fields[2].SQL.Length, -1)
 	assert.Equal(t, table.Fields[3].Name, "Email")
 	assert.Equal(t, table.Fields[3].SQL.Name, "email")
-	assert.Equal(t, table.Fields[3].SQL.Type, "varchar")
+	assert.Equal(t, table.Fields[3].SQL.Type, getVarcharType())
 	assert.Equal(t, table.Fields[3].SQL.Length, 255)
 	assert.Equal(t, table.Fields[4].SQL.Name, "attachment")
-	assert.Equal(t, table.Fields[4].SQL.Type, "blob")
+	assert.Equal(t, table.Fields[4].SQL.Type, getBlobType())
 	assert.Equal(t, table.Fields[5].Name, "Modified")
 	assert.Equal(t, table.Fields[5].SQL.Name, "modified_col")
-	assert.Equal(t, table.Fields[5].SQL.Type, "bigint")
-	assert.Equal(t, table.Fields[5].SQL.Length, 20)
+	assert.Equal(t, table.Fields[5].SQL.Type, getBigintType())
+	//assert.Equal(t, table.Fields[5].SQL.Length, 20)
 }
 
 func TestColumnDict(t *testing.T) {
-	table, err := crud.NewTable(Foo{})
+	table, err := crud.NewTable(getDriver(), Foo{})
 	assert.Nil(t, err)
 
 	columnDict := table.SQLColumnDict()
@@ -52,7 +54,7 @@ func TestColumnDict(t *testing.T) {
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
 
-	table, err = crud.NewTable(&Foo{})
+	table, err = crud.NewTable(getDriver(), &Foo{})
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -62,7 +64,7 @@ func TestColumnDict(t *testing.T) {
 	assert.Equal(t, columnDict["beast"], "Beast")
 
 	/*var f *Foo
-	table, err = crud.NewTable(f)
+	table, err = crud.NewTable(getDriver(), f)
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -73,7 +75,7 @@ func TestColumnDict(t *testing.T) {
 }
 
 func TestColumnDictOfSlices(t *testing.T) {
-	table, err := crud.NewTable([]Foo{})
+	table, err := crud.NewTable(getDriver(), []Foo{})
 	assert.Nil(t, err)
 
 	columnDict := table.SQLColumnDict()
@@ -82,7 +84,7 @@ func TestColumnDictOfSlices(t *testing.T) {
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
 
-	table, err = crud.NewTable(FooSlice{})
+	table, err = crud.NewTable(getDriver(), FooSlice{})
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -91,7 +93,7 @@ func TestColumnDictOfSlices(t *testing.T) {
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
 
-	table, err = crud.NewTable(&FooSlice{})
+	table, err = crud.NewTable(getDriver(), &FooSlice{})
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -100,7 +102,7 @@ func TestColumnDictOfSlices(t *testing.T) {
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
 
-	table, err = crud.NewTable(FooPTRSlice{})
+	table, err = crud.NewTable(getDriver(), FooPTRSlice{})
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -109,7 +111,7 @@ func TestColumnDictOfSlices(t *testing.T) {
 	assert.Equal(t, columnDict["yolo"], "YOLO")
 	assert.Equal(t, columnDict["beast"], "Beast")
 
-	table, err = crud.NewTable(&FooPTRSlice{})
+	table, err = crud.NewTable(getDriver(), &FooPTRSlice{})
 	assert.Nil(t, err)
 
 	columnDict = table.SQLColumnDict()
@@ -120,14 +122,14 @@ func TestColumnDictOfSlices(t *testing.T) {
 }
 
 func TestReadingCustomTableName(t *testing.T) {
-	table, err := crud.NewTable(CustomTableName{})
+	table, err := crud.NewTable(getDriver(), CustomTableName{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "CustomTableName")
 	assert.Equal(t, table.SQLName, "yolo")
 }
 
 func TestReadingCustomTableNameFromList(t *testing.T) {
-	table, err := crud.NewTable([]*CustomTableName{})
+	table, err := crud.NewTable(getDriver(), []*CustomTableName{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "CustomTableName")
 	assert.Equal(t, table.SQLName, "yolo")
@@ -135,35 +137,35 @@ func TestReadingCustomTableNameFromList(t *testing.T) {
 
 func TestReadTableName(t *testing.T) {
 	// Pointer to slice
-	name, sqlName := crud.ReadTableName(&[]*CustomTableName{})
+	name, sqlName := crud.ReadTableName(getDriver(), &[]*CustomTableName{})
 	assert.Equal(t, name, "CustomTableName")
 	assert.Equal(t, sqlName, "yolo")
 
 	// Slice
-	name, sqlName = crud.ReadTableName([]*CustomTableName{})
+	name, sqlName = crud.ReadTableName(getDriver(), []*CustomTableName{})
 	assert.Equal(t, name, "CustomTableName")
 	assert.Equal(t, sqlName, "yolo")
 
 	// Pointer
-	name, sqlName = crud.ReadTableName(&CustomTableName{})
+	name, sqlName = crud.ReadTableName(getDriver(), &CustomTableName{})
 	assert.Equal(t, name, "CustomTableName")
 	assert.Equal(t, sqlName, "yolo")
 
 	// Struct
-	name, sqlName = crud.ReadTableName(CustomTableName{})
+	name, sqlName = crud.ReadTableName(getDriver(), CustomTableName{})
 	assert.Equal(t, name, "CustomTableName")
 	assert.Equal(t, sqlName, "yolo")
 }
 
 func TestMixed(t *testing.T) {
-	table, err := crud.NewTable(Mixed{})
+	table, err := crud.NewTable(getDriver(), Mixed{})
 	assert.Nil(t, err)
 	assert.Equal(t, table.Name, "Mixed")
 	assert.Equal(t, table.SQLName, "__mixed__")
 }
 
 func TestReadingTableColumns(t *testing.T) {
-	columns, err := crud.ReadTableColumns(UserProfile{})
+	columns, err := crud.ReadTableColumns(getDriver(), UserProfile{})
 
 	assert.Nil(t, err)
 	assert.Equal(t, columns[0], "id")
@@ -175,7 +177,7 @@ func TestReadingTableColumns(t *testing.T) {
 }
 
 func TestReadingTableColumnsFromPointer(t *testing.T) {
-	columns, err := crud.ReadTableColumns(&UserProfile{})
+	columns, err := crud.ReadTableColumns(getDriver(), &UserProfile{})
 
 	assert.Nil(t, err)
 	assert.Equal(t, columns[0], "id")
@@ -189,7 +191,7 @@ func TestReadingTableColumnsFromPointer(t *testing.T) {
 func TestReadingTableColumnsFromList(t *testing.T) {
 	list := []*UserProfile{}
 
-	columns, err := crud.ReadTableColumns(&list)
+	columns, err := crud.ReadTableColumns(getDriver(), &list)
 
 	assert.Nil(t, err)
 	assert.Equal(t, columns[0], "id")

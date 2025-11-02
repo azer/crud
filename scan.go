@@ -9,7 +9,7 @@ import (
 
 // Create a scanner for any given interface. This function will be called for
 // every target interface passed to DB methods that scans results.
-func NewScan(to interface{}) (*Scan, error) {
+func NewScan(driver string, to interface{}) (*Scan, error) {
 	scan := &Scan{
 		To:         to,
 		ToPointers: meta.HasPointers(to),
@@ -17,7 +17,7 @@ func NewScan(to interface{}) (*Scan, error) {
 	}
 
 	if scan.ToStructs {
-		table, err := NewTable(to)
+		table, err := NewTable(driver, to)
 		if err != nil {
 			return nil, err
 		}

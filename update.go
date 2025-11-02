@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 )
 
-func update(exec ExecFn, record interface{}) (stdsql.Result, error) {
-	table, err := NewTable(record)
+func update(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {
+	table, err := NewTable(driver, record)
 	if err != nil {
 		return nil, err
 	}
@@ -19,11 +20,18 @@ func update(exec ExecFn, record interface{}) (stdsql.Result, error) {
 		return nil, errors.New(fmt.Sprintf("Table '%s' (%s) doesn't have a primary-key field", table.Name, table.SQLName))
 	}
 
-	return exec(sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet()), table.SQLUpdateValueSet()...)
+	var query string
+	if pg.IsPostgres(driver) {
+		query = pg.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet())
+	} else {
+		query = sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet())
+	}
+
+	return exec(query, table.SQLUpdateValueSet()...)
 }
 
-func mustUpdate(exec ExecFn, record interface{}) error {
-	result, err := update(exec, record)
+func mustUpdate(driver string, exec ExecFn, record interface{}) error {
+	result, err := update(driver, exec, record)
 	if err != nil {
 		return err
 	}

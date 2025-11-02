@@ -2,24 +2,24 @@ package crud
 
 import (
 	"github.com/azer/crud/v2/meta"
-	"github.com/azer/crud/v2/sql"
+	"github.com/azer/crud/v2/types"
 )
 
 // Create an internal representation of a database table, including its fields from given
 // struct record
-func NewTable(any interface{}) (*Table, error) {
+func NewTable(driver string, any interface{}) (*Table, error) {
 	if meta.IsSlice(any) {
 		any = meta.CreateElement(any).Interface()
 	}
 
-	fields, err := GetFieldsOf(any)
+	fields, err := GetFieldsOf(driver, any)
 	if err != nil {
 		return nil, err
 	}
 
 	SetDefaultPK(fields)
 
-	name, sqlName := ReadTableName(any)
+	name, sqlName := ReadTableName(driver, any)
 
 	return &Table{
 		Name:    name,
@@ -34,8 +34,8 @@ type Table struct {
 	Fields  []*Field
 }
 
-func (table *Table) SQLOptions() []*sql.Options {
-	result := []*sql.Options{}
+func (table *Table) SQLOptions() []*types.ColumnOptions {
+	result := []*types.ColumnOptions{}
 
 	for _, f := range table.Fields {
 		result = append(result, f.SQL)
@@ -99,17 +99,17 @@ func (table *Table) SQLUpdateValueSet() []interface{} {
 }
 
 // Return struct name and SQL table name
-func ReadTableName(any interface{}) (string, string) {
-	return meta.TypeNameOf(any), SQLTableNameOf(any)
+func ReadTableName(driver string, any interface{}) (string, string) {
+	return meta.TypeNameOf(any), SQLTableNameOf(driver, any)
 }
 
 // Return table columns for given struct, pointer to struct or slice of structs.
-func ReadTableColumns(any interface{}) ([]string, error) {
+func ReadTableColumns(driver string, any interface{}) ([]string, error) {
 	if meta.IsSlice(any) {
 		any = meta.CreateElement(any).Interface()
 	}
 
-	fields, err := GetFieldsOf(any)
+	fields, err := GetFieldsOf(driver, any)
 	if err != nil {
 		return nil, err
 	}

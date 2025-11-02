@@ -25,7 +25,7 @@ func main() {
 	}
 
 	azer := User{
-		FirstName: "Azer",
+		FirstName: "John",
 		LastName:  "Koculu",
 	}
 
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	copy := User{}
-	if err := DB.Read(&copy, "SELECT * FROM users WHERE first_name='Azer'"); err != nil {
+	if err := DB.Read(&copy, "SELECT * FROM users WHERE first_name='John'"); err != nil {
 		panic(err)
 	}
 

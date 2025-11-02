@@ -8,7 +8,7 @@ import (
 )
 
 func TestSQLTableNameOf(t *testing.T) {
-	assert.Equal(t, crud.SQLTableNameOf(&Foo{}), "foos")
-	assert.Equal(t, crud.SQLTableNameOf(&FooSlice{}), "foo_slices")
-	assert.Equal(t, crud.SQLTableNameOf(FooPTRSlice{}), "foo_ptr_slices")
+	assert.Equal(t, crud.SQLTableNameOf(getDriver(), &Foo{}), "foos")
+	assert.Equal(t, crud.SQLTableNameOf(getDriver(), &FooSlice{}), "foo_slices")
+	assert.Equal(t, crud.SQLTableNameOf(getDriver(), FooPTRSlice{}), "foo_ptr_slices")
 }

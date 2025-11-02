@@ -1,58 +1,59 @@
-//go:build !postgres
-// +build !postgres
+//go:build postgres
+// +build postgres
 
 package crud_test
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
+
+	"database/sql"
 	"time"
 
 	"github.com/azer/crud/v2"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 func init() {
 	fmt.Println("db:", os.Getenv("DATABASE_URL"))
 
 	var err error
-	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
+	DB, err = crud.Connect("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		panic(err)
 	}
 }
 
 func getDriver() string {
-	return "mysql"
+	return "postgres"
 }
 
 func getIntType() string {
-	return "int"
-}
-
-func getBigintType() string {
-	return "bigint"
-}
-
-func getVarcharType() string {
-	return "varchar"
-}
-
-func getTextType() string {
-	return "text"
+	return "INTEGER"
 }
 
 func getPkType() string {
-	return "int"
+	return "SERIAL"
+}
+
+func getBigintType() string {
+	return "BIGINT"
+}
+
+func getVarcharType() string {
+	return "VARCHAR"
+}
+
+func getTextType() string {
+	return "TEXT"
 }
 
 func getBlobType() string {
-	return "blob"
+	return "BYTEA"
 }
 
 func getBoolType() string {
-	return "tinyint"
+	return "BOOLEAN"
 }
 
 var DB *crud.DB
@@ -86,7 +87,7 @@ type Post struct {
 	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_posts"`
 	Title     string    `json:"title"`
 	Text      string    `json:"text"`
-	CreatedAt time.Time `json:"created_at" sql:"now"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Foo struct {

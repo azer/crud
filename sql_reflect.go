@@ -9,20 +9,20 @@ import (
 // Find out what given interface should be called in the database. It first looks up
 // if a table name was explicitly specified (see "table-name" option), or automatically
 // generates a plural name from the name of the struct type.
-func SQLTableNameOf(any interface{}) string {
-	if customTableName, ok := lookupCustomTableName(any); ok {
+func SQLTableNameOf(driver string, any interface{}) string {
+	if customTableName, ok := lookupCustomTableName(driver, any); ok {
 		return customTableName
 	}
 
 	return snakecase.SnakeCase(inflection.Plural(meta.TypeNameOf(any)))
 }
 
-func lookupCustomTableName(any interface{}) (string, bool) {
+func lookupCustomTableName(driver string, any interface{}) (string, bool) {
 	if meta.IsSlice(any) {
 		any = meta.CreateElement(any).Interface()
 	}
 
-	fields, err := GetFieldsOf(any)
+	fields, err := GetFieldsOf(driver, any)
 	if err != nil {
 		return "", false
 	}

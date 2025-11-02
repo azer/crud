@@ -5,12 +5,18 @@ import (
 	"fmt"
 
 	"github.com/azer/crud/v2/meta"
+	"github.com/azer/crud/v2/pg"
 )
 
-func read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
+func read(driver string, query QueryFn, scanTo interface{}, allparams []interface{}) error {
 	sql, params, err := ResolveReadParams(allparams)
 	if err != nil {
 		return err
+	}
+
+	// Convert placeholders for postgres
+	if pg.IsPostgres(driver) {
+		sql = pg.ConvertQueryPlaceholders(sql)
 	}
 
 	if !meta.IsPointer(scanTo) {
@@ -18,14 +24,14 @@ func read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
 	}
 
 	if meta.IsSlice(scanTo) {
-		return readAll(query, scanTo, sql, params)
+		return readAll(driver, query, scanTo, sql, params)
 	}
 
-	return readOne(query, scanTo, sql, params)
+	return readOne(driver, query, scanTo, sql, params)
 }
 
-func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
-	scanner, err := NewScan(scanTo)
+func readOne(driver string, query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
+	scanner, err := NewScan(driver, scanTo)
 	if err != nil {
 		return err
 	}
@@ -44,8 +50,8 @@ func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}
 	return rows.Err()
 }
 
-func readAll(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
-	scanner, err := NewScan(scanTo)
+func readAll(driver string, query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
+	scanner, err := NewScan(driver, scanTo)
 	if err != nil {
 		return err
 	}

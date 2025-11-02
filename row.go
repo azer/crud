@@ -1,5 +1,7 @@
 package crud
 
+import "time"
+
 type RowValue struct {
 	SQLColumn string
 	Value     interface{}
@@ -21,15 +23,15 @@ func (row *Row) SQLValues() map[string]interface{} {
 }
 
 // Takes a valid struct record and returns a crud.Row instance.
-func newRow(st interface{}) (*Row, error) {
-	values, err := GetRowValuesOf(st)
+func newRow(driver string, st interface{}) (*Row, error) {
+	values, err := GetRowValuesOf(driver, st)
 	if err != nil {
 		return nil, err
 	}
 
-	tableName := SQLTableNameOf(st)
+	tableName := SQLTableNameOf(driver, st)
 
-	if customTableName, ok := lookupCustomTableName(st); ok {
+	if customTableName, ok := lookupCustomTableName(driver, st); ok {
 		tableName = customTableName
 	}
 
@@ -42,8 +44,8 @@ func newRow(st interface{}) (*Row, error) {
 // Scans given struct record and returns a list of crud.Row instances for each
 // struct field. It's useful for extracting values and corresponding SQL meta information
 // from structs representing database tables.
-func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
-	fields, err := collectRows(st, []*RowValue{})
+func GetRowValuesOf(driver string, st interface{}) ([]*RowValue, error) {
+	fields, err := collectRows(driver, st, []*RowValue{})
 	if err != nil {
 		return nil, err
 	}
@@ -51,11 +53,11 @@ func GetRowValuesOf(st interface{}) ([]*RowValue, error) {
 	return fields, nil
 }
 
-func collectRows(st interface{}, rows []*RowValue) ([]*RowValue, error) {
-	iter := NewFieldIteration(st)
+func collectRows(driver string, st interface{}, rows []*RowValue) ([]*RowValue, error) {
+	iter := NewFieldIteration(driver, st)
 	for iter.Next() {
 		if iter.IsEmbeddedStruct() {
-			if _rows, err := collectRows(iter.ValueField().Interface(), rows); err != nil {
+			if _rows, err := collectRows(driver, iter.ValueField().Interface(), rows); err != nil {
 				return nil, err
 			} else {
 				rows = _rows
@@ -76,6 +78,10 @@ func collectRows(st interface{}, rows []*RowValue) ([]*RowValue, error) {
 		value := iter.Value()
 
 		if n, ok := value.(int); ok && sqlOptions.AutoIncrement > 0 && n == 0 {
+			continue
+		}
+
+		if t, ok := value.(time.Time); ok && t.IsZero() {
 			continue
 		}
 

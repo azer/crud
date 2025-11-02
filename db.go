@@ -4,6 +4,7 @@ import (
 	"context"
 	stdsql "database/sql"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 	"github.com/azer/logger"
 	"github.com/labstack/gommon/random"
@@ -41,26 +42,52 @@ func (db *DB) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
 	return result, error
 }
 
-// Takes any valid struct and creates a SQL table from it.
 func (db *DB) CreateTable(st interface{}, ifexists bool) error {
-	t, err := NewTable(st)
+	t, err := NewTable(db.Driver, st)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec(sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists))
+	var query string
+	if pg.IsPostgres(db.Driver) {
+		query = pg.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists)
+	} else {
+		query = sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists)
+	}
+
+	_, err = db.Exec(query)
 	return err
 }
 
-// Takes any valid struct, finds out its corresponding SQL table and drops it.
 func (db *DB) DropTable(st interface{}, ifexists bool) error {
-	t, err := NewTable(st)
+	t, err := NewTable(db.Driver, st)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec(sql.DropTableQuery(t.SQLName, true))
+	var query string
+	if pg.IsPostgres(db.Driver) {
+		query = pg.DropTableQuery(t.SQLName, ifexists)
+	} else {
+		query = sql.DropTableQuery(t.SQLName, true)
+	}
+
+	_, err = db.Exec(query)
+
 	return err
+}
+
+func (db *DB) CheckIfTableExists(name string) bool {
+	var query string
+	if pg.IsPostgres(db.Driver) {
+		query = pg.ShowTablesQuery(name)
+	} else {
+		query = sql.ShowTablesLikeQuery(name)
+	}
+
+	var result string
+	err := db.Client.QueryRow(query).Scan(&result)
+	return err == nil && result == name
 }
 
 // Creates multiple tables from given any amount of structs. Calls `CreateTable` internally.
@@ -98,25 +125,16 @@ func (db *DB) ResetTables(structs ...interface{}) error {
 	return nil
 }
 
-// Runs a query to check if the given table exists and returns bool
-func (db *DB) CheckIfTableExists(name string) bool {
-	var result string
-	err := db.Client.QueryRow(sql.ShowTablesLikeQuery(name)).Scan(&result)
-	return err == nil && result == name
+func (db *DB) Create(record interface{}) error {
+	return create(db.Driver, db.Exec, record)
 }
 
-// Inserts given record into the database, generating an insert query for it.
-func (db *DB) Create(record interface{}) error {
-	return create(db.Exec, record)
+func (db *DB) CreateAndRead(record interface{}) error {
+	return createAndRead(db.Driver, db.Exec, db.Query, record)
 }
 
 func (db *DB) CreateAndGetResult(record interface{}) (stdsql.Result, error) {
-	return createAndGetResult(db.Exec, record)
-}
-
-// Inserts given record and scans the inserted row back to the given row.
-func (db *DB) CreateAndRead(record interface{}) error {
-	return createAndRead(db.Exec, db.Query, record)
+	return createAndGetResult(db.Driver, db.Exec, record)
 }
 
 // Runs given SQL query and scans the result rows into the given target interface. The target
@@ -129,21 +147,14 @@ func (db *DB) CreateAndRead(record interface{}) error {
 //
 // users := &[]*User{}
 // err := tx.Read(users, "SELECT * FROM users", 1)
-//
 func (db *DB) Read(scanTo interface{}, params ...interface{}) error {
-	return read(db.Query, scanTo, params)
-}
-
-// Finding out the primary-key field of the given row, updates the corresponding record on the table
-// with the values in the given record.
-func (db *DB) Update(record interface{}) error {
-	return mustUpdate(db.Exec, record)
+	return read(db.Driver, db.Query, scanTo, params)
 }
 
 // Generates and executes a DELETE query for given struct record. It matches the database row by finding
 // out the primary key field defined in the table schema.
 func (db *DB) Delete(record interface{}) error {
-	return mustDelete(db.Exec, record)
+	return mustDelete(db.Driver, db.Exec, record)
 }
 
 // Start a DB transaction. It returns an interface w/ most of the methods DB provides.
@@ -156,6 +167,7 @@ func (db *DB) Begin(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		Id:      random.String(32),
 		IdKey:   "Id",
+		Driver:  db.Driver,
 		Client:  client,
 		Context: ctx,
 	}, nil
@@ -166,6 +178,7 @@ func (db *DB) WithContext(ctx context.Context) *WithContext {
 	return &WithContext{
 		Context: ctx,
 		DB:      db.Client,
+		Driver:  db.Driver,
 		Id:      random.String(32),
 		IdKey:   "Id",
 	}
@@ -184,4 +197,10 @@ func Connect(driver, url string) (*DB, error) {
 		Driver: driver,
 		URL:    url,
 	}, nil
+}
+
+// Finding out the primary-key field of the given row, updates the corresponding record on the table
+// with the values in the given record.
+func (db *DB) Update(record interface{}) error {
+	return mustUpdate(db.Driver, db.Exec, record)
 }
