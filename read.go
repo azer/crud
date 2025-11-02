@@ -3,9 +3,9 @@ package crud
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/azer/crud/v2/meta"
+	"github.com/azer/crud/v2/pg"
 )
 
 func read(driver string, query QueryFn, scanTo interface{}, allparams []interface{}) error {
@@ -15,8 +15,8 @@ func read(driver string, query QueryFn, scanTo interface{}, allparams []interfac
 	}
 
 	// Convert placeholders for postgres
-	if isPostgres(driver) {
-		sql = convertPlaceholders(sql)
+	if pg.IsPostgres(driver) {
+		sql = pg.ConvertQueryPlaceholders(sql)
 	}
 
 	if !meta.IsPointer(scanTo) {
@@ -24,31 +24,14 @@ func read(driver string, query QueryFn, scanTo interface{}, allparams []interfac
 	}
 
 	if meta.IsSlice(scanTo) {
-		return readAll(query, scanTo, sql, params)
+		return readAll(driver, query, scanTo, sql, params)
 	}
 
-	return readOne(query, scanTo, sql, params)
+	return readOne(driver, query, scanTo, sql, params)
 }
 
-func convertPlaceholders(query string) string {
-	// Convert ? placeholders to $1, $2, $3, etc.
-	result := strings.Builder{}
-	paramIndex := 1
-
-	for i := 0; i < len(query); i++ {
-		if query[i] == '?' {
-			result.WriteString(fmt.Sprintf("$%d", paramIndex))
-			paramIndex++
-		} else {
-			result.WriteByte(query[i])
-		}
-	}
-
-	return result.String()
-}
-
-func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
-	scanner, err := NewScan(scanTo)
+func readOne(driver string, query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
+	scanner, err := NewScan(driver, scanTo)
 	if err != nil {
 		return err
 	}
@@ -67,8 +50,8 @@ func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}
 	return rows.Err()
 }
 
-func readAll(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
-	scanner, err := NewScan(scanTo)
+func readAll(driver string, query QueryFn, scanTo interface{}, sql string, params []interface{}) error {
+	scanner, err := NewScan(driver, scanTo)
 	if err != nil {
 		return err
 	}

@@ -4,11 +4,12 @@ import (
 	stdsql "database/sql"
 	"fmt"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 )
 
 func createAndGetResult(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {
-	row, err := newRow(record)
+	row, err := newRow(driver, record)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func createAndGetResult(driver string, exec ExecFn, record interface{}) (stdsql.
 		values = append(values, v)
 	}
 
-	if isPostgres(driver) {
-		return exec(postgresInsertQuery(row.SQLTableName, columns, ""), values...)
+	if pg.IsPostgres(driver) {
+		return exec(pg.InsertQuery(row.SQLTableName, columns, ""), values...)
 	}
 
 	return exec(sql.InsertQuery(row.SQLTableName, columns), values...)
@@ -34,12 +35,12 @@ func create(driver string, exec ExecFn, record interface{}) error {
 }
 
 func createAndRead(driver string, exec ExecFn, query QueryFn, record interface{}) error {
-	table, err := NewTable(record)
+	table, err := NewTable(driver, record)
 	if err != nil {
 		return err
 	}
 
-	row, err := newRow(record)
+	row, err := newRow(driver, record)
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func createAndRead(driver string, exec ExecFn, query QueryFn, record interface{}
 
 	for c, v := range row.SQLValues() {
 		// Skip auto-increment primary key for postgres
-		if isPostgres(driver) && c == pkField.SQL.Name && pkField.SQL.IsAutoIncrementing {
+		if pg.IsPostgres(driver) && c == pkField.SQL.Name && pkField.SQL.IsAutoIncrementing {
 			continue
 		}
 
@@ -62,8 +63,8 @@ func createAndRead(driver string, exec ExecFn, query QueryFn, record interface{}
 		values = append(values, v)
 	}
 
-	if isPostgres(driver) {
-		queryStr := postgresInsertQuery(row.SQLTableName, columns, pkField.SQL.Name)
+	if pg.IsPostgres(driver) {
+		queryStr := pg.InsertQuery(row.SQLTableName, columns, pkField.SQL.Name)
 		rows, err := query(queryStr, values...)
 		if err != nil {
 			return err

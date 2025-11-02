@@ -4,6 +4,7 @@ import (
 	"context"
 	stdsql "database/sql"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 	"github.com/azer/logger"
 	"github.com/labstack/gommon/random"
@@ -42,14 +43,14 @@ func (db *DB) Query(sql string, params ...interface{}) (*stdsql.Rows, error) {
 }
 
 func (db *DB) CreateTable(st interface{}, ifexists bool) error {
-	t, err := NewTable(st)
+	t, err := NewTable(db.Driver, st)
 	if err != nil {
 		return err
 	}
 
 	var query string
-	if isPostgres(db.Driver) {
-		query = postgresCreateTableQuery(t.SQLName, t.SQLOptions(), ifexists)
+	if pg.IsPostgres(db.Driver) {
+		query = pg.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists)
 	} else {
 		query = sql.NewTableQuery(t.SQLName, t.SQLOptions(), ifexists)
 	}
@@ -59,26 +60,27 @@ func (db *DB) CreateTable(st interface{}, ifexists bool) error {
 }
 
 func (db *DB) DropTable(st interface{}, ifexists bool) error {
-	t, err := NewTable(st)
+	t, err := NewTable(db.Driver, st)
 	if err != nil {
 		return err
 	}
 
 	var query string
-	if isPostgres(db.Driver) {
-		query = postgresDropTableQuery(t.SQLName, ifexists)
+	if pg.IsPostgres(db.Driver) {
+		query = pg.DropTableQuery(t.SQLName, ifexists)
 	} else {
 		query = sql.DropTableQuery(t.SQLName, true)
 	}
 
 	_, err = db.Exec(query)
+
 	return err
 }
 
 func (db *DB) CheckIfTableExists(name string) bool {
 	var query string
-	if isPostgres(db.Driver) {
-		query = postgresShowTablesQuery(name)
+	if pg.IsPostgres(db.Driver) {
+		query = pg.ShowTablesQuery(name)
 	} else {
 		query = sql.ShowTablesLikeQuery(name)
 	}

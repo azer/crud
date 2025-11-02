@@ -5,40 +5,41 @@ import (
 	"testing"
 
 	"github.com/azer/crud/v2/sql"
+	"github.com/azer/crud/v2/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewFieldQuery(t *testing.T) {
-	f, err := sql.NewOptions("varchar(30) required default='yolo' name=key")
+	f, err := types.NewColumnOptions("varchar(30) required default='yolo' name=key")
 	assert.Nil(t, err)
 	query := sql.NewFieldQuery(f)
 	assert.Equal(t, query, "  `key` varchar(30) NOT NULL DEFAULT 'yolo'")
 
-	f, err = sql.NewOptions("name=id type=int(11) auto-increment unique unsigned")
+	f, err = types.NewColumnOptions("name=id type=int(11) auto-increment unique unsigned")
 	assert.Nil(t, err)
 	query = sql.NewFieldQuery(f)
 	assert.Equal(t, query, "  `id` int(11) UNSIGNED UNIQUE AUTO_INCREMENT")
 
-	f, err = sql.NewOptions("text name=bio")
+	f, err = types.NewColumnOptions("text name=bio")
 	assert.Nil(t, err)
 	query = sql.NewFieldQuery(f)
 	assert.Equal(t, query, "  `bio` text")
 }
 
 func TestNewFieldQueries(t *testing.T) {
-	id, err := sql.NewOptions("name=id type=int(11) auto-increment unique unsigned")
+	id, err := types.NewColumnOptions("name=id type=int(11) auto-increment unique unsigned")
 	assert.Nil(t, err)
 
-	key, err := sql.NewOptions("varchar(30) required default='yolo' name=key")
+	key, err := types.NewColumnOptions("varchar(30) required default='yolo' name=key")
 	assert.Nil(t, err)
 
-	bio, err := sql.NewOptions("text name=bio")
+	bio, err := types.NewColumnOptions("text name=bio")
 	assert.Nil(t, err)
 
-	ignored, err := sql.NewOptions("-")
+	ignored, err := types.NewColumnOptions("-")
 	assert.Nil(t, err)
 
-	queries := sql.NewFieldQueries([]*sql.Options{id, key, bio, ignored})
+	queries := sql.NewFieldQueries([]*types.ColumnOptions{id, key, bio, ignored})
 	assert.Nil(t, err)
 
 	lines := strings.Split(queries, "\n")
@@ -49,19 +50,19 @@ func TestNewFieldQueries(t *testing.T) {
 }
 
 func TestNewTableQuery(t *testing.T) {
-	id, err := sql.NewOptions("name=id type=int(11) auto-increment=100 unique unsigned primary-key")
+	id, err := types.NewColumnOptions("name=id type=int(11) auto-increment=100 unique unsigned primary-key")
 	assert.Nil(t, err)
 
-	key, err := sql.NewOptions("varchar(30) required default='yolo' name=key")
+	key, err := types.NewColumnOptions("varchar(30) required default='yolo' name=key")
 	assert.Nil(t, err)
 
-	bio, err := sql.NewOptions("text name=bio")
+	bio, err := types.NewColumnOptions("text name=bio")
 	assert.Nil(t, err)
 
-	ignored, err := sql.NewOptions("-")
+	ignored, err := types.NewColumnOptions("-")
 	assert.Nil(t, err)
 
-	query := sql.NewTableQuery("user", []*sql.Options{id, key, bio, ignored}, false)
+	query := sql.NewTableQuery("user", []*types.ColumnOptions{id, key, bio, ignored}, false)
 	lines := strings.Split(query, "\n")
 	assert.Equal(t, len(lines), 6)
 	assert.Equal(t, lines[0], "CREATE TABLE `user` (")
@@ -71,7 +72,7 @@ func TestNewTableQuery(t *testing.T) {
 	assert.Equal(t, lines[4], "  PRIMARY KEY (`id`)")
 	assert.Equal(t, lines[5], ") AUTO_INCREMENT=100;")
 
-	query = sql.NewTableQuery("user", []*sql.Options{id, key, bio, ignored}, true)
+	query = sql.NewTableQuery("user", []*types.ColumnOptions{id, key, bio, ignored}, true)
 	lines = strings.Split(query, "\n")
 	assert.Equal(t, lines[0], "CREATE TABLE IF NOT EXISTS `user` (")
 }

@@ -1,14 +1,14 @@
-package sql_test
+package types_test
 
 import (
 	"testing"
 
-	"github.com/azer/crud/v2/sql"
+	"github.com/azer/crud/v2/types"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestAllOptions(t *testing.T) {
-	o, err := sql.NewOptions("varchar(255) auto-increment=25 primary-key required default='yolo' name=id table-name='hello-kitty'")
+	o, err := types.NewColumnOptions("varchar(255) auto-increment=25 primary-key required default='yolo' name=id table-name='hello-kitty'")
 	assert.Nil(t, err)
 	assert.Equal(t, o.Name, "id")
 	assert.Equal(t, o.Type, "varchar")
@@ -22,13 +22,13 @@ func TestAllOptions(t *testing.T) {
 }
 
 func TestIgnoring(t *testing.T) {
-	o, err := sql.NewOptions("-")
+	o, err := types.NewColumnOptions("-")
 	assert.Nil(t, err)
 	assert.Equal(t, o.Ignore, true)
 }
 
 func TestDefaultValues(t *testing.T) {
-	o, err := sql.NewOptions("int autoincrement")
+	o, err := types.NewColumnOptions("int autoincrement")
 	assert.Nil(t, err)
 	assert.Equal(t, o.AutoIncrement, 1)
 	assert.True(t, o.IsAutoIncrementing)
@@ -37,12 +37,12 @@ func TestDefaultValues(t *testing.T) {
 }
 
 func TestCustomTypes(t *testing.T) {
-	o, err := sql.NewOptions("text")
+	o, err := types.NewColumnOptions("text")
 	assert.Nil(t, err)
 	assert.Equal(t, o.Type, "text")
 	assert.False(t, o.IsAutoIncrementing)
 
-	o, err = sql.NewOptions("auto_increment type=bigint(16)")
+	o, err = types.NewColumnOptions("auto_increment type=bigint(16)")
 	assert.Nil(t, err)
 	assert.Equal(t, o.Type, "bigint")
 	assert.Equal(t, o.Length, 16)
@@ -51,6 +51,6 @@ func TestCustomTypes(t *testing.T) {
 }
 
 func TestFailing(t *testing.T) {
-	_, err := sql.NewOptions("yolo")
+	_, err := types.NewColumnOptions("yolo")
 	assert.NotNil(t, err)
 }

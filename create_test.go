@@ -1,8 +1,9 @@
 package crud_test
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCreate(t *testing.T) {
@@ -52,7 +53,10 @@ func TestCreateEmpty(t *testing.T) {
 }
 
 func TestEmbedding(t *testing.T) {
-	DB.ResetTables(EmbeddedFoo{})
+	err := DB.ResetTables(EmbeddedFoo{})
+	if err != nil {
+		panic(err)
+	}
 
 	foo := EmbeddedFoo{
 		Foo: Foo{
@@ -65,7 +69,7 @@ func TestEmbedding(t *testing.T) {
 	}
 
 	assert.Equal(t, foo.Id, 0)
-	err := DB.CreateAndRead(&foo)
+	err = DB.CreateAndRead(&foo)
 	assert.Nil(t, err)
 	assert.Equal(t, foo.Id, 1)
 	assert.Equal(t, foo.APIKey, "hi")

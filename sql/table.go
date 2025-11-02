@@ -3,9 +3,11 @@ package sql
 import (
 	"fmt"
 	"strings"
+
+	"github.com/azer/crud/v2/types"
 )
 
-func NewTableQuery(name string, fields []*Options, ifNotExists bool) string {
+func NewTableQuery(name string, fields []*types.ColumnOptions, ifNotExists bool) string {
 	ifNotExistsExt := ""
 	if ifNotExists {
 		ifNotExistsExt = " IF NOT EXISTS"
@@ -15,7 +17,7 @@ func NewTableQuery(name string, fields []*Options, ifNotExists bool) string {
 		ifNotExistsExt, name, NewFieldQueries(fields), NewPrimaryKeyQuery(fields), NewTableConfigQuery(fields))
 }
 
-func NewFieldQueries(fields []*Options) string {
+func NewFieldQueries(fields []*types.ColumnOptions) string {
 	queries := []string{}
 
 	for _, f := range fields {
@@ -29,7 +31,7 @@ func NewFieldQueries(fields []*Options) string {
 	return strings.Join(queries, ",\n")
 }
 
-func NewFieldQuery(field *Options) string {
+func NewFieldQuery(field *types.ColumnOptions) string {
 	length := ""
 	autoIncrement := ""
 	required := ""
@@ -67,7 +69,7 @@ func NewFieldQuery(field *Options) string {
 	return fmt.Sprintf("  `%s` %s%s", field.Name, field.Type, query)
 }
 
-func NewPrimaryKeyQuery(fields []*Options) string {
+func NewPrimaryKeyQuery(fields []*types.ColumnOptions) string {
 	keys := []string{}
 
 	for _, f := range fields {
@@ -83,7 +85,7 @@ func NewPrimaryKeyQuery(fields []*Options) string {
 	return fmt.Sprintf(",\n  PRIMARY KEY (`%s`)", strings.Join(keys, "`, `"))
 }
 
-func NewTableConfigQuery(fields []*Options) string {
+func NewTableConfigQuery(fields []*types.ColumnOptions) string {
 	autoIncrement := ""
 	for _, f := range fields {
 		if f.AutoIncrement > 1 {

@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 )
 
 func update(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {
-	table, err := NewTable(record)
+	table, err := NewTable(driver, record)
 	if err != nil {
 		return nil, err
 	}
@@ -20,8 +21,8 @@ func update(driver string, exec ExecFn, record interface{}) (stdsql.Result, erro
 	}
 
 	var query string
-	if isPostgres(driver) {
-		query = postgresUpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet())
+	if pg.IsPostgres(driver) {
+		query = pg.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet())
 	} else {
 		query = sql.UpdateQuery(table.SQLName, pk.SQL.Name, table.SQLUpdateColumnSet())
 	}

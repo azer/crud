@@ -1,18 +1,20 @@
 package crud
 
 import (
-	"github.com/azer/crud/v2/sql"
+	"strings"
+
+	"github.com/azer/crud/v2/types"
 )
 
 type Field struct {
 	Name  string
 	Value interface{}
-	SQL   *sql.Options
+	SQL   *types.ColumnOptions
 }
 
 // Get DB fields of any valid struct given
-func GetFieldsOf(st interface{}) ([]*Field, error) {
-	fields, err := collectFields(st, []*Field{})
+func GetFieldsOf(driver string, st interface{}) ([]*Field, error) {
+	fields, err := collectFields(driver, st, []*Field{})
 	if err != nil {
 		return nil, err
 	}
@@ -20,11 +22,11 @@ func GetFieldsOf(st interface{}) ([]*Field, error) {
 	return fields, nil
 }
 
-func collectFields(st interface{}, fields []*Field) ([]*Field, error) {
-	iter := NewFieldIteration(st)
+func collectFields(driver string, st interface{}, fields []*Field) ([]*Field, error) {
+	iter := NewFieldIteration(driver, st)
 	for iter.Next() {
 		if iter.IsEmbeddedStruct() {
-			if _fields, err := collectFields(iter.ValueField().Interface(), fields); err != nil {
+			if _fields, err := collectFields(driver, iter.ValueField().Interface(), fields); err != nil {
 				return nil, err
 			} else {
 				fields = _fields
@@ -59,7 +61,10 @@ func SetDefaultPK(fields []*Field) {
 	}
 
 	for i, f := range fields {
-		if !f.SQL.IsPrimaryKey && f.SQL.Name == "id" && f.SQL.Type == "int" {
+		sqlType := strings.ToLower(f.SQL.Type)
+		isInt := sqlType == "int" || sqlType == "integer" || sqlType == "bigint"
+
+		if !f.SQL.IsPrimaryKey && f.SQL.Name == "id" && isInt {
 			fields[i].SQL.IsAutoIncrementing = true
 			fields[i].SQL.AutoIncrement = 1
 			fields[i].SQL.IsRequired = true

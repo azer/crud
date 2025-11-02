@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/azer/crud/v2/pg"
 	"github.com/azer/crud/v2/sql"
 )
 
 func deleteRow(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {
-	table, err := NewTable(record)
+	table, err := NewTable(driver, record)
 
 	if err != nil {
 		return nil, err
@@ -21,8 +22,8 @@ func deleteRow(driver string, exec ExecFn, record interface{}) (stdsql.Result, e
 	}
 
 	var query string
-	if isPostgres(driver) {
-		query = postgresDeleteQuery(table.SQLName, pk.SQL.Name)
+	if pg.IsPostgres(driver) {
+		query = pg.DeleteQuery(table.SQLName, pk.SQL.Name)
 	} else {
 		query = sql.DeleteQuery(table.SQLName, pk.SQL.Name)
 	}

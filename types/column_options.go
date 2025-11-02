@@ -1,4 +1,4 @@
-package sql
+package types
 
 import (
 	"errors"
@@ -7,8 +7,24 @@ import (
 	"strings"
 )
 
-func NewOptions(input string) (*Options, error) {
-	options := &Options{}
+type ColumnOptions struct {
+	Name               string
+	Type               string
+	Length             int
+	DefaultValue       string
+	AutoIncrement      int
+	IsAutoIncrementing bool
+	IsPrimaryKey       bool
+	Serial             bool
+	IsUnique           bool
+	IsUnsigned         bool
+	IsRequired         bool
+	Ignore             bool
+	TableName          string
+}
+
+func NewColumnOptions(input string) (*ColumnOptions, error) {
+	options := &ColumnOptions{}
 	input = strings.TrimSpace(input)
 
 	if input == "" {
@@ -59,6 +75,11 @@ func NewOptions(input string) (*Options, error) {
 			continue
 		}
 
+		if part == "serial" {
+			options.Serial = true
+			continue
+		}
+
 		if part == "unsigned" {
 			options.IsUnsigned = true
 			continue
@@ -69,28 +90,13 @@ func NewOptions(input string) (*Options, error) {
 			continue
 		}
 
-		return nil, errors.New(fmt.Sprintf("Unrecognized SQL option: %s", part))
+		return nil, errors.New(fmt.Sprintf("Unrecognized SQL column option: %s", part))
 	}
 
 	return options, nil
 }
 
-type Options struct {
-	Name               string
-	Type               string
-	Length             int
-	DefaultValue       string
-	AutoIncrement      int
-	IsAutoIncrementing bool
-	IsPrimaryKey       bool
-	IsUnique           bool
-	IsUnsigned         bool
-	IsRequired         bool
-	Ignore             bool
-	TableName          string
-}
-
-func (options *Options) ReadAttr(input string, names ...string) (string, bool) {
+func (options *ColumnOptions) ReadAttr(input string, names ...string) (string, bool) {
 	parts := strings.Split(input, "=")
 
 	for _, name := range names {
@@ -104,7 +110,7 @@ func (options *Options) ReadAttr(input string, names ...string) (string, bool) {
 	return "", false
 }
 
-func (options *Options) ReadTypeAttr(input string) bool {
+func (options *ColumnOptions) ReadTypeAttr(input string) bool {
 	value, ok := options.ReadAttr(input, "type")
 	if !ok || len(value) == 0 {
 		return false
@@ -113,13 +119,13 @@ func (options *Options) ReadTypeAttr(input string) bool {
 	return options.ReadType(value)
 }
 
-func (options *Options) ReadType(input string) bool {
+func (options *ColumnOptions) ReadType(input string) bool {
 	parts := strings.FieldsFunc(input, func(c rune) bool {
 		return c == '(' || c == ')'
 	})
 
-	name := parts[0]
-	length, isType := Types[name]
+	typeName := parts[0]
+	length, isType := GetValidSqlType(typeName)
 
 	if !isType {
 		return false
@@ -131,13 +137,13 @@ func (options *Options) ReadType(input string) bool {
 		}
 	}
 
-	options.Type = name
+	options.Type = typeName
 	options.Length = length
 
 	return true
 }
 
-func (options *Options) ReadDefaultValue(input string) bool {
+func (options *ColumnOptions) ReadDefaultValue(input string) bool {
 	value, ok := options.ReadAttr(input, "default")
 	if !ok {
 		return false
@@ -147,7 +153,7 @@ func (options *Options) ReadDefaultValue(input string) bool {
 	return true
 }
 
-func (options *Options) ReadName(input string) bool {
+func (options *ColumnOptions) ReadName(input string) bool {
 	value, ok := options.ReadAttr(input, "name")
 	if !ok {
 		return false
@@ -157,7 +163,7 @@ func (options *Options) ReadName(input string) bool {
 	return true
 }
 
-func (options *Options) ReadTableName(input string) bool {
+func (options *ColumnOptions) ReadTableName(input string) bool {
 	value, ok := options.ReadAttr(input, "table-name")
 	if !ok {
 		return false
@@ -167,7 +173,7 @@ func (options *Options) ReadTableName(input string) bool {
 	return true
 }
 
-func (options *Options) ReadAutoIncrement(input string) bool {
+func (options *ColumnOptions) ReadAutoIncrement(input string) bool {
 	value, ok := options.ReadAttr(input, "auto-increment", "auto_increment", "autoincrement")
 	if !ok {
 		return false

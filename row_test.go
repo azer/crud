@@ -8,11 +8,11 @@ import (
 )
 
 func TestGettingRowValues(t *testing.T) {
-	rows, err := crud.GetRowValuesOf(UserProfile{})
+	rows, err := crud.GetRowValuesOf(getDriver(), UserProfile{})
 	assert.Nil(t, err)
 	assert.Equal(t, len(rows), 5)
 
-	rows, err = crud.GetRowValuesOf(UserProfile{
+	rows, err = crud.GetRowValuesOf(getDriver(), UserProfile{
 		Name:       "John",
 		Email:      "azer@mitte.ai",
 		Modified:   9223372036854775807,
@@ -32,11 +32,11 @@ func TestGettingRowValues(t *testing.T) {
 	assert.Equal(t, rows[4].SQLColumn, "modified_col")
 	assert.Equal(t, rows[4].Value.(int64), int64(9223372036854775807))
 
-	rows, err = crud.GetRowValuesOf(Post{})
+	rows, err = crud.GetRowValuesOf(getDriver(), Post{})
 	assert.Nil(t, err)
 	assert.Equal(t, len(rows), 3)
 
-	rows, err = crud.GetRowValuesOf(Post{
+	rows, err = crud.GetRowValuesOf(getDriver(), Post{
 		Title: "Hello World",
 		Text:  "It's still 2015 here",
 	})
