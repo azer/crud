@@ -3,14 +3,20 @@ package crud
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/azer/crud/v2/meta"
 )
 
-func read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
+func read(driver string, query QueryFn, scanTo interface{}, allparams []interface{}) error {
 	sql, params, err := ResolveReadParams(allparams)
 	if err != nil {
 		return err
+	}
+
+	// Convert placeholders for postgres
+	if isPostgres(driver) {
+		sql = convertPlaceholders(sql)
 	}
 
 	if !meta.IsPointer(scanTo) {
@@ -22,6 +28,23 @@ func read(query QueryFn, scanTo interface{}, allparams []interface{}) error {
 	}
 
 	return readOne(query, scanTo, sql, params)
+}
+
+func convertPlaceholders(query string) string {
+	// Convert ? placeholders to $1, $2, $3, etc.
+	result := strings.Builder{}
+	paramIndex := 1
+
+	for i := 0; i < len(query); i++ {
+		if query[i] == '?' {
+			result.WriteString(fmt.Sprintf("$%d", paramIndex))
+			paramIndex++
+		} else {
+			result.WriteByte(query[i])
+		}
+	}
+
+	return result.String()
 }
 
 func readOne(query QueryFn, scanTo interface{}, sql string, params []interface{}) error {

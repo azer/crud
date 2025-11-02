@@ -9,14 +9,14 @@ import (
 /*func TestDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	nova := UserProfile{}
-	err := DB.Read(&nova, "SELECT * FROM user_profile WHERE name = 'Nova'")
+	fuji := UserProfile{}
+	err := DB.Read(&fuji, "SELECT * FROM user_profile WHERE name = 'Fuji'")
 	assert.Nil(t, err)
 
-	assert.Nil(t, DB.Delete(nova))
+	assert.Nil(t, DB.Delete(fuji))
 
-	novac := UserProfile{}
-	err = DB.Read(&novac, "SELECT * FROM user_profile WHERE name = 'Nova'")
+	fujic := UserProfile{}
+	err = DB.Read(&fujic, "SELECT * FROM user_profile WHERE name = 'Fuji'")
 	assert.NotNil(t, err)
 }
 
@@ -30,14 +30,14 @@ func TestDeleteNotMatching(t *testing.T) {
 func TestMustDelete(t *testing.T) {
 	assert.Nil(t, CreateUserProfiles())
 
-	nova := UserProfile{}
-	err := DB.Read(&nova, "SELECT * FROM user_profiles WHERE name = 'Nova'")
+	fuji := UserProfile{}
+	err := DB.Read(&fuji, "SELECT * FROM user_profiles WHERE name = 'Fuji'")
 	assert.Nil(t, err)
 
-	assert.Nil(t, DB.Delete(nova))
+	assert.Nil(t, DB.Delete(fuji))
 
-	novac := UserProfile{}
-	err = DB.Read(&novac, "SELECT * FROM user_profiles WHERE name = 'Nova'")
+	fujic := UserProfile{}
+	err = DB.Read(&fujic, "SELECT * FROM user_profiles WHERE name = 'Fuji'")
 	assert.NotNil(t, err)
 }
 

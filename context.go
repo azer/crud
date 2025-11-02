@@ -10,6 +10,7 @@ import (
 type WithContext struct {
 	Context context.Context
 	DB      *stdsql.DB
+	Driver  string
 	Id      string
 	IdKey   string
 }
@@ -40,27 +41,27 @@ func (ctx *WithContext) Query(sql string, params ...interface{}) (*stdsql.Rows, 
 
 // Insert given record to the database.
 func (ctx *WithContext) Create(record interface{}) error {
-	return create(ctx.Exec, record)
+	return create(ctx.Driver, ctx.Exec, record)
 }
 
 // Inserts given record and scans the inserted row back to the given row.
 func (ctx *WithContext) CreateAndRead(record interface{}) error {
-	return createAndRead(ctx.Exec, ctx.Query, record)
+	return createAndRead(ctx.Driver, ctx.Exec, ctx.Query, record)
 }
 
 // Run a select query on the databaase (w/ given parameters optionally) and scan the result(s) to the
 // target interface specified as the first parameter.
 func (ctx *WithContext) Read(scanTo interface{}, params ...interface{}) error {
-	return read(ctx.Query, scanTo, params)
+	return read(ctx.Driver, ctx.Query, scanTo, params)
 }
 
 // Run an update query on the transaction, finding out the primary-key field of the given row.
 func (ctx *WithContext) Update(record interface{}) error {
-	return mustUpdate(ctx.Exec, record)
+	return mustUpdate(ctx.Driver, ctx.Exec, record)
 }
 
 // Executes a DELETE query on the transaction for given struct record. It matches
 // the database row by finding out the primary key field defined in the table schema.
 func (ctx *WithContext) Delete(record interface{}) error {
-	return mustDelete(ctx.Exec, record)
+	return mustDelete(ctx.Driver, ctx.Exec, record)
 }

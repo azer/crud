@@ -10,9 +10,9 @@ func TestCreate(t *testing.T) {
 	assert.Nil(t, err)
 
 	azer := UserProfile{
-		Name:  "Azer",
+		Name:  "John",
 		Bio:   "I like photography",
-		Email: "azer@roadbeats.com",
+		Email: "azer@mitte.ai",
 	}
 
 	err = DB.Create(azer)
@@ -25,9 +25,9 @@ func TestCreateAndRead(t *testing.T) {
 	DB.ResetTables(UserProfile{})
 
 	azer := UserProfile{
-		Name:  "Azer",
+		Name:  "John",
 		Bio:   "I like photography",
-		Email: "azer@roadbeats.com",
+		Email: "azer@mitte.ai",
 	}
 
 	assert.Equal(t, azer.Id, 0)
@@ -42,7 +42,7 @@ func TestCreateEmpty(t *testing.T) {
 	DB.ResetTables(UserProfile{})
 
 	azer := UserProfile{
-		Name: "Azer",
+		Name: "John",
 	}
 
 	err := DB.Create(azer)

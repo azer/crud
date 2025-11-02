@@ -8,7 +8,7 @@ import (
 	"github.com/azer/crud/v2/sql"
 )
 
-func deleteRow(exec ExecFn, record interface{}) (stdsql.Result, error) {
+func deleteRow(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {
 	table, err := NewTable(record)
 
 	if err != nil {
@@ -20,11 +20,18 @@ func deleteRow(exec ExecFn, record interface{}) (stdsql.Result, error) {
 		return nil, errors.New(fmt.Sprintf("Table '%s' (%s) doesn't have a primary-key field", table.Name, table.SQLName))
 	}
 
-	return exec(sql.DeleteQuery(table.SQLName, pk.SQL.Name), pk.Value)
+	var query string
+	if isPostgres(driver) {
+		query = postgresDeleteQuery(table.SQLName, pk.SQL.Name)
+	} else {
+		query = sql.DeleteQuery(table.SQLName, pk.SQL.Name)
+	}
+
+	return exec(query, pk.Value)
 }
 
-func mustDelete(exec ExecFn, record interface{}) error {
-	result, err := deleteRow(exec, record)
+func mustDelete(driver string, exec ExecFn, record interface{}) error {
+	result, err := deleteRow(driver, exec, record)
 	if err != nil {
 		return err
 	}

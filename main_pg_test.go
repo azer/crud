@@ -1,5 +1,5 @@
-//go:build !postgres
-// +build !postgres
+//go:build postgres
+// +build postgres
 
 package crud_test
 
@@ -8,14 +8,14 @@ import (
 	"os"
 
 	"github.com/azer/crud/v2"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 )
 
 func init() {
 	fmt.Println("db:", os.Getenv("DATABASE_URL"))
 
 	var err error
-	DB, err = crud.Connect("mysql", os.Getenv("DATABASE_URL"))
+	DB, err = crud.Connect("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		panic(err)
 	}

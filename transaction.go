@@ -10,6 +10,7 @@ import (
 type Tx struct {
 	Context context.Context
 	Client  *stdsql.Tx
+	Driver  string
 	Id      string
 	IdKey   string
 }
@@ -54,12 +55,16 @@ func (tx *Tx) Rollback() error {
 
 // Insert given record to the database.
 func (tx *Tx) Create(record interface{}) error {
-	return create(tx.Exec, record)
+	return create(tx.Driver, tx.Exec, record)
 }
 
-// Inserts given record and scans the inserted row back to the given row.
 func (tx *Tx) CreateAndRead(record interface{}) error {
-	return createAndRead(tx.Exec, tx.Query, record)
+	return createAndRead(tx.Driver, tx.Exec, tx.Query, record)
+}
+
+// Run an update query on the transaction, finding out the primary-key field of the given row.
+func (tx *Tx) Update(record interface{}) error {
+	return mustUpdate(tx.Driver, tx.Exec, record)
 }
 
 // Run a select query on the databaase (w/ given parameters optionally) and scan the result(s) to the
@@ -72,18 +77,12 @@ func (tx *Tx) CreateAndRead(record interface{}) error {
 //
 // users := &[]*User{}
 // err := tx.Read(users, "SELECT * FROM users", 1)
-//
 func (tx *Tx) Read(scanTo interface{}, params ...interface{}) error {
-	return read(tx.Query, scanTo, params)
-}
-
-// Run an update query on the transaction, finding out the primary-key field of the given row.
-func (tx *Tx) Update(record interface{}) error {
-	return mustUpdate(tx.Exec, record)
+	return read(tx.Driver, tx.Query, scanTo, params)
 }
 
 // Executes a DELETE query on the transaction for given struct record. It matches
 // the database row by finding out the primary key field defined in the table schema.
 func (tx *Tx) Delete(record interface{}) error {
-	return mustDelete(tx.Exec, record)
+	return mustDelete(tx.Driver, tx.Exec, record)
 }
