@@ -1,6 +1,6 @@
 ## CRUD
 
-A minimalistic relational database library for Go.
+A minimalistic relational database library for Go. Supports PostgreSQL and MySQL.
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
@@ -27,14 +27,14 @@ A minimalistic relational database library for Go.
 ## Install
 
 ```bash
-$ go get github.com/azer/crud/v2
+$ go get github.com/azer/crud/v3
 ```
 
 ## Initialize
 
 ```go
 import (
-  "github.com/azer/crud/v2"
+  "github.com/azer/crud/v3"
   _ "github.com/go-sql-driver/mysql"
 )
 
