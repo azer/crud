@@ -1,6 +1,6 @@
 ## CRUD
 
-A minimalistic relational database library for Go. Supports PostgreSQL and MySQL.
+Lightweight, simple relational database library for Go. Supports PostgreSQL and MySQL.
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
