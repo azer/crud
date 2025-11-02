@@ -1,4 +1,4 @@
-module github.com/azer/crud/v3
+module github.com/azer/crud/v4
 
 require (
 	github.com/azer/logger v1.0.0

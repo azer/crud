@@ -10,7 +10,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/azer/crud/v3"
+	"github.com/azer/crud/v4"
 	_ "github.com/lib/pq"
 )
 

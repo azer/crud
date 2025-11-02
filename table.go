@@ -1,8 +1,8 @@
 package crud
 
 import (
-	"github.com/azer/crud/v3/meta"
-	"github.com/azer/crud/v3/types"
+	"github.com/azer/crud/v4/meta"
+	"github.com/azer/crud/v4/types"
 )
 
 // Create an internal representation of a database table, including its fields from given

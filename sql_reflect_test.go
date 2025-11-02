@@ -3,7 +3,7 @@ package crud_test
 import (
 	"testing"
 
-	"github.com/azer/crud/v3"
+	"github.com/azer/crud/v4"
 	"github.com/stretchr/testify/assert"
 )
 

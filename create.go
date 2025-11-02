@@ -4,8 +4,8 @@ import (
 	stdsql "database/sql"
 	"fmt"
 
-	"github.com/azer/crud/v3/pg"
-	"github.com/azer/crud/v3/sql"
+	"github.com/azer/crud/v4/pg"
+	"github.com/azer/crud/v4/sql"
 )
 
 func createAndGetResult(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {

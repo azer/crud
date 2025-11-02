@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/azer/crud/v3/types"
+	"github.com/azer/crud/v4/types"
 )
 
 func IsPostgres(driver string) bool {

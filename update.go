@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/azer/crud/v3/pg"
-	"github.com/azer/crud/v3/sql"
+	"github.com/azer/crud/v4/pg"
+	"github.com/azer/crud/v4/sql"
 )
 
 func update(driver string, exec ExecFn, record interface{}) (stdsql.Result, error) {

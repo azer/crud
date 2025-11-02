@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/azer/crud/v3/meta"
-	"github.com/azer/crud/v3/pg"
+	"github.com/azer/crud/v4/meta"
+	"github.com/azer/crud/v4/pg"
 )
 
 func read(driver string, query QueryFn, scanTo interface{}, allparams []interface{}) error {
