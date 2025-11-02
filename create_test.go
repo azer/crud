@@ -2,6 +2,7 @@ package crud_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -82,8 +83,9 @@ func TestCreatingRenamedTableRow(t *testing.T) {
 	DB.ResetTables(Post{})
 
 	p := Post{
-		Title: "Foo",
-		Text:  "bar",
+		Title:     "Foo",
+		Text:      "bar",
+		CreatedAt: time.Now(),
 	}
 
 	assert.Equal(t, p.Id, 0)

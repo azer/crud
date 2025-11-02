@@ -1,5 +1,7 @@
 package crud
 
+import "time"
+
 type RowValue struct {
 	SQLColumn string
 	Value     interface{}
@@ -76,6 +78,10 @@ func collectRows(driver string, st interface{}, rows []*RowValue) ([]*RowValue, 
 		value := iter.Value()
 
 		if n, ok := value.(int); ok && sqlOptions.AutoIncrement > 0 && n == 0 {
+			continue
+		}
+
+		if t, ok := value.(time.Time); ok && t.IsZero() {
 			continue
 		}
 

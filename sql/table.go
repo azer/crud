@@ -51,7 +51,9 @@ func NewFieldQuery(field *types.ColumnOptions) string {
 		required = " NOT NULL"
 	}
 
-	if field.DefaultValue != "" {
+	if field.CurrentTimestamp {
+		defaultValue = " DEFAULT CURRENT_TIMESTAMP"
+	} else if field.DefaultValue != "" {
 		defaultValue = fmt.Sprintf(" DEFAULT %s", field.DefaultValue)
 	}
 

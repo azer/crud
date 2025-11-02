@@ -21,6 +21,7 @@ type ColumnOptions struct {
 	IsRequired         bool
 	Ignore             bool
 	TableName          string
+	CurrentTimestamp   bool
 }
 
 func NewColumnOptions(input string) (*ColumnOptions, error) {
@@ -87,6 +88,11 @@ func NewColumnOptions(input string) (*ColumnOptions, error) {
 
 		if part == "unique" {
 			options.IsUnique = true
+			continue
+		}
+
+		if part == "now" {
+			options.CurrentTimestamp = true
 			continue
 		}
 

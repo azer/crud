@@ -86,7 +86,7 @@ type Post struct {
 	Id        int       `json:"id" sql:"auto-increment primary-key required table-name=renamed_posts"`
 	Title     string    `json:"title"`
 	Text      string    `json:"text"`
-	CreatedAt time.Time `json:"created_at"`
+	CreatedAt time.Time `json:"created_at" sql:"now"`
 }
 
 type Foo struct {

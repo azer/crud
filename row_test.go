@@ -34,7 +34,7 @@ func TestGettingRowValues(t *testing.T) {
 
 	rows, err = crud.GetRowValuesOf(getDriver(), Post{})
 	assert.Nil(t, err)
-	assert.Equal(t, len(rows), 3)
+	assert.Equal(t, len(rows), 2)
 
 	rows, err = crud.GetRowValuesOf(getDriver(), Post{
 		Title: "Hello World",
