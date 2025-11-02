@@ -280,8 +280,7 @@ DATABASE_URL="?" go test ./...
 
 ## What's Missing?
 
-* **Hooks:** I'm not sure if this is needed, but worths to consider.
-* **Foreign Keys:** [*](https://dev.mysql.com/doc/refman/5.7/en/create-table-foreign-keys.html)
+* **Foreign Keys:** Won't implement
 * **Make UTF-8 Default:** Looks like the default charset is not UTF8.
 
 ## LICENSE
