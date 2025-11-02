@@ -27,14 +27,14 @@ A minimalistic relational database library for Go. Supports PostgreSQL and MySQL
 ## Install
 
 ```bash
-$ go get github.com/azer/crud/v3
+$ go get github.com/azer/crud/v4
 ```
 
 ## Initialize
 
 ```go
 import (
-  "github.com/azer/crud/v3"
+  "github.com/azer/crud/v4"
   _ "github.com/go-sql-driver/mysql"
 )
 
