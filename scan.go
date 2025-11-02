@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"reflect"
 
-	"github.com/azer/crud/v2/meta"
+	"github.com/azer/crud/v3/meta"
 )
 
 // Create a scanner for any given interface. This function will be called for

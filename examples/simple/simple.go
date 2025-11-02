@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/azer/crud/v2"
+	"github.com/azer/crud/v3"
 	_ "github.com/go-sql-driver/mysql"
 )
 

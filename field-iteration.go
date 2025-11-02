@@ -3,9 +3,9 @@ package crud
 import (
 	"reflect"
 
-	"github.com/azer/crud/v2/meta"
-	"github.com/azer/crud/v2/pg"
-	"github.com/azer/crud/v2/types"
+	"github.com/azer/crud/v3/meta"
+	"github.com/azer/crud/v3/pg"
+	"github.com/azer/crud/v3/types"
 	"github.com/azer/snakecase"
 )
 

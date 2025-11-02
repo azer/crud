@@ -3,7 +3,7 @@ package crud
 import (
 	"strings"
 
-	"github.com/azer/crud/v2/types"
+	"github.com/azer/crud/v3/types"
 )
 
 type Field struct {

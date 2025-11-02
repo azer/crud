@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/azer/crud/v2/meta"
+	"github.com/azer/crud/v3/meta"
 	"github.com/stretchr/testify/assert"
 )
 

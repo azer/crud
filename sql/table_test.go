@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/azer/crud/v2/sql"
-	"github.com/azer/crud/v2/types"
+	"github.com/azer/crud/v3/sql"
+	"github.com/azer/crud/v3/types"
 	"github.com/stretchr/testify/assert"
 )
 
